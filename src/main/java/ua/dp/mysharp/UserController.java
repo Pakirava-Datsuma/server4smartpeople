@@ -1,5 +1,7 @@
 package ua.dp.mysharp;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +20,12 @@ public class UserController {
 	public User getUser() {
 		return userService.getOne();
 	}
-	
+
+	@RequestMapping("/userlist")
+	public Collection<User> getUserList() {
+		return userService.getAll();
+	}
+
 	@RequestMapping("/about")
 	public String aboutMIA() {
 		return "Hi! This is #MIA - My Information Assistant.";
