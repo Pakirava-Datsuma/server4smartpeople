@@ -1,6 +1,8 @@
 package ua.dp.mysharp;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -62,9 +64,17 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Collection<User> getAll() {
-		return StreamSupport.stream(
-	            Spliterators.spliteratorUnknownSize(userRepo.findAll().iterator(),
-	                    Spliterator.ORDERED), false)
-				.collect(Collectors.<User> toList());
+		Collection<User> collection = new ArrayList<User>();
+		Iterator<User> iterator =  userRepo.findAll().iterator();
+		while (iterator.hasNext()) {
+			collection.add(iterator.next());
+		}
+		return collection;
 	}
+	
+	@Override
+	public User getOne() {
+		return userRepo.findAll().iterator().next();
+	}
+
 }

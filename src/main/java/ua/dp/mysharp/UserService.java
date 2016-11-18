@@ -13,4 +13,6 @@ public interface UserService {
 	
 	void createTestUser();
 	Collection<User> getAll();
+	User getOne();
+
 }

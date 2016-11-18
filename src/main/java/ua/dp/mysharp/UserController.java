@@ -16,7 +16,7 @@ public class UserController {
 
 	@RequestMapping("/user")
 	public User getUser() {
-		return userService.getAll().iterator().next();
+		return userService.getOne();
 	}
 	
 	@RequestMapping("/about")
