@@ -22,6 +22,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.7</java.version>
+		<maven.compiler.target>1.7</maven.compiler.target>
+  		<maven.compiler.source>1.7</maven.compiler.source>
 	</properties>
 
 	<dependencies>
@@ -56,6 +58,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+			   <groupId>com.google.appengine</groupId>
+			   <artifactId>appengine-maven-plugin</artifactId>
+			   <version>1.9.44</version>
 			</plugin>
 		</plugins>
 	</build>
