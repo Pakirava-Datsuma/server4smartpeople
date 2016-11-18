@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Data
-@NoArgsConstructor
 public class User {
 
 	@Id
@@ -32,5 +31,6 @@ public class User {
 		this.lastName = lastName;
 	}
 	
+	public User() {};
 	
 }
