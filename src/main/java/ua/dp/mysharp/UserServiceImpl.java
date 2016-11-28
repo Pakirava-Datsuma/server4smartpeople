@@ -1,12 +1,11 @@
 package ua.dp.mysharp;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -16,7 +15,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User create(String firstName, String lastName) {
-		User user = new User(firstName, lastName);
+		User user = new User();
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
 		userRepo.save(user);
 		return user;
 	}
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
 	public boolean setFavoriteMusic(Long id, String url) {
 		User user = find(id);
 		if (user == null) return false;
-		user.favoriteSongURL = url;
+		user.setFavoriteSongURL(url);
 		userRepo.save(user);
 		return true;
 	}
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
 	public boolean setUserPhoto(Long id, String url) {
 		User user = find(id);
 		if (user == null) return false;
-		user.profilePhotoURL = url;
+		user.setProfilePhotoURL(url);
 		userRepo.save(user);
 		return true;
 	}
@@ -49,12 +50,12 @@ public class UserServiceImpl implements UserService {
 		User testUser = create(
 				"Test", 
 				"User");
-		if (testUser == null) throw new RuntimeException("test user not created");
+		if (testUser == null) throw new RuntimeException("test owner not created");
 		
-		setFavoriteMusic(testUser.id, 
+		setFavoriteMusic(testUser.getId(),
 				"https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://uk1.internet-radio.com:8004/listen.pls&t=.pls");
-		setUserPhoto(testUser.id, "http://iconizer.net/files/Practika/orig/user.png");
-		System.out.println("test user created: " + testUser.toString());
+		setUserPhoto(testUser.getId(), "http://iconizer.net/files/Practika/orig/owner.png");
+		System.out.println("test owner created: " + testUser.toString());
 
 	}
 

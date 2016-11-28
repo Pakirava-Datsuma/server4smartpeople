@@ -1,10 +1,11 @@
 package ua.dp.mysharp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * @author swanta
@@ -12,23 +13,22 @@ import lombok.Data;
  */
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
 	@Id
 	@GeneratedValue
-	Long id;
-	
-	String firstName, lastName;
-	String profilePhotoURL;
-	
-	String favoriteSongURL;
+    private Long id;
 
-	public User(String firstName, String lastName) {
-		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
-	}
+    private String firstName, lastName;
+    private String profilePhotoURL;
 	
-	public User() {};
-	
+	private String favoriteSongURL;
+
+	@OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+	private Collection<Place> places;
+
+//	@OneToMany(mappedBy = "Place", fetch = FetchType.LAZY)
+//	Collection<Place> visitedPlaces;
 }

@@ -1,16 +1,17 @@
 package ua.dp.mysharp;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collection;
 
 /**
  * @author swanta
  *
  */
 @RestController
+@RequestMapping("/user")
 public class UserController {
 	
 	@Autowired
@@ -21,19 +22,9 @@ public class UserController {
 		return userService.getOne();
 	}
 
-	@RequestMapping("/userlist")
+	@RequestMapping("/users")
 	public Collection<User> getUserList() {
 		return userService.getAll();
 	}
 
-	@RequestMapping("/about")
-	public String aboutMIA() {
-		return "Hi! This is #MIA - My Information Assistant.";
-	}
-	
-	@RequestMapping("/test")
-	public String createTestUser() {
-		userService.createTestUser();
-		return ("now repo has users: " + userService.getAll().size());
-	}
 }

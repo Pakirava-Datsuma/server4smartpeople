@@ -5,7 +5,7 @@ import java.util.Collection;
 
 public interface UserService {
 
-	User create(String firstName, String lastName);
+	User create(String name, String photoURL);
 	User find(Long id);
 	
 	boolean setFavoriteMusic(Long id, String url);
