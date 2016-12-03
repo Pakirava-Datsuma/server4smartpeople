@@ -22,6 +22,17 @@ class Main extends React.Component {
         this.onUserUpdate = this.onUserUpdate.bind(this);
         this.onHouseUpdate = this.onHouseUpdate.bind(this);
         this.onBack = this.onBack.bind(this);
+        this.updateData = this.updateData.bind(this);
+    }
+
+    componentDidMount() {
+        this.updateData();
+    }
+
+    updateData() {
+        this.setState({
+            users: InitialData.users,
+            houses: InitialData.houses});
 
     }
 
@@ -29,24 +40,34 @@ class Main extends React.Component {
         browserHistory.push("/user/" + id);
     }
 
-    onUserAdd(){}
+    onUserAdd(){
+        this.updateData();
+    }
 
     onHouseSelect(id){
         browserHistory.push("/house/" + id);
     }
 
-    onHouseAdd(){}
+    onHouseAdd(){
+        this.updateData();
+    }
 
-    onUserUpdate(){}
+    onUserUpdate(){
+        this.updateData();
+    }
 
-    onHouseUpdate(){}
+    onHouseUpdate(){
+        this.updateData();
+    }
 
     onBack(){
         browserHistory.push("/");
     }
 
     render () {
-        let adminPanelWrapper = () => <AdminPanel users={this.state.users}
+        let adminPanelWrapper = () => <AdminPanel title="#MIA"
+                                                  description="network"
+                                                  users={this.state.users}
                                            houses={this.state.houses}
                                            onUserSelect={this.onUserSelect}
                                            onUserAdd={this.onUserAdd}
@@ -68,12 +89,14 @@ class Main extends React.Component {
         };
 
         return <div>
+            <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"/>
             <Router history={browserHistory}>
                 <Route path="/" component={adminPanelWrapper}/>
                 <Route path="/user/:id" component={userPanelWrapper}/>
                 <Route path="/house/:id" component={housePanelWrapper}/>
             </Router>
-        </div>
+        </div>;
     }
 }
 
