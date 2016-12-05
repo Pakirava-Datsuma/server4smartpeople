@@ -15,10 +15,12 @@ class AdminPanel extends React.Component {
             <Grid>
                 <Row className="adminpanel-gridrow">
                     <Col xs={6} md={4}>
-                        <UsersList users={this.props.users}/>
+                        <UsersList users={this.props.users}
+                                   onItemsUpdate={this.getUsers}/>
                     </Col>
                     <Col xs={6} md={4}>
-                        <HousesList houses={this.props.houses}/>
+                        <HousesList houses={this.props.houses}
+                                    onItemsUpdate={this.getHouses}/>
                     </Col>
                 </Row>
             </Grid>

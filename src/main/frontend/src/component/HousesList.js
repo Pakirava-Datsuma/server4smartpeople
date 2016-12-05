@@ -22,7 +22,7 @@ class HousesList extends React.Component {
                 return {
                     id: house.id,
                     url: house.photoURL,
-                    name: house.id
+                    name: house.name
                 }
             });
         }
@@ -30,7 +30,8 @@ class HousesList extends React.Component {
                            items={items}
                            onClick={this.props.onUserSelect}
                            header={this.state.title + ": " + items.length}
-                           bsStyle={this.state.panelStyle}/>;
+                           bsStyle={this.state.panelStyle}
+                          onItemsUpdate={this.props.onItemsUpdate}/>;
     }
 }
 export default HousesList;

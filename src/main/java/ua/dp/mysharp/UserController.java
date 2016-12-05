@@ -11,18 +11,18 @@ import java.util.Collection;
  *
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 	
 	@Autowired
 	UserService userService;
 
-	@RequestMapping("/user")
+	@RequestMapping("/one")
 	public User getUser() {
 		return userService.getOne();
 	}
 
-	@RequestMapping("/users")
+	@RequestMapping("/all")
 	public Collection<User> getUserList() {
 		return userService.getAll();
 	}

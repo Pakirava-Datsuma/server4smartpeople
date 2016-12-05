@@ -22,7 +22,7 @@ class UsersList extends React.Component {
                 return {
                     id: user.id,
                     url: user.photoURL,
-                    name: user.id
+                    name: user.name
                 }
             });
         }
@@ -30,7 +30,8 @@ class UsersList extends React.Component {
                           items={items}
                           onClick={this.props.onUserSelect}
                           header={this.state.title + ": " + items.length}
-                          bsStyle={this.state.panelStyle}/>;
+                          bsStyle={this.state.panelStyle}
+                          onItemsUpdate={this.props.onItemsUpdate}/>;
     }
 }
  export default UsersList;

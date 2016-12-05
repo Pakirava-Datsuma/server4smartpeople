@@ -21,10 +21,10 @@ public class User {
 	@GeneratedValue
     private Long id;
 
-    private String firstName, lastName;
-    private String profilePhotoURL;
+    private String name;
+    private String photoURL;
 	
-	private String favoriteSongURL;
+	private String songURL;
 
 	@OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
 	private Collection<Place> places;

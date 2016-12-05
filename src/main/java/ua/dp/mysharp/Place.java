@@ -17,7 +17,9 @@ public class Place {
     @Id
     @GeneratedValue
     private Long id;
-    private String Name;
+    private String name;
+    private String photoURL;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -14,10 +14,10 @@ public class UserServiceImpl implements UserService {
 	UserRepository userRepo;
 
 	@Override
-	public User create(String firstName, String lastName) {
+	public User create(String name, String photoURL) {
 		User user = new User();
-		user.setFirstName(firstName);
-		user.setLastName(lastName);
+		user.setName(name);
+		user.setPhotoURL(photoURL);
 		userRepo.save(user);
 		return user;
 	}
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 	public boolean setFavoriteMusic(Long id, String url) {
 		User user = find(id);
 		if (user == null) return false;
-		user.setFavoriteSongURL(url);
+		user.setSongURL(url);
 		userRepo.save(user);
 		return true;
 	}
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 	public boolean setUserPhoto(Long id, String url) {
 		User user = find(id);
 		if (user == null) return false;
-		user.setProfilePhotoURL(url);
+		user.setPhotoURL(url);
 		userRepo.save(user);
 		return true;
 	}

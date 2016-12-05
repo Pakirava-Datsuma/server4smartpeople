@@ -11,7 +11,7 @@ import java.util.Collection;
  * Created by swanta on 28.11.16.
  */
 @RestController
-@RequestMapping("/place")
+@RequestMapping("/places")
 public class PlaceController {
 
     @Autowired
