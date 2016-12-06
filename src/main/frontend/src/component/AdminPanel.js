@@ -7,9 +7,11 @@ import {UsersList} from './UsersList';
 import {HousesList} from './HousesList';
 import InitialData from './InitialData';
 
+console.log("adminpanel loading...");
 class AdminPanel extends React.Component {
     constructor () {
         super();
+        console.log("adminPanel created");
         this.getUsers = this.getUsers.bind(this);
         this.getHouses = this.getHouses.bind(this);
     }
@@ -34,6 +36,7 @@ class AdminPanel extends React.Component {
     }
 
     componentDidMount(){
+        console.log("AdminPanel mounted");
         this.getUsers();
         this.getHouses();
     }
@@ -55,5 +58,6 @@ class AdminPanel extends React.Component {
         </div>;
     }
 }
+console.log("adminpanel loaded");
 
 export default AdminPanel;

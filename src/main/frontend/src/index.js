@@ -7,14 +7,18 @@ import {UserPanel} from './component/UserPanel';
 import {HousePanel} from './component/HousePanel';
 // import './index.css';
 
+console.log("injecting router to root...");
+
 ReactDOM.render((
         <Router history={browserHistory}>
             <Route path="/" component={Main}>
-                <IndexRoute component={AdminPanel}/>
-                <Route path="user/:id" component={UserPanel}/>
-                <Route path="house/:id" component={HousePanel}/>
+                {/*<IndexRoute component={AdminPanel}/>*/}
+                {/*<Route path="user/:id" component={UserPanel}/>*/}
+                {/*<Route path="house/:id" component={HousePanel}/>*/}
             </Route>
         </Router>
     ),
   document.getElementById('root')
 );
+
+console.log("router injected");
