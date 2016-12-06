@@ -13,7 +13,7 @@ class ImageWithTooltip extends React.Component {
             {this.props.text}
         </Tooltip>;
 
-        onClick = function () => {this.props.onClick(this.props.id);};
+        onClick = function () {this.props.onClick(this.props.id);};
 
         image =
             <Image className="mediumAvatar" src={this.props.url} circle
