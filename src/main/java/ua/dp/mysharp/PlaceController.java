@@ -15,22 +15,33 @@ import java.util.Collection;
 public class PlaceController {
 
     @Autowired
+    private
     PlaceService placeService;
 
     @RequestMapping("/all")
-    public Collection<Place> getPlaces() {
-        return placeService.getAll();
+    public Collection<PlaceDTO> getPlaces() {
+        return placeService.convert(placeService.getAll());
     }
 
     @RequestMapping("/one")
-    public Place getMainPlace(){
-        return placeService.getOne();
+    public PlaceDTO getMainPlace(){
+        return placeService.convert(placeService.getOne());
     }
 
     @RequestMapping(value = "/one",
                     params = {"id"})
-    public Place getOne(@RequestParam("id") Long id) {
-        return placeService.find(id);
+    public PlaceDTO getOne(@RequestParam("id") Long id) {
+        return placeService.convert(placeService.find(id));
+    }
+
+    @RequestMapping(value = "/new",
+                    params = {"name", "photo", "owner"})
+    public PlaceDTO addPlace(@RequestParam("name") String name,
+                          @RequestParam("photo") String photo,
+                          @RequestParam("owner") Long ownerId) {
+        Place place = placeService.create(name, ownerId);
+        place.setPhotoURL(photo);
+        return placeService.convert(place);
     }
 
 }

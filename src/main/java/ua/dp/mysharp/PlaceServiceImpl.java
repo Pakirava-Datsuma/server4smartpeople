@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.stream.Collectors;
 
 @Service
 public class PlaceServiceImpl implements PlaceService {
@@ -13,13 +13,13 @@ public class PlaceServiceImpl implements PlaceService {
 	@Autowired
 	PlaceRepository placeRepo;
 	@Autowired
-	UserService userService;
+	UserRepository userRepo;
 
 	@Override
 	public Place create(String name, Long ownerId) {
 		Place place = new Place();
 		place.setName(name);
-		place.setOwner(userService.find(ownerId));
+		place.setOwner(userRepo.findOne(ownerId));
 		placeRepo.save(place);
 		return place;
 	}
@@ -30,12 +30,11 @@ public class PlaceServiceImpl implements PlaceService {
 	}
 
 	@Override
-	public void createTestPlace() {
-		User user = userService.getOne();
-		if (user == null) throw  new RuntimeException("you must create test owner first");
+	public void createTestPlace(User owner) {
+		if (owner == null) throw  new RuntimeException("you must create test owner first");
 		Place testPlace = create(
 				"TestPlace",
-				user.getId());
+				owner.getId());
 		if (testPlace == null) throw new RuntimeException("test place not created");
 
 		System.out.println("test place created: " + testPlace.getName());
@@ -44,17 +43,35 @@ public class PlaceServiceImpl implements PlaceService {
 
 	@Override
 	public Collection<Place> getAll() {
-		Collection<Place> collection = new ArrayList<Place>();
-		Iterator<Place> iterator =  placeRepo.findAll().iterator();
-		while (iterator.hasNext()) {
-			collection.add(iterator.next());
+		Collection<Place> places = new ArrayList<Place>();
+		for (Place place : placeRepo.findAll()) {
+			places.add(place);
 		}
-		return collection;
+		return places;
 	}
 	
 	@Override
 	public Place getOne() {
 		return placeRepo.findAll().iterator().next();
+	}
+
+	public Place convert(PlaceDTO dto) {
+		Place place = placeRepo.findOne(dto.getId());
+		if (place == null) {
+			User owner = userRepo.findOne(dto.getOwnerId());
+			place = new Place(dto.getId(), dto.getName(), dto.getPhotoURL(), owner);
+		}
+		return place;
+	}
+
+	public PlaceDTO convert(Place place) {
+		return new PlaceDTO(place);
+	}
+
+	public Collection<PlaceDTO> convert(Collection<Place> places) {
+		return places.stream()
+				.map(PlaceDTO::new)
+				.collect(Collectors.toList());
 	}
 
 }
