@@ -9,7 +9,7 @@ public interface PlaceService {
 
 	Place find(Long id);
 
-	void createTestPlace(User owner);
+	Place createTestPlace(User owner);
 
 	Collection<Place> getAll();
 

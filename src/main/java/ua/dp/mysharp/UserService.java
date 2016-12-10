@@ -11,7 +11,7 @@ public interface UserService {
 	boolean setFavoriteMusic(Long id, String url);
 	boolean setUserPhoto(Long id, String url);
 	
-	void createTestUser();
+	User createTestUser();
 	Collection<User> getAll();
 	User getOne();
 

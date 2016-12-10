@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void createTestUser() {
+	public User createTestUser() {
 		User testUser = create(
 				"Test", 
 				"User");
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
 				"https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://uk1.internet-radio.com:8004/listen.pls&t=.pls");
 		setUserPhoto(testUser.getId(), "http://iconizer.net/files/Practika/orig/owner.png");
 		System.out.println("test owner created: " + testUser.toString());
-
+		return testUser;
 	}
 
 	@Override

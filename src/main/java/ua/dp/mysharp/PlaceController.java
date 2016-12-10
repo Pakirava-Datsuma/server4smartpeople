@@ -17,6 +17,9 @@ public class PlaceController {
     @Autowired
     private
     PlaceService placeService;
+    @Autowired
+    private
+    UserService userService;
 
     @RequestMapping("/all")
     public Collection<PlaceDTO> getPlaces() {
@@ -42,6 +45,13 @@ public class PlaceController {
         Place place = placeService.create(name, ownerId);
         place.setPhotoURL(photo);
         return placeService.convert(place);
+    }
+
+    @RequestMapping("/test")
+    public PlaceDTO createTestPlace() {
+        User owner = userService.getOne();
+        if (owner == null) owner = userService.createTestUser();
+        return placeService.convert(placeService.createTestPlace(owner));
     }
 
 }

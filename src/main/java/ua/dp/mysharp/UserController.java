@@ -27,4 +27,7 @@ public class UserController {
 		return userService.getAll();
 	}
 
+	@RequestMapping("/test")
+	public User createTestUser() { return userService.createTestUser();}
+
 }

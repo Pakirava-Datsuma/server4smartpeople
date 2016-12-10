@@ -23,8 +23,7 @@ public class AppController {
 
     @RequestMapping("/test")
     public String createTestEntities() {
-        userService.createTestUser();
-        placeService.createTestPlace();
+        placeService.createTestPlace(userService.createTestUser());
         return String.format(
                 "now application has:\n" +
                     " users: %d\n" +

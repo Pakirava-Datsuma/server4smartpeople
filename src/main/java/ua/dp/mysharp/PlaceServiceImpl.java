@@ -30,7 +30,7 @@ public class PlaceServiceImpl implements PlaceService {
 	}
 
 	@Override
-	public void createTestPlace(User owner) {
+	public Place createTestPlace(User owner) {
 		if (owner == null) throw  new RuntimeException("you must create test owner first");
 		Place testPlace = create(
 				"TestPlace",
@@ -38,7 +38,7 @@ public class PlaceServiceImpl implements PlaceService {
 		if (testPlace == null) throw new RuntimeException("test place not created");
 
 		System.out.println("test place created: " + testPlace.getName());
-
+		return testPlace;
 	}
 
 	@Override
