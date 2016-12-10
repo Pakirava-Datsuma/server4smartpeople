@@ -11,7 +11,7 @@ const InitialData = {
         },
         {
             id: 1,
-            photoURL: "https://d3ui957tjb5bqd.cloudfront.net/images/screenshots/products/150/1503/1503352/round-cat-pet-shop-store-logo-template-3-f.png?1469888649",
+            photoURL: "https://s-media-cache-ak0.pinimg.com/236x/06/bb/0a/06bb0aab77b49b3a9b5ed41096e495f2.jpg",
             musicURL: "",
             name: "test user"
         },
@@ -54,7 +54,10 @@ const InitialData = {
             ownerId: [1],
             name: "test place"
         },
-    ]
+    ],
+
+    DefaultUserLogoURL: "http://simpleicon.com/wp-content/uploads/add-user.svg",
+    DefaultHouseLogoURL: "https://cdn.pixabay.com/photo/2014/04/03/00/38/house-308936_1280.png",
 };
 // console.log("length: " + InitialData.users.length);
 // console.log("array: " + InitialData.users.toString());

@@ -9,6 +9,12 @@ class UserPanel extends React.Component {
     constructor (props) {
         super();
         this.getUser = this.getUser.bind(this);
+        this.state = {
+            user: {
+                name: "not loaded",
+
+            },
+        }
     }
 
     getUser(id) {
@@ -26,8 +32,7 @@ class UserPanel extends React.Component {
 
     render () {
         return <div>
-            <PageHeader>! Username here !</PageHeader>
-            {this.state.user}
+            <PageHeader>this.state.user.name</PageHeader>
         </div>;
 
     };

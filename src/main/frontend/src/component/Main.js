@@ -17,10 +17,14 @@ class Main extends React.Component {
     render () {
         console.log("Main rendering...");
         return (
-            <div className="header" margin="2em">
+            <div>
+            <div className="header" marginWidth="2em" marginHeight="0.5em">
                 <PageHeader>#MIA
                     <small>network</small>
                 </PageHeader>
+                {/*<Link href="/">View</Link>*/}
+                {/*<Link href="simulate">Simulate</Link>*/}
+            </div>
                 {this.props.children}
             </div>);
     }

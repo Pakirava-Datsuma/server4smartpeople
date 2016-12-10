@@ -3,14 +3,14 @@
  */
 import React from 'react';
 import ReactTimeout from 'react-timeout';
-import {Panel, Grid} from 'react-bootstrap';
+import {Panel, Grid, Button} from 'react-bootstrap';
 import ImageWithTooltip from './ImageWithTooltip';
 
-class ImageList extends React.Component {
+export class ImageList extends React.Component {
     constructor(){
         super();
         this.state={
-            updateInterval: 2
+            updateInterval: 20000,
         };
     }
 
@@ -35,7 +35,7 @@ class ImageList extends React.Component {
     }
 
     render () {
-        let imagesSet = "set is empty for now...";
+        let imagesSet = <p>No data loaded...</p>;
         if (this.props.items) {
             imagesSet = this.props.items.map((item) =>
                 <ImageWithTooltip id={item.id}
@@ -45,11 +45,25 @@ class ImageList extends React.Component {
                                   onClick={this.props.onClick}
                                   key={item.id}/>)
         }
-        return <Panel header={<h3>{this.props.header}</h3>}
+
+        let header=<div>
+            <h3>{this.props.header}</h3>
+            {this.props.children}
+        </div>;
+
+        return <Panel header={header}
                       bsStyle={this.props.bsStyle}>
                 {imagesSet}
             </Panel>;
     }
 }
 
-export default ImageList;
+export var AddButton = (props) => {
+    return <Button onClick={props.onClick}
+                   bsStyle={props.bsStyle}>+</Button>
+}
+
+export var UpdateButton = (props) => {
+    return <Button onClick={props.onClick}
+                   bsStyle={props.bsStyle}>(O)</Button>
+}

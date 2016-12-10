@@ -13,9 +13,14 @@ ReactDOM.render((
         <Router history={browserHistory}>
             <Route path="/" component={Main}>
                 <IndexRoute component={AdminPanel}/>
-                <Route path="user/:id" component={UserPanel}/>
-                <Route path="house/:id" component={HousePanel}/>
+                {/*<Route path="user/:id" component={UserPanel}/>*/}
+                {/*<Route path="house/:id" component={HousePanel}/>*/}
             </Route>
+            {/*<Route path="simulate" component={Main}>*/}
+                {/*<IndexRoute component={AdminPanel}/>*/}
+                {/*<Route path="user/:id" component={UserPanel}/>*/}
+                {/*<Route path="house/:id" component={HousePanel}/>*/}
+            {/*</Route>*/}
         </Router>
     ),
   document.getElementById('root')
