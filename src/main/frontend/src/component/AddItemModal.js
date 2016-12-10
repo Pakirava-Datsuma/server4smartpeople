@@ -4,30 +4,30 @@
 import React from 'react';
 import ReactTimeout from 'react-timeout';
 import {ButtonToolbar, Button, Image, Modal, FormGroup, FormControl,
-  ControlLabel} from 'react-bootstrap';
+  ControlLabel, Glyphicon} from 'react-bootstrap';
 import ImageWithTooltip from './ImageWithTooltip';
 
 export default class AddItemModal extends React.Component {
     constructor(){
         super();
         this.state={
-            show: false,
-            entity: "this.props.entity",
-            logoURL: "this.props.logo",
+            // show: false,
         };
+        this.onOk = this.onOk.bind(this);
+        this.onCancel = this.onCancel.bind(this);
     }
 
     defaultProps = {
         show: false,
-        entity: "",
-        logoURL: "",
+        entity: "something",
+        glyph: "info-sign",
     };
 
     onOk(){
         // show sending data to server dialog
         // and only after succes you may hide the modal
         this.props.onAdd();
-        this.props.onHide();
+        // this.props.onHide();
     };
 
     onCancel(){
@@ -37,31 +37,37 @@ export default class AddItemModal extends React.Component {
         let form = <form>
             <FormGroup controlId="modalName">
                 <ControlLabel>Name</ControlLabel>
-                <FormControl type="text" placeHolder="type your name here" />
+                <FormControl type="text" placeholder="type your name here" />
             </FormGroup>
             <FormGroup controlId="modalImage">
                 <ControlLabel>Photo</ControlLabel>
-                <FormControl type="URL to photo" placeHolder="paste link to your photo here" />
+                <FormControl type="URL to photo" placeholder="paste link to your photo here" />
             </FormGroup>
         </form>;
 
         let title = <Modal.Title>
-            <Image width="15em"
-                   margin="1em"
-                   src={this.props.logo}
-                   rounded />
+            <Glyphicon glyph={this.props.glyph}/>
             {this.props.title}
         </Modal.Title>;
 
-        let buttons = <ButtonToolbar>
-            {/*<Button onClick={this.onOK.bind(this)}>{this.props.btnOK}</Button>*/}
-            <Button onClick={this.onCancel.bind(this)}>{this.props.btnCancel}</Button>
-        </ButtonToolbar>;
+        let buttons =
+        // <ButtonToolbar>
+            <Button onClick={this.onOk} block>
+              <Glyphicon glyph="ok" />
+              {this.props.btnOk}
+              </Button>
+            // <Button onClick={this.onCancel}>{this.props.btnCancel}</Button>
+        // </ButtonToolbar>
+        ;
 
         return  <Modal show={this.props.show}
                        onHide={this.props.onHide}
-                       onAdd={this.props.onAdd}>
-            <Modal.Header closeButton>{title}</Modal.Header>
+                       keyboard
+                       >
+            <Modal.Header onHide={this.props.onHide}
+                          closeButton>
+                {title}
+            </Modal.Header>
             <Modal.Body>
                 {form}
             </Modal.Body>

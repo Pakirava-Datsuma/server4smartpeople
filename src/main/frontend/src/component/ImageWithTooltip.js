@@ -13,11 +13,14 @@ class ImageWithTooltip extends React.Component {
             {this.props.text}
         </Tooltip>;
 
-        onClick = function () {this.props.onClick(this.props.id);};
+        onClick = () => this.props.onClick(this.props.id);
 
         image =
-            <Image className="mediumAvatar" src={this.props.url} circle
-                   onClick={onClick} />;
+            <Image className="smallAvatar" src={this.props.url}
+                   onClick={onClick}
+                   responsive
+                   circle
+                    />;
 
         trigger = <OverlayTrigger overlay={tooltip}
                             placement="top"
