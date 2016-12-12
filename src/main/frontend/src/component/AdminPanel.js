@@ -40,20 +40,20 @@ class AdminPanel extends React.Component {
     onHideAddHouseModal() {this.setState({showAddHouseModal: false})}
 
     getUsers() {
-        // console.log("updating users...");
+        console.log("updating users...");
 
-        // $.get("/users/all", (users)=>{
-            console.log("...users upated");
-            // this.setState({users: users});
-        // });
+        $.get("/users/all", (users)=>{
+            console.log("users: " + users.toString());
+            this.setState({users: users});
+        });
     }
 
     getHouses() {
-        // console.log("updating houses...");
-        // $.get("/places/all", (houses)=>{
-            console.log("...houses upated");
-            // this.setState({houses: houses});
-        // });
+        console.log("updating houses...");
+        $.get("/places/all", (houses)=>{
+          console.log("houses: " + houses);
+            this.setState({houses: houses});
+        });
     }
 
     // shouldComponentUpdate(nextProps, nextState) {
@@ -65,30 +65,48 @@ class AdminPanel extends React.Component {
 
     componentDidMount(){
         console.log("AdminPanel mounted");
-        this.getUsers();
-        this.getHouses();
+        // this.getUsers();
+        // this.getHouses();
     }
 
     onAddUser(user) {
       let newUsers = this.state.users.concat(user);
       this.setState({users: newUsers});
-        console.log("user added");
+        console.log("user added: " + user);
         return true;
     }
 
     onAddHouse(house) {
-      let newHouses = this.state.houses.concat(house);
-      this.setState({houses: newHouses});
-        console.log("house added");
+      let url= "/places/new";
+      let data={
+        name: house.name,
+        photo: house.photo,
+        owner: this.state.users[0].id,
+      };
+      // console.log(url);
+      $.get(url, data, (house)=> {
+          let newHouses = this.state.houses.concat(house);
+          this.setState({houses: newHouses});
+          console.log("house added, upd pls");
+          console.log("house sent: " + house);
+      });
         return true;
     }
 
     render () {
         console.log("adminPanel rendering...");
-        let users=this.state.users.map((user) => { return {
+        let users=[];
+        let houses=[];
+        if (Array.isArray(this.state.users))
+            users=this.state.users.map((user) => { return {
                     id: user.id,
                     url: user.photoURL,
                     name: user.name, }});
+        if (Array.isArray(this.state.houses))
+            houses=this.state.houses.map((house) => { return {
+                    id: house.id,
+                    url: house.photoURL,
+                    name: house.name, }});
         let userList=<ImageList title="Users"
                       items={users}
                       bsStyle="success"
@@ -98,10 +116,6 @@ class AdminPanel extends React.Component {
                       buttonUpdate
                       onUpdate={this.getUsers}
          />;
-        let houses=this.state.houses.map((house) => { return {
-                    id: house.id,
-                    url: house.photoURL,
-                    name: house.name, }});
         let housesList=<ImageList title="Houses"
                       items={houses}
                       bsStyle="primary"

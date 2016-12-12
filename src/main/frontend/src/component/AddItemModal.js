@@ -11,7 +11,8 @@ export default class AddItemModal extends React.Component {
     constructor(){
         super();
         this.state={
-            // show: false,
+          name: "",
+          photo: "",
         };
         this.onOk = this.onOk.bind(this);
         this.onCancel = this.onCancel.bind(this);
@@ -24,10 +25,15 @@ export default class AddItemModal extends React.Component {
     };
 
     onOk(){
+      alert("sending?");
         // show sending data to server dialog
         // and only after succes you may hide the modal
-        this.props.onAdd();
-        // this.props.onHide();
+        let entity={
+          name: this.state.name,
+          photo: this.state.photo,
+        };
+        if (this.props.onAdd(entity))
+            this.props.onHide();
     };
 
     onCancel(){
@@ -37,11 +43,13 @@ export default class AddItemModal extends React.Component {
         let form = <form>
             <FormGroup controlId="modalName">
                 <ControlLabel>Name</ControlLabel>
-                <FormControl type="text" placeholder="type your name here" />
+                <FormControl type="text" placeholder="type your name here"
+                      onChange={(event) => {this.setState({name: event.target.value})}}/>
             </FormGroup>
             <FormGroup controlId="modalImage">
                 <ControlLabel>Photo</ControlLabel>
-                <FormControl type="URL to photo" placeholder="paste link to your photo here" />
+                <FormControl type="URL to photo" placeholder="paste link to your photo here"
+                      onChange={(event) => {this.setState({photo: event.target.value})}}/>
             </FormGroup>
         </form>;
 
@@ -52,7 +60,7 @@ export default class AddItemModal extends React.Component {
 
         let buttons =
         // <ButtonToolbar>
-            <Button onClick={this.onOk} block>
+            <Button block onClick={this.onOk}>
               <Glyphicon glyph="ok" />
               {this.props.btnOk}
               </Button>
