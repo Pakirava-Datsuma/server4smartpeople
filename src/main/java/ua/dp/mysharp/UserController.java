@@ -18,14 +18,14 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
-//	@RequestMapping("/all")
+	@RequestMapping("/")
 	public @ResponseBody Collection<User> getAll() {
 		return userService.getAll();
 	}
 
 	@RequestMapping("/user/{id}")
 	public @ResponseBody User get(@RequestParam("id") Long id) {
-		return userService.find(id);
+		return userService.get(id);
 	}
 
 	@RequestMapping(value = "/new", method = RequestMethod.POST)

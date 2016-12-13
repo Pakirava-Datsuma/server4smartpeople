@@ -11,25 +11,30 @@ import java.util.Iterator;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	UserRepository userRepo;
+	private UserRepository userRepo;
+
+	@Override
+	public User create(String name, String photoURL) {
+		User user = new User();
+		user.setName(name);
+		user.setPhotoURL(photoURL);
+		userRepo.save(user);
+		return user;
+	}
 
 	@Override
 	public User add(User user) {
-//		User user = new User();
-//		user.setName(name);
-//		user.setPhotoURL(photoURL);
-
 		return userRepo.save(user);
 	}
 
 	@Override
-	public User find(Long id) {
+	public User get(Long id) {
 		return userRepo.findOne(id);
 	}
 
 	@Override
 	public boolean setFavoriteMusic(Long id, String url) {
-		User user = find(id);
+		User user = get(id);
 		if (user == null) return false;
 		user.setSongURL(url);
 		userRepo.save(user);
@@ -38,11 +43,25 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean setUserPhoto(Long id, String url) {
-		User user = find(id);
+		User user = get(id);
 		if (user == null) return false;
 		user.setPhotoURL(url);
 		userRepo.save(user);
 		return true;
+	}
+
+	@Override
+	public User createTestUser() {
+		User testUser = create(
+				"Test", 
+				"User");
+		if (testUser == null) throw new RuntimeException("test owner not created");
+		
+		setFavoriteMusic(testUser.getId(),
+				"https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://uk1.internet-radio.com:8004/listen.pls&t=.pls");
+		setUserPhoto(testUser.getId(), "http://iconizer.net/files/Practika/orig/owner.png");
+		System.out.println("test owner created: " + testUser.toString());
+		return testUser;
 	}
 
 	@Override
@@ -54,10 +73,4 @@ public class UserServiceImpl implements UserService {
 		}
 		return collection;
 	}
-	
-	@Override
-	public User get(Long id) {
-		return userRepo.findAll().iterator().next();
-	}
-
 }

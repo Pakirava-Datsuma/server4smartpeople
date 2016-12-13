@@ -20,4 +20,15 @@ public class AppController {
     public String aboutMIA() {
         return "Hi! This is #MIA - My Information Assistant.";
     }
+
+    @RequestMapping("/test")
+    public String createTestEntities() {
+        placeService.createTestPlace(userService.createTestUser());
+        return String.format(
+                "now application has:\n" +
+                    " users: %d\n" +
+                    " places: %d",
+                userService.getAll().size(),
+                placeService.getAll().size());
+    }
 }

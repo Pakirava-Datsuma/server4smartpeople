@@ -5,21 +5,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 @Service
 public class PlaceServiceImpl implements PlaceService {
 
 	@Autowired
-	PlaceRepository placeRepo;
+	private PlaceRepository placeRepo;
 	@Autowired
-	UserRepository userRepo;
+	private UserService userService;
 
 	@Override
 	public Place create(String name, Long ownerId) {
 		Place place = new Place();
 		place.setName(name);
-		place.setOwner(userRepo.findOne(ownerId));
+		place.setOwner(userService.get(ownerId));
 		placeRepo.save(place);
 		return place;
 	}
@@ -56,27 +55,8 @@ public class PlaceServiceImpl implements PlaceService {
 	}
 	
 	@Override
-	public Place getOne() {
-		return placeRepo.findAll().iterator().next();
-	}
-
-	public Place convert(PlaceDTO dto) {
-		Place place = placeRepo.findOne(dto.getId());
-		if (place == null) {
-			User owner = userRepo.findOne(dto.getOwnerId());
-			place = new Place(dto.getId(), dto.getName(), dto.getPhotoURL(), owner);
-		}
-		return place;
-	}
-
-	public PlaceDTO convert(Place place) {
-		return new PlaceDTO(place);
-	}
-
-	public Collection<PlaceDTO> convert(Collection<Place> places) {
-		return places.stream()
-				.map(PlaceDTO::new)
-				.collect(Collectors.toList());
+	public Place get(Long id) {
+		return placeRepo.findOne(id);
 	}
 
 }

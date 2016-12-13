@@ -13,13 +13,7 @@ public interface PlaceService {
 
 	Collection<Place> getAll();
 
-	Place getOne();
-
-	Place convert(PlaceDTO dto);
-
-	PlaceDTO convert(Place place);
-
-	Collection<PlaceDTO> convert(Collection<Place> places);
+	Place get(Long id);
 
 	Place add(Place place);
 }
