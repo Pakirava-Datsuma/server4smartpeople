@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by swanta on 28.11.16.
  */
 @RestController
-@RequestMapping("/mia")
+@RequestMapping("/api/server")
 public class AppController {
 
     @Autowired
@@ -19,16 +19,5 @@ public class AppController {
     @RequestMapping("/about")
     public String aboutMIA() {
         return "Hi! This is #MIA - My Information Assistant.";
-    }
-
-    @RequestMapping("/test")
-    public String createTestEntities() {
-        placeService.createTestPlace(userService.createTestUser());
-        return String.format(
-                "now application has:\n" +
-                    " users: %d\n" +
-                    " places: %d",
-                userService.getAll().size(),
-                placeService.getAll().size());
     }
 }

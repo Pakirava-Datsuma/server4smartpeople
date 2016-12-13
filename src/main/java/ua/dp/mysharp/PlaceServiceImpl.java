@@ -30,8 +30,13 @@ public class PlaceServiceImpl implements PlaceService {
 	}
 
 	@Override
+	public Place add(Place place) {
+		return placeRepo.save(place);
+	}
+
+	@Override
 	public Place createTestPlace(User owner) {
-		if (owner == null) throw  new RuntimeException("you must create test owner first");
+		if (owner == null) throw  new RuntimeException("you must add test owner first");
 		Place testPlace = create(
 				"TestPlace",
 				owner.getId());

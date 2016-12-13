@@ -1,9 +1,9 @@
 package ua.dp.mysharp;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -11,7 +11,7 @@ import java.util.Collection;
  * Created by swanta on 28.11.16.
  */
 @RestController
-@RequestMapping("/places")
+@RequestMapping("/api/places")
 public class PlaceController {
 
     @Autowired
@@ -21,37 +21,31 @@ public class PlaceController {
     private
     UserService userService;
 
-    @RequestMapping("/all")
-    public Collection<PlaceDTO> getPlaces() {
-        return placeService.convert(placeService.getAll());
+    @RequestMapping("/")
+    public ResponseEntity<Collection<Place>> getAll() {
+        return new ResponseEntity<>(placeService.getAll(), HttpStatus.OK);
     }
 
-    @RequestMapping("/one")
-    public PlaceDTO getMainPlace(){
-        return placeService.convert(placeService.getOne());
-    }
+//    @RequestMapping("/one")
+//    public PlaceDTO getMainPlace(){
+//        return placeService.convert(placeService.get());
+//    }
 
-    @RequestMapping(value = "/one",
-                    params = {"id"})
-    public PlaceDTO getOne(@RequestParam("id") Long id) {
+    @RequestMapping("/one/{id}")
+    public PlaceDTO get(@RequestParam("id") Long id) {
         return placeService.convert(placeService.find(id));
     }
 
-    @RequestMapping(value = "/new",
-                    params = {"name", "photo", "owner"})
-    public PlaceDTO addPlace(@RequestParam("name") String name,
-                          @RequestParam("photo") String photo,
-                          @RequestParam("owner") Long ownerId) {
+    @RequestMapping(value = "/new", method = RequestMethod.POST)
+    public ResponseEntity<Place> add(@RequestBody Place item) {
+        return new ResponseEntity<>(placeService.add(item), HttpStatus.CREATED);
+    }
+    @RequestMapping(value = "/new", params = {"name", "photo", "owner"})
+    public ResponseEntity<Place> add(@RequestParam("name") String name,
+                                     @RequestParam("photo") String photo,
+                                     @RequestParam("owner") Long ownerId) {
         Place place = placeService.create(name, ownerId);
         place.setPhotoURL(photo);
-        return placeService.convert(place);
+        return new ResponseEntity<>(placeService.add(place), HttpStatus.CREATED);
     }
-
-    @RequestMapping("/test")
-    public PlaceDTO createTestPlace() {
-        User owner = userService.getOne();
-        if (owner == null) owner = userService.createTestUser();
-        return placeService.convert(placeService.createTestPlace(owner));
-    }
-
 }

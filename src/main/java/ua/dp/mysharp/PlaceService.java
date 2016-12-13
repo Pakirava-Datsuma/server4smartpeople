@@ -20,4 +20,6 @@ public interface PlaceService {
 	PlaceDTO convert(Place place);
 
 	Collection<PlaceDTO> convert(Collection<Place> places);
+
+	Place add(Place place);
 }

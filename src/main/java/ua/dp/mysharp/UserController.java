@@ -1,8 +1,9 @@
 package ua.dp.mysharp;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -11,23 +12,24 @@ import java.util.Collection;
  *
  */
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 	
 	@Autowired
 	UserService userService;
 
-	@RequestMapping("/one")
-	public User getUser() {
-		return userService.getOne();
-	}
-
-	@RequestMapping("/all")
-	public Collection<User> getUserList() {
+//	@RequestMapping("/all")
+	public @ResponseBody Collection<User> getAll() {
 		return userService.getAll();
 	}
 
-	@RequestMapping("/test")
-	public User createTestUser() { return userService.createTestUser();}
+	@RequestMapping("/user/{id}")
+	public @ResponseBody User get(@RequestParam("id") Long id) {
+		return userService.find(id);
+	}
 
+	@RequestMapping(value = "/new", method = RequestMethod.POST)
+	public ResponseEntity<User> add(@RequestBody User user) {
+		return new ResponseEntity<>(userService.add(user), HttpStatus.CREATED);
+	}
 }
