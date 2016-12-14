@@ -69,12 +69,17 @@ export default class ImageList extends React.Component {
         let imagesSet = <p>No data loaded...</p>;
         if (this.props.items) {
             imagesSet = this.props.items.map((item, id) =>
-                <ImageWithTooltip id={item.id}
-                                  url={item.url}
-                                  text={item.name}
-                                  category={this.props.title}
-                                  onClick={this.props.onSelect}
-                                  key={item.id}/>)
+              <span className="image-list-item">
+                  <ImageWithTooltip className="image-tooltip"
+                                    id={item.id}
+                                    url={item.url}
+                                    text={item.name}
+                                    category={this.props.title}
+                                    onClick={this.props.onSelect}
+                                    key={item.id}
+                                    responsive
+                                    />
+              </span>)
         }
 
         let header=<div><h3>{this.props.title + ": " + imagesSet.length}</h3>

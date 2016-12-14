@@ -1,9 +1,9 @@
 /**
  * Created by swanta on 30.11.16.
  */
+import {HouseController, UserController} from './ApiList';
 import React from 'react';
 import {Grid, Row, Col} from 'react-bootstrap';
-import $ from 'jquery';
 // import UsersList from './UsersList';
 // import HousesList from './HousesList';
 import ImageList from './ImageList';
@@ -41,8 +41,7 @@ class AdminPanel extends React.Component {
 
     getUsers() {
         console.log("updating users...");
-
-        $.get("/users/all", (users)=>{
+        UserController.getAll((users)=>{
             console.log("users: " + users.toString());
             this.setState({users: users});
         });
@@ -50,9 +49,9 @@ class AdminPanel extends React.Component {
 
     getHouses() {
         console.log("updating houses...");
-        $.get("/places/all", (houses)=>{
+        HouseController.getAll((houses)=>{
           console.log("houses: " + houses);
-            this.setState({houses: houses});
+          this.setState({houses: houses});
         });
     }
 
@@ -70,25 +69,29 @@ class AdminPanel extends React.Component {
     }
 
     onAddUser(user) {
-      let newUsers = this.state.users.concat(user);
-      this.setState({users: newUsers});
-        console.log("user added: " + user);
-        return true;
+      UserController.post(user, (newUser) => {
+        let newUsers = this.state.users.concat(newUser);
+        this.setState({users: newUsers});
+        console.log("user added, upd pls");
+        console.log("user sent: " + user);
+        console.log("user got: " + newUser);
+      });
+      return true;
     }
 
     onAddHouse(house) {
-      let url= "/places/new";
       let data={
         name: house.name,
         photo: house.photo,
-        owner: this.state.users[0].id,
+        ownerId: this.state.users[0].id,
       };
+      HouseController.post(data, (newHouse) => {
       // console.log(url);
-      $.get(url, data, (house)=> {
-          let newHouses = this.state.houses.concat(house);
+          let newHouses = this.state.houses.concat(newHouse);
           this.setState({houses: newHouses});
           console.log("house added, upd pls");
           console.log("house sent: " + house);
+          console.log("house got: " + newHouse);
       });
         return true;
     }
@@ -147,7 +150,7 @@ class AdminPanel extends React.Component {
         return <div className="admin-panel">
             <Grid>
                 <Row className="adminpanel-gridrow">
-                    <Col xs={6} md={4}>
+                    <Col xs={12} md={4}>
                         {userList}
                     </Col>
                     <Col xs={6} md={4}>

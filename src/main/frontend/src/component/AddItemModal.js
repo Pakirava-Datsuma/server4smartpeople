@@ -25,7 +25,7 @@ export default class AddItemModal extends React.Component {
     };
 
     onOk(){
-      alert("sending?");
+      // alert("sending?");
         // show sending data to server dialog
         // and only after succes you may hide the modal
         let entity={

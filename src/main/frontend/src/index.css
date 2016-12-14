@@ -11,7 +11,12 @@ img.fullAvatar {
   width: 15em;
   margin: 2em;
 }
-
+.admin-panel .image-list-item {
+  width: 5em;
+  height: 5em;
+  overflow: auto;
+  margin: 1em;
+}
 body {
   margin: 0;
   padding: 0;
