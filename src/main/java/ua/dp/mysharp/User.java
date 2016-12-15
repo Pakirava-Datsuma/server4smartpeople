@@ -1,5 +1,8 @@
 package ua.dp.mysharp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +18,9 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class User {
 
 	@Id
@@ -27,6 +33,7 @@ public class User {
 	private String songURL;
 
 	@OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+	@JsonBackReference
 	private Collection<Place> places;
 
 //	@OneToMany(mappedBy = "Place", fetch = FetchType.LAZY)
