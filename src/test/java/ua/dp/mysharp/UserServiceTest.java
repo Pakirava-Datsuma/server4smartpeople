@@ -8,13 +8,12 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
+import static ua.dp.mysharp.EntityFactory.*;
 
 /**
  * Created by swanta on 13.12.16.
@@ -26,15 +25,15 @@ public class UserServiceTest {
     @InjectMocks
     private UserServiceImpl service;
 
-    private User normalUser, badUser, nullUser;
-    private Collection<User> normalUsers;
+    private User
+            normalUser = getNormalUser(),
+            badUser = getEmptyUser(),
+            nullUser = getNullUser();
+    private Collection<User>
+            normalUsers = getNormalUsers();
 
     @Before
     public void setUpRepoMock() throws Exception {
-        normalUser = getNormalUser();
-        badUser = getNullUser();
-        nullUser = null;
-        normalUsers = getNormalUsers();
 
         when(repo.findOne(normalUser.getId())).thenReturn(normalUser);
         when(repo.findOne(null)).thenThrow(new IllegalArgumentException());
@@ -101,30 +100,4 @@ public class UserServiceTest {
         }
     }
 
-    private User getNullUser() {
-        return new User(null, null, null, null, null);
-    }
-
-    private User getEmptyUser() {
-        return new User(0L, "", "", "", new HashSet<Place>(0));
-    }
-
-    private User getNormalUser() {
-        Place place = new Place(
-                2L,
-                "Cool House",
-                "http://iconizer.net/files/Practika/orig/house.png",
-                normalUser);
-        User normalUser = new User(
-                1L,
-                "Jacky",
-                "http://iconizer.net/files/Practika/orig/owner.png",
-                "https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://uk1.internet-radio.com:8004/listen.pls&t=.pls",
-                Collections.singletonList(place));
-        place.setOwner(normalUser);
-        return normalUser;
-    }
-    private Collection<User> getNormalUsers() {
-        return Collections.singletonList(normalUser);
-    }
 }

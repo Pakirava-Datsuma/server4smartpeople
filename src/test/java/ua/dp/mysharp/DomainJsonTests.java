@@ -5,21 +5,12 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
-import org.springframework.core.ResolvableType;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.stream.StreamSupport;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.in;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static ua.dp.mysharp.EntityFactory.getNormalUser;
 
 /**
  * Created by swanta on 17.12.16.
@@ -33,12 +24,13 @@ public class DomainJsonTests {
 
     @Test
     public void serializeUser() throws Exception {
-        User user = new User(1L, "Jack", "picUrl", "songUrl", Collections.emptyList());
+        User user = getNormalUser();
         JsonContent<User> json = this.userJson.write(user);
-        Arrays.stream(User.class.getDeclaredFields()).forEach(field -> {
-            assertThat(json).extractingJsonPathStringValue(field.getName())
-                    .isEqualTo(User.class.getDeclaredMethod("get" + field.getName()).invoke(user));
-        });
+        assertThat(json).extractingJsonPathStringValue("id").isEqualTo(user.getId());
+        assertThat(json).extractingJsonPathStringValue("name").isEqualTo(user.getName());
+        assertThat(json).extractingJsonPathStringValue("photoURL").isEqualTo(user.getPhotoURL());
+        assertThat(json).extractingJsonPathStringValue("songURL").isEqualTo(user.getSongURL());
+        assertThat(json).extractingJsonPathStringValue("places").isEqualTo(user.getPlaces());
     }
 
     public void deserializeUser() throws Exception {

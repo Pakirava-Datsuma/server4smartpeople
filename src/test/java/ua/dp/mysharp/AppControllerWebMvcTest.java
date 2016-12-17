@@ -12,12 +12,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
-
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ua.dp.mysharp.EntityFactory.getNormalPlace;
+import static ua.dp.mysharp.EntityFactory.getNormalUser;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(AppController.class)
@@ -40,9 +41,6 @@ public class AppControllerWebMvcTest {
 	@MockBean
 	private PlaceService placeService = new PlaceServiceImpl();
 
-	User normalUser, nullUser, emptyUser;
-	Place normalPlace;
-
 	@Before
 	public void setup() {
 //		given(userService.add(normalUser)).willReturn(normalUser);
@@ -54,12 +52,12 @@ public class AppControllerWebMvcTest {
 //
 //		given(userService.getAll()).willReturn(Collections.singleton(normalUser));
 
-        given(userService.createTestUser()).willReturn(normalUser);
-		given(placeService.createTestPlace(normalUser)).willReturn(normalPlace);
+        given(userService.createTestUser()).willReturn(getNormalUser());
+		given(placeService.createTestPlace(getNormalUser())).willReturn(getNormalPlace());
 	}
 
 	@Test
-	public void getServerInfo(){
+	public void getServerInfo() throws Exception{
 		mvc.perform(get(BASE_URL + "about")
 		        .accept(MediaType.TEXT_PLAIN)
             )
@@ -69,14 +67,14 @@ public class AppControllerWebMvcTest {
         verifyNoMoreInteractions(placeService);
 	}
 
-	public void createTestEntities(){
+	public void createTestEntities() throws Exception{
 		mvc.perform(get(BASE_URL + "test")
 		        .accept(MediaType.TEXT_PLAIN)
             )
 		    .andExpect(status().isOk())
 		    .andExpect(content().string(Matchers.matches("."))); //nonempty
         verify(userService, times(1)).createTestUser();
-        verify(placeService, times(1)).createTestPlace(normalUser);
+        verify(placeService, times(1)).createTestPlace(getNormalUser());
 	}
 
 	@Test
