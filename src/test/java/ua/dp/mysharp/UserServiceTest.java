@@ -4,9 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.mockito.internal.verification.VerificationModeFactory;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -23,55 +26,66 @@ public class UserServiceTest {
     @InjectMocks
     private UserService service;
 
-    private List<User> normalUsers = getNormalUsers();
-    private List<User> badUsers = getBadUsers();
+    private User normalUser, badUser, nullUser;
+    private Collection<User> normalUsers;
+
+    @Before
+    public void setUpRepoMock() throws Exception {
+        normalUser = getNormalUser();
+        badUser = getNullUser();
+        nullUser = null;
+        normalUsers = getNormalUsers();
+
+        when(repo.findOne(normalUser.getId())).thenReturn(normalUser);
+        when(repo.findOne(null)).thenThrow(new IllegalArgumentException());
+        when(repo.save(normalUser)).thenReturn(normalUser);
+        when(repo.findAll()).thenReturn(new Iterable<User>() {
+            @Override
+            public Iterator<User> iterator() {
+                return normalUsers.iterator();
+            }
+        });
+    }
 
     @Test
-    @ExceptionHandler(IllegalArgumentException.class)
-    public void addBadUser() throws Exception {
-        badUsers.forEach( user -> {
-            assertNull(service.add(user));
-            verify(repo).save(user);
-        });
-    }
-    @Test
-    public void addNormalUser() throws Exception {
-        normalUsers.forEach( user -> {
-            assertEquals(user, service.add(user));
-            verify(repo).save(user);
-        });
+    public void add() throws Exception {
+
+        assertNull(service.add(nullUser));
+        verify(repo, VerificationModeFactory.calls(0)).save(nullUser);
+
+        assertNull(service.add(badUser));
+        verify(repo).save(badUser);
+
+        assertEquals(normalUser, service.add(normalUser));
+        verify(repo).save(normalUser);
     }
 
     @Test
-    public void getNormalId() throws Exception {
-        normalUsers.forEach( user -> {
-            assertEquals(user, service.get(user.getId()));
-            verify(repo).findOne(user.getId());
-        });
-    }
-    @Test
-    public void getNullId() throws Exception {
+    public void get() throws Exception {
+        assertEquals(normalUser, service.get(normalUser.getId()));
         assertNull(service.get(null));
+        verify(repo, VerificationModeFactory.calls(2))
+                .findOne(normalUser.getId());
     }
 
     @Test
     public void setFavoriteMusic() throws Exception  {
-        User testUser = service.add(normalUsers.get(0));
         String testString = "!SONG_MARK!";
-        String testStringBefore = testUser.getSongURL();
-        service.setFavoriteMusic(testUser.getId(),testString);
-        assertEquals(testUser.getSongURL(), testString);
-        service.setFavoriteMusic(testUser.getId(),testStringBefore);
+//        String testStringBefore = normalUser.getSongURL();
+        service.setFavoriteMusic(normalUser.getId(),testString);
+        assertEquals(normalUser.getSongURL(), testString);
+        verify(repo).save(normalUser);
+//        service.setFavoriteMusic(normalUser.getId(),testStringBefore);
     }
 
     @Test
     public void setUserPhoto() throws Exception {
-        User testUser = service.add(normalUsers.get(0));
         String testString = "!PHOTO_MARK!";
-        String testStringBefore = testUser.getPhotoURL();
-        service.setUserPhoto(testUser.getId(),testString);
-        assertEquals(testUser.getPhotoURL(), testString);
-        service.setUserPhoto(testUser.getId(),testStringBefore);
+//        String testStringBefore = normalUser.getPhotoURL();
+        service.setUserPhoto(normalUser.getId(),testString);
+        assertEquals(normalUser.getPhotoURL(), testString);
+        verify(repo).save(normalUser);
+//        service.setUserPhoto(normalUser.getId(),testStringBefore);
     }
 
     @Test
@@ -87,61 +101,30 @@ public class UserServiceTest {
         }
     }
 
-    @Before
-    public void setUpRepoMock() throws Exception {
-        // mock single user methods
-        normalUsers.forEach(user -> {
-                    when(repo.findOne(user.getId()))
-                            .thenReturn(user);
-                    when (repo.save(user))
-                            .thenReturn(user);
-                }
-        );
-
-        badUsers.forEach(user -> {
-                    try {
-                        when(repo.findOne(user.getId()))
-                                .thenReturn(null);
-                    } catch (NullPointerException ignored) {
-                    }
-                    ;
-                    try {
-                        when(repo.save(user))
-                                .thenReturn(null);
-                    } catch (NullPointerException ignored) {
-                    }
-                    ;
-                }
-        );
-
-        when(repo.findOne(null)).thenThrow(new IllegalArgumentException());
-
-        // mock collects methods
-        when(repo.findAll()).thenReturn(new Iterable<User>() {
-            @Override
-            public Iterator<User> iterator() {
-                return normalUsers.iterator();
-            }
-        });
-
+    private User getNullUser() {
+        return new User(null, null, null, null, null);
     }
 
-    private List<User> getBadUsers() {
-        User nullUser = new User(null, null, null, null, null);
-        return Arrays.asList(null, nullUser);
+    private User getEmptyUser() {
+        return new User(0L, "", "", "", new HashSet<Place>(0));
     }
 
-    private List<User> getNormalUsers() {
-
-        User nullUser = new User(null, null, null, null, null);
-        User emptyUser = new User(0L, "", "", "", new HashSet<Place>(0));
-        User staticUser = new User(
+    private User getNormalUser() {
+        User normalUser = new User(
                 1L,
                 "Jacky",
                 "http://iconizer.net/files/Practika/orig/owner.png",
                 "https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://uk1.internet-radio.com:8004/listen.pls&t=.pls",
-                Collections.emptySet());
-        return Arrays.asList(staticUser, emptyUser);
+                null);
+        Place place = new Place(
+                2L,
+                "Cool House",
+                "http://iconizer.net/files/Practika/orig/house.png",
+                normalUser);
+        normalUser.getPlaces().add(place);
+        return normalUser;
     }
-
+    private Collection<User> getNormalUsers() {
+        return Collections.singletonList(normalUser);
+    }
 }
