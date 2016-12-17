@@ -3,8 +3,10 @@ package ua.dp.mysharp;
 import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -15,10 +17,9 @@ import static org.mockito.Mockito.when;
 /**
  * Created by swanta on 13.12.16.
  */
-//@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class PlaceControllerTest {
-    @Mock private PlaceService service;
-//    @Mock private UserService userService;
+    @Mock private PlaceService service = new PlaceServiceImpl();
     @InjectMocks private PlaceController controller;
 
     @Before

@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Collection;
@@ -15,8 +14,7 @@ import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by swanta on 13.12.16.
@@ -53,7 +51,7 @@ public class UserServiceTest {
     public void add() throws Exception {
 
         assertNull(service.add(nullUser));
-        verify(repo, VerificationModeFactory.calls(0)).save(nullUser);
+        verify(repo, never()).save(nullUser);
 
         assertNull(service.add(badUser));
         verify(repo).save(badUser);
@@ -66,7 +64,7 @@ public class UserServiceTest {
     public void get() throws Exception {
         assertEquals(normalUser, service.get(normalUser.getId()));
         assertNull(service.get(null));
-        verify(repo, VerificationModeFactory.calls(2))
+        verify(repo, times(1))
                 .findOne(normalUser.getId());
     }
 
