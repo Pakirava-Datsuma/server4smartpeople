@@ -24,11 +24,6 @@ public class PlaceServiceImpl implements PlaceService {
 	}
 
 	@Override
-	public Place find(Long id) {
-		return placeRepo.findOne(id);
-	}
-
-	@Override
 	public Place add(Place place) {
 		return placeRepo.save(place);
 	}

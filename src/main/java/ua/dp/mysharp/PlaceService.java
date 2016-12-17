@@ -7,8 +7,6 @@ public interface PlaceService {
 
 	Place create(String name, Long ownerId);
 
-	Place find(Long id);
-
 	Place createTestPlace(User owner);
 
 	Collection<Place> getAll();

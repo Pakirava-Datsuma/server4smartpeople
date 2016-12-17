@@ -24,11 +24,17 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User add(User user) {
+		if (user.getName().isEmpty()) {
+			return null;
+		}
 		return userRepo.save(user);
 	}
 
 	@Override
 	public User get(Long id) {
+		if (id == null) {
+			return null;
+		}
 		return userRepo.findOne(id);
 	}
 

@@ -30,7 +30,7 @@ public class PlaceController {
 
     @RequestMapping("/place/{id}")
     public ResponseEntity<Place> get(@RequestParam("id") Long id) {
-        return new ResponseEntity<>(placeService.find(id), HttpStatus.FOUND);
+        return new ResponseEntity<>(placeService.get(id), HttpStatus.FOUND);
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
