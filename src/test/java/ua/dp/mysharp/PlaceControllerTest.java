@@ -1,13 +1,16 @@
 package ua.dp.mysharp;
 
 import com.google.common.collect.ImmutableList;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -16,13 +19,13 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class PlaceControllerTest {
-    @Mock private PlaceService placeService;
-    @Mock private UserService userService;
+    @Mock private PlaceService service;
+//    @Mock private UserService userService;
     @InjectMocks private PlaceController controller;
 
-    @Before
+    @BeforeClass
     public void initMockPlaceService() {
-        when(placeService.getAll()).thenReturn(ImmutableList.of());
+        when(service.getAll()).thenReturn(ImmutableList.of());
     }
 
     @Test
@@ -30,21 +33,48 @@ public class PlaceControllerTest {
         //test
         controller.getAll();
         //validate
-        verify(placeService).getAll();
+        verify(service).getAll();
     }
 
     @Test
     public void get() throws Exception {
-        Long id = 1L;
-        controller.get(id);
-        verify(placeService).find(id);
+        //when
+        Place testPlace = getTestPlaceWithUser();
+        when(service.get(testPlace.getId())).thenReturn(testPlace);
+        ResponseEntity<Place> expected = new ResponseEntity<Place>(testPlace, HttpStatus.FOUND);
+
+        //test
+        ResponseEntity<Place> result = controller.get(testPlace.getId());
+
+         //validate
+        verify(service).get(testPlace.getId());
+        assertEquals(expected, result);
     }
 
     @Test
-    public void add() throws Exception {
+    public void addPlaceWithOwner() throws Exception {
+        //when
+        Place testPlace = getTestPlaceWithUser();
+        when(service.add(testPlace)).thenReturn(testPlace);
+        ResponseEntity<Place> expected = new ResponseEntity<Place>(testPlace, HttpStatus.CREATED);
+
+        //test
+        ResponseEntity<Place> result = controller.add(testPlace);
+
+        //validate
+        verify(service).add(testPlace);
+        assertEquals(expected, result);
+    }
+
+    private Place getTestPlaceWithUser() {
+        Long id = 1L;
+        User user = new User();
         Place place = new Place();
-        controller.add(place);
-        verify(placeService).add(place);
-        verify(userService).find(place.getId());
+        user.setId(id++);
+        user.setName("Vasya");
+        place.setId(id);
+        place.setOwner(user);
+        place.setName("Vasya's ferrari");
+        return place;
     }
 }

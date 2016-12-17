@@ -37,7 +37,7 @@ public class UserControllerTest {
     public void get() throws Exception {
         Long id = 1L;
         controller.get(id);
-        verify(userService).find(id);
+        verify(userService).get(id);
     }
 
     @Test

@@ -17,9 +17,6 @@ public class PlaceController {
     @Autowired
     private
     PlaceService placeService;
-    @Autowired
-    private
-    UserService userService;
 
     @RequestMapping("/")
     public ResponseEntity<Collection<Place>> getAll() {
