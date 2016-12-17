@@ -2,9 +2,11 @@ package ua.dp.mysharp;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -19,12 +21,12 @@ import static org.mockito.Mockito.when;
 /**
  * Created by swanta on 13.12.16.
  */
-
+@RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
     @Mock
     private UserRepository repo;
     @InjectMocks
-    private UserService service;
+    private UserServiceImpl service;
 
     private User normalUser, badUser, nullUser;
     private Collection<User> normalUsers;
@@ -110,18 +112,18 @@ public class UserServiceTest {
     }
 
     private User getNormalUser() {
-        User normalUser = new User(
-                1L,
-                "Jacky",
-                "http://iconizer.net/files/Practika/orig/owner.png",
-                "https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://uk1.internet-radio.com:8004/listen.pls&t=.pls",
-                null);
         Place place = new Place(
                 2L,
                 "Cool House",
                 "http://iconizer.net/files/Practika/orig/house.png",
                 normalUser);
-        normalUser.getPlaces().add(place);
+        User normalUser = new User(
+                1L,
+                "Jacky",
+                "http://iconizer.net/files/Practika/orig/owner.png",
+                "https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://uk1.internet-radio.com:8004/listen.pls&t=.pls",
+                Collections.singletonList(place));
+        place.setOwner(normalUser);
         return normalUser;
     }
     private Collection<User> getNormalUsers() {
