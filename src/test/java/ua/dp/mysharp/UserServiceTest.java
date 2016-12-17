@@ -13,7 +13,7 @@ import java.util.Iterator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
-import static ua.dp.mysharp.EntityFactory.*;
+import static ua.dp.mysharp.TestEntityFactory.*;
 
 /**
  * Created by swanta on 13.12.16.
@@ -27,7 +27,7 @@ public class UserServiceTest {
 
     private User
             normalUser = getNormalUser(),
-            badUser = getEmptyUser(),
+            emptyUser = getEmptyUser(),
             nullUser = getNullUser();
     private Collection<User>
             normalUsers = getNormalUsers();
@@ -52,8 +52,8 @@ public class UserServiceTest {
         assertNull(service.add(nullUser));
         verify(repo, never()).save(nullUser);
 
-        assertNull(service.add(badUser));
-        verify(repo).save(badUser);
+        assertNull(service.add(emptyUser));
+        verify(repo, never()).save(emptyUser);
 
         assertEquals(normalUser, service.add(normalUser));
         verify(repo).save(normalUser);
@@ -70,21 +70,21 @@ public class UserServiceTest {
     @Test
     public void setFavoriteMusic() throws Exception  {
         String testString = "!SONG_MARK!";
-//        String testStringBefore = normalUser.getSongURL();
+        String testStringBefore = normalUser.getSongURL();
         service.setFavoriteMusic(normalUser.getId(),testString);
         assertEquals(normalUser.getSongURL(), testString);
         verify(repo).save(normalUser);
-//        service.setFavoriteMusic(normalUser.getId(),testStringBefore);
+        service.setFavoriteMusic(normalUser.getId(),testStringBefore);
     }
 
     @Test
     public void setUserPhoto() throws Exception {
         String testString = "!PHOTO_MARK!";
-//        String testStringBefore = normalUser.getPhotoURL();
+        String testStringBefore = normalUser.getPhotoURL();
         service.setUserPhoto(normalUser.getId(),testString);
         assertEquals(normalUser.getPhotoURL(), testString);
         verify(repo).save(normalUser);
-//        service.setUserPhoto(normalUser.getId(),testStringBefore);
+        service.setUserPhoto(normalUser.getId(),testStringBefore);
     }
 
     @Test

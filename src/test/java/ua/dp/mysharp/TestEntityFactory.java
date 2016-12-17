@@ -1,14 +1,12 @@
 package ua.dp.mysharp;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 
 /**
  * Created by swanta on 17.12.16.
  */
-public class EntityFactory {
+public class TestEntityFactory {
     private static User nullUser;
     private static User badUser;
     private static User normalUser;
@@ -26,7 +24,7 @@ public class EntityFactory {
 
     public static User getEmptyUser() {
         if (badUser == null) {
-            badUser = new User(0L, "", "", "", new HashSet<Place>(0));
+            badUser = new User(0L, "", "", "");//, new HashSet<Place>(0));
         }
         return badUser;
     }
@@ -51,13 +49,16 @@ public class EntityFactory {
                     1L,
                     "Jacky",
                     "http://iconizer.net/files/Practika/orig/owner.png",
-                    "https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://uk1.internet-radio.com:8004/listen.pls&t=.pls",
-                    new ArrayList<Place>());
+                    "https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://uk1.internet-radio.com:8004/listen.pls&t=.pls"
+//                    new ArrayList<Place>()
+            );
             normalPlace = new Place(
                     2L,
                     "Cool House",
                     "http://iconizer.net/files/Practika/orig/house.png",
-                    normalUser);
+                    normalUser
+            );
+//            normalUser.getPlaces().add(normalPlace);
         }
         return normalPlace;
     }
