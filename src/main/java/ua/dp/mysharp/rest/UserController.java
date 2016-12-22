@@ -30,7 +30,7 @@ public class UserController {
 	@RequestMapping("/get/{id}")
 	@ResponseStatus(HttpStatus.FOUND)
 	@ResponseBody
-	public User get(@RequestParam("id") Long id) {
+	public User get(@RequestParam("id") long id) {
 		return userService.get(id);
 	}
 

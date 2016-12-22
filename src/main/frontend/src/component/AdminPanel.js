@@ -15,6 +15,8 @@ class AdminPanel extends React.Component {
     constructor () {
         super();
         console.log("adminPanel created");
+        const this.userDefaultPic = "http://clipartix.com/wp-content/uploads/2016/05/Free-house-clip-art-clipart-clipartcow.gif";
+        const this.houseDefaultPic = "http://clipartix.com/wp-content/uploads/2016/05/Free-house-clip-art-clipart-clipartcow.gif";
         this.state = {
             houses: InitialData.houses ,
             users: InitialData.users ,
@@ -41,7 +43,7 @@ class AdminPanel extends React.Component {
 
     getUsers() {
         console.log("updating users...");
-        UserController.getAll((users)=>{
+        UserController.list((users)=>{
             console.log("users: " + users.toString());
             this.setState({users: users});
         });
@@ -49,7 +51,7 @@ class AdminPanel extends React.Component {
 
     getHouses() {
         console.log("updating houses...");
-        HouseController.getAll((houses)=>{
+        HouseController.list((houses)=>{
           console.log("houses: " + houses);
           this.setState({houses: houses});
         });
@@ -69,7 +71,7 @@ class AdminPanel extends React.Component {
     }
 
     onAddUser(user) {
-      UserController.post(user, (newUser) => {
+      UserController.create(user, (newUser) => {
         let newUsers = this.state.users.concat(newUser);
         this.setState({users: newUsers});
         console.log("user added, upd pls");
@@ -80,12 +82,12 @@ class AdminPanel extends React.Component {
     }
 
     onAddHouse(house) {
-      let data={
+      let newHouse={
         name: house.name,
-        photo: house.photo,
+        photoURL: house.photo,
         ownerId: this.state.users[0].id,
       };
-      HouseController.post(data, (newHouse) => {
+      HouseController.create(newHouse, (newHouse) => {
       // console.log(url);
           let newHouses = this.state.houses.concat(newHouse);
           this.setState({houses: newHouses});
@@ -103,12 +105,12 @@ class AdminPanel extends React.Component {
         if (Array.isArray(this.state.users))
             users=this.state.users.map((user) => { return {
                     id: user.id,
-                    url: user.photoURL,
+                    url: user.photoURL == null ? this.userDefaultPic: user.photoURL,
                     name: user.name, }});
         if (Array.isArray(this.state.houses))
             houses=this.state.houses.map((house) => { return {
                     id: house.id,
-                    url: house.photoURL,
+                    url: house.photoURL == null ? this.houseDefaultPic: house.photoURL,
                     name: house.name, }});
         let userList=<ImageList title="Users"
                       items={users}

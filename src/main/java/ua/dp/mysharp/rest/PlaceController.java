@@ -29,7 +29,7 @@ public class PlaceController {
     @RequestMapping("/get/{id}")
     @ResponseStatus( HttpStatus.FOUND)
     @ResponseBody
-    public Place get(@RequestParam("id") Long id) {
+    public Place get(@RequestParam("id") long id) {
         return placeService.get(id);
     }
 

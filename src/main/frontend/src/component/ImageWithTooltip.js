@@ -7,6 +7,7 @@ import {Tooltip, OverlayTrigger, Image} from 'react-bootstrap';
 class ImageWithTooltip extends React.Component {
 
     render () {
+      console.log("ImageWithTooltip: " + this.props.text + "\n" + this.props.url);
         let tooltip, image, trigger, onClick;
 
         tooltip = <Tooltip id={this.props.category + this.props.id}>
