@@ -7,8 +7,12 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import ua.dp.mysharp.model.Place;
+import ua.dp.mysharp.model.User;
+import ua.dp.mysharp.rest.API.NewPlace;
+import ua.dp.mysharp.rest.PlaceController;
+import ua.dp.mysharp.service.PlaceService;
+import ua.dp.mysharp.service.PlaceServiceImpl;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -18,7 +22,7 @@ import static org.mockito.Mockito.when;
  * Created by swanta on 13.12.16.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class PlaceControllerTest {
+public class PlaceControllerToServiceTest {
     @Mock private PlaceService service = new PlaceServiceImpl();
     @InjectMocks private PlaceController controller;
 
@@ -38,30 +42,31 @@ public class PlaceControllerTest {
     @Test
     public void get() throws Exception {
         //when
-        Place testPlace = getTestPlaceWithUser();
-        when(service.get(testPlace.getId())).thenReturn(testPlace);
-        ResponseEntity<Place> expected = new ResponseEntity<Place>(testPlace, HttpStatus.FOUND);
+        Place expected = getTestPlaceWithUser();
+        when(service.get(expected.getId())).thenReturn(expected);
 
         //test
-        ResponseEntity<Place> result = controller.get(testPlace.getId());
+        Place result = controller.get(expected.getId());
 
          //validate
-        verify(service).get(testPlace.getId());
+        verify(service).get(expected.getId());
         assertEquals(expected, result);
     }
 
     @Test
     public void addPlaceWithOwner() throws Exception {
         //when
-        Place testPlace = getTestPlaceWithUser();
-        when(service.add(testPlace)).thenReturn(testPlace);
-        ResponseEntity<Place> expected = new ResponseEntity<Place>(testPlace, HttpStatus.CREATED);
+        Place expected = getTestPlaceWithUser();
+        NewPlace request = new NewPlace();
+        request.setName(expected.getName());
+        request.setOwnerId(expected.getOwner().getId());
+        when(service.create(request.getName(), request.getOwnerId())).thenReturn(expected);
 
         //test
-        ResponseEntity<Place> result = controller.add(testPlace);
+        Place result = controller.add(request);
 
         //validate
-        verify(service).add(testPlace);
+        verify(service).create(request.getName(), request.getOwnerId());
         assertEquals(expected, result);
     }
 

@@ -1,4 +1,7 @@
-package ua.dp.mysharp;
+package ua.dp.mysharp.service;
+
+import ua.dp.mysharp.model.Place;
+import ua.dp.mysharp.model.User;
 
 import java.util.Collection;
 
@@ -12,6 +15,4 @@ public interface PlaceService {
 	Collection<Place> getAll();
 
 	Place get(Long id);
-
-	Place add(Place place);
 }

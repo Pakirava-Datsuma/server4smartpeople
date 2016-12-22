@@ -6,6 +6,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import ua.dp.mysharp.model.User;
+import ua.dp.mysharp.repository.UserRepository;
+import ua.dp.mysharp.service.UserServiceImpl;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -47,16 +50,21 @@ public class UserServiceTest {
     }
 
     @Test
-    public void add() throws Exception {
+    public void createSucces() throws Exception {
+        User actual = service.create(normalUser.getName(), normalUser.getPhotoURL());
+        assertEquals(normalUser.getName(), actual.getName());
+        assertEquals(normalUser.getPhotoURL(), actual.getPhotoURL());
+        verify(repo, times(1)).save(normalUser);
+    }
 
-        assertNull(service.add(nullUser));
+    @Test
+    public void createError() throws Exception {
+
+        assertNull(service.create(nullUser.getName(), nullUser.getPhotoURL()));
         verify(repo, never()).save(nullUser);
 
-        assertNull(service.add(emptyUser));
+        assertNull(service.create(emptyUser.getName(), emptyUser.getPhotoURL()));
         verify(repo, never()).save(emptyUser);
-
-        assertEquals(normalUser, service.add(normalUser));
-        verify(repo).save(normalUser);
     }
 
     @Test

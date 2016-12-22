@@ -1,7 +1,9 @@
-package ua.dp.mysharp;
+package ua.dp.mysharp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.dp.mysharp.model.User;
+import ua.dp.mysharp.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,21 +17,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User create(String name, String photoURL) {
+		if (name == null || name.isEmpty()) return null;
 		User user = new User();
 		user.setName(name);
 		user.setPhotoURL(photoURL);
 		userRepo.save(user);
 		return user;
-	}
-
-	@Override
-	public User add(User user) {
-		if (user == null
-                || user.getName() == null
-                || user.getName().isEmpty()) {
-			return null;
-		}
-		return userRepo.save(user);
 	}
 
 	@Override
@@ -50,10 +43,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean setUserPhoto(Long id, String url) {
+	public boolean setUserPhoto(Long id, String photoUrl) {
 		User user = get(id);
 		if (user == null) return false;
-		user.setPhotoURL(url);
+		user.setPhotoURL(photoUrl);
 		userRepo.save(user);
 		return true;
 	}

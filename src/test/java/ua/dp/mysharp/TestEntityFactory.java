@@ -1,5 +1,8 @@
 package ua.dp.mysharp;
 
+import ua.dp.mysharp.model.Place;
+import ua.dp.mysharp.model.User;
+
 import java.util.Collection;
 import java.util.Collections;
 
@@ -58,7 +61,7 @@ public class TestEntityFactory {
                     "http://iconizer.net/files/Practika/orig/house.png",
                     normalUser
             );
-//            normalUser.getPlaces().add(normalPlace);
+//            normalUser.getPlaces().create(normalPlace);
         }
         return normalPlace;
     }

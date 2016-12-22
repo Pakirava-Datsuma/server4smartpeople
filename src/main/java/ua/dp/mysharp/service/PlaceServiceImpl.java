@@ -1,7 +1,10 @@
-package ua.dp.mysharp;
+package ua.dp.mysharp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.dp.mysharp.model.Place;
+import ua.dp.mysharp.model.User;
+import ua.dp.mysharp.repository.PlaceRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,13 +27,8 @@ public class PlaceServiceImpl implements PlaceService {
 	}
 
 	@Override
-	public Place add(Place place) {
-		return placeRepo.save(place);
-	}
-
-	@Override
 	public Place createTestPlace(User owner) {
-		if (owner == null) throw  new RuntimeException("you must add test owner first");
+		if (owner == null) throw  new RuntimeException("you must create test owner first");
 		Place testPlace = create(
 				"TestPlace",
 				owner.getId());

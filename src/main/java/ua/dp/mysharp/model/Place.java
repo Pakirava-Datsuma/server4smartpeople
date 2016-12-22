@@ -1,4 +1,4 @@
-package ua.dp.mysharp;
+package ua.dp.mysharp.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

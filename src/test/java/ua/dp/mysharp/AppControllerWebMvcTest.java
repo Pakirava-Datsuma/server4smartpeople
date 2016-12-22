@@ -11,6 +11,9 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import ua.dp.mysharp.rest.AppController;
+import ua.dp.mysharp.service.PlaceService;
+import ua.dp.mysharp.service.UserService;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -43,9 +46,9 @@ public class AppControllerWebMvcTest {
 
 	@Before
 	public void setup() {
-//		given(userService.add(normalUser)).willReturn(normalUser);
-//		given(userService.add(nullUser)).willReturn(null);
-//		given(userService.add(emptyUser)).willReturn(null);
+//		given(userService.create(normalUser)).willReturn(normalUser);
+//		given(userService.create(nullUser)).willReturn(null);
+//		given(userService.create(emptyUser)).willReturn(null);
 //
 //		given(userService.get(normalUser.getId())).willReturn(normalUser);
 //		given(userService.get(null)).willReturn(null);

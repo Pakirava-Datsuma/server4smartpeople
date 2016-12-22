@@ -7,6 +7,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import ua.dp.mysharp.model.User;
+import ua.dp.mysharp.rest.UserController;
+import ua.dp.mysharp.rest.API.NewUser;
+import ua.dp.mysharp.service.UserService;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,7 +19,7 @@ import static org.mockito.Mockito.when;
  * Created by swanta on 13.12.16.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class UserControllerTest {
+public class UserControllerToServiceTest {
     @Mock private UserService service;
     @InjectMocks private UserController controller;
 
@@ -40,9 +44,12 @@ public class UserControllerTest {
     }
 
     @Test
-    public void add() throws Exception {
+    public void create() throws Exception {
         User user = new User();
-        controller.add(user);
-        verify(service).add(user);
+        NewUser request = new NewUser();
+        request.setName(user.getName());
+        request.setPhotoUrl(user.getPhotoURL());
+        controller.create(request);
+        verify(service).create(request.getName(), request.getPhotoUrl());
     }
 }
