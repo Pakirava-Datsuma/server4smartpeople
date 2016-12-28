@@ -6,7 +6,7 @@ import React from 'react';
 import {Grid, Row, Col} from 'react-bootstrap';
 // import UsersList from './UsersList';
 // import HousesList from './HousesList';
-import ImageList from './ImageList';
+import UsersList from './UsersList';
 import InitialData from './InitialData';
 import AddItemModal from './AddItemModal';
 
@@ -15,8 +15,8 @@ class AdminPanel extends React.Component {
     constructor () {
         super();
         console.log("adminPanel created");
-        const this.userDefaultPic = "http://clipartix.com/wp-content/uploads/2016/05/Free-house-clip-art-clipart-clipartcow.gif";
-        const this.houseDefaultPic = "http://clipartix.com/wp-content/uploads/2016/05/Free-house-clip-art-clipart-clipartcow.gif";
+        this.userDefaultPic = "http://clipartix.com/wp-content/uploads/2016/05/Free-house-clip-art-clipart-clipartcow.gif";
+        this.houseDefaultPic = "http://clipartix.com/wp-content/uploads/2016/05/Free-house-clip-art-clipart-clipartcow.gif";
         this.state = {
             houses: InitialData.houses ,
             users: InitialData.users ,
@@ -112,7 +112,7 @@ class AdminPanel extends React.Component {
                     id: house.id,
                     url: house.photoURL == null ? this.houseDefaultPic: house.photoURL,
                     name: house.name, }});
-        let userList=<ImageList title="Users"
+        let userList=<UsersList title="Users"
                       items={users}
                       bsStyle="success"
                       onSelect={this.props.onUserSelect}
@@ -121,15 +121,15 @@ class AdminPanel extends React.Component {
                       buttonUpdate
                       onUpdate={this.getUsers}
          />;
-        let housesList=<ImageList title="Houses"
-                      items={houses}
-                      bsStyle="primary"
-                      onSelect={this.props.onHouseSelect}
-                      buttonAdd
-                      onAdd={this.onShowAddHouseModal}
-                      buttonUpdate
-                      onUpdate={this.getHouses}
-         />;
+        // let housesList=<ImageList title="Houses"
+        //               items={houses}
+        //               bsStyle="primary"
+        //               onSelect={this.props.onHouseSelect}
+        //               buttonAdd
+        //               onAdd={this.onShowAddHouseModal}
+        //               buttonUpdate
+        //               onUpdate={this.getHouses}
+        //  />;
          let modalAddUser=<AddItemModal title="New user"
                        entity="User"
                        glyph="user"
@@ -139,24 +139,21 @@ class AdminPanel extends React.Component {
                        btnOk="Create"
                        btnCancel="Cancel"
                        />
-         let modalAddHouse=<AddItemModal title="New place for smart people"
-                       entity="House"
-                       glyph="house"
-                       show={this.state.showAddHouseModal}
-                       onHide={this.onHideAddHouseModal}
-                       onAdd={this.onAddHouse}
-                       btnOk="Create"
-                       btnCancel="Cancel"
-                       />
-
+        //  let modalAddHouse=<AddItemModal title="New place for smart people"
+        //                entity="House"
+        //                glyph="house"
+        //                show={this.state.showAddHouseModal}
+        //                onHide={this.onHideAddHouseModal}
+        //                onAdd={this.onAddHouse}
+        //                btnOk="Create"
+        //                btnCancel="Cancel"
+        //                />
+         //
         return <div className="admin-panel">
             <Grid>
                 <Row className="adminpanel-gridrow">
                     <Col xs={12} md={4}>
                         {userList}
-                    </Col>
-                    <Col xs={6} md={4}>
-                        {housesList}
                     </Col>
                 </Row>
             </Grid>

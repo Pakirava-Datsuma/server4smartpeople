@@ -2,8 +2,9 @@
  * Created by swanta on 02.12.16.
  */
 import React from 'react';
-import {ButtonToolbar} from 'react-bootstrap';
+import {ButtonToolbar, Panel} from 'react-bootstrap';
 import {ImageList, AddButton, UpdateButton} from './ImageList';
+import SmartList from './SmartList';
 
 class UsersList extends React.Component {
     constructor(){
@@ -41,14 +42,26 @@ class UsersList extends React.Component {
             <UpdateButton onClick={this.props.onItemsUpdate} />
         </ButtonToolbar>
 
-        return <ImageList title={this.state.title}
-                          items={items}
-                          onClick={this.props.onUserSelect}
-                          header={this.state.title + ": " + items.length}
-                          bsStyle={this.state.panelStyle}
-                          onItemsUpdate={this.props.onItemsUpdate}>
-            {buttons}
-        </ImageList>;
+        let header=<div><h3>{this.props.title + ": " + imagesSet.length}</h3>
+              <Buttons buttonAdd={this.props.buttonAdd}
+                        onAdd={this.props.onAdd}
+                          styleAddButton={this.props.bsStyle}
+                         buttonUpdate={this.props.buttonUpdate}
+                         onUpdate={this.props.onUpdate}
+                         />
+            </div>;
+
+        let list = <SmartList editable={true}
+                      items={items}
+                      onClick={this.props.onUserSelect}
+                      header={this.state.title + ": " + items.length}
+                      bsStyle={this.state.panelStyle}
+                      onItemsUpdate={this.props.onItemsUpdate}/>;
+
+        return <Panel header={header}
+                      bsStyle={this.props.bsStyle}>
+                {list}
+            </Panel>;
     }
 }
  export default UsersList;
