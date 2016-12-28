@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import ua.dp.mysharp.model.User;
+import ua.dp.mysharp.model.UserDTO;
 
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -15,8 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ua.dp.mysharp.IT_Util.APPLICATION_JSON_UTF8;
 import static ua.dp.mysharp.IT_Util.convertToJsonBytes;
 import static ua.dp.mysharp.REST_API.NEW_USER;
-import static ua.dp.mysharp.TestEntityFactory.getEmptyUser;
-import static ua.dp.mysharp.TestEntityFactory.getNormalUser;
+import static ua.dp.mysharp.UserTestEntityFactory.getEmptyNewUserDto;
+import static ua.dp.mysharp.UserTestEntityFactory.getNormalExistUserDto;
 
 /**
  * Created by swanta on 19.12.16.
@@ -31,7 +31,7 @@ public class IT_UserControllerTest {
 
     @Test
     public void addNormalUser() throws Exception {
-        User user = getNormalUser();
+        UserDTO user = getNormalExistUserDto();
         byte[] requestBody = convertToJsonBytes(user);
 //        System.out.println(user);
 //        System.out.println(requestBody);
@@ -51,7 +51,7 @@ public class IT_UserControllerTest {
 
     @Test
     public void addBadUser() throws Exception {
-        User user = getEmptyUser();
+        UserDTO user = getEmptyNewUserDto();
         byte[] requestBody = convertToJsonBytes(user);
 //        System.out.println(user);
 //        System.out.println(requestBody);

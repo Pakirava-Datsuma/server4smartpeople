@@ -17,17 +17,16 @@ import ua.dp.mysharp.service.UserService;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ua.dp.mysharp.TestEntityFactory.getNormalPlace;
-import static ua.dp.mysharp.TestEntityFactory.getNormalUser;
+import static ua.dp.mysharp.PlaceTestEntityFactory.getNormalExistPlace;
+import static ua.dp.mysharp.REST_API.CREATE_TEST_ENTITIES;
+import static ua.dp.mysharp.REST_API.SERVER_INFO;
+import static ua.dp.mysharp.UserTestEntityFactory.getNormalExistUser;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(AppController.class)
 public class AppControllerWebMvcTest {
-
-    private String BASE_URL = "/api/server/";
 
 	@Autowired
 	private MockMvc mvc;
@@ -55,13 +54,13 @@ public class AppControllerWebMvcTest {
 //
 //		given(userService.getAll()).willReturn(Collections.singleton(normalUser));
 
-        given(userService.createTestUser()).willReturn(getNormalUser());
-		given(placeService.createTestPlace(getNormalUser())).willReturn(getNormalPlace());
+        given(userService.createTestUser()).willReturn(getNormalExistUser());
+		given(placeService.createTestPlace(getNormalExistUser())).willReturn(getNormalExistPlace());
 	}
 
 	@Test
 	public void getServerInfo() throws Exception{
-		mvc.perform(get(BASE_URL + "about")
+		mvc.perform(SERVER_INFO.request()
 		        .accept(MediaType.TEXT_PLAIN)
             )
 		    .andExpect(status().isOk());
@@ -71,13 +70,13 @@ public class AppControllerWebMvcTest {
 	}
 
 	public void createTestEntities() throws Exception{
-		mvc.perform(get(BASE_URL + "test")
+		mvc.perform(CREATE_TEST_ENTITIES.request()
 		        .accept(MediaType.TEXT_PLAIN)
             )
 		    .andExpect(status().isOk())
 		    .andExpect(content().string(Matchers.matches("."))); //nonempty
         verify(userService, times(1)).createTestUser();
-        verify(placeService, times(1)).createTestPlace(getNormalUser());
+        verify(placeService, times(1)).createTestPlace(getNormalExistUser());
 	}
 
 	@Test

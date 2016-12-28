@@ -3,6 +3,7 @@ package ua.dp.mysharp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.dp.mysharp.model.User;
+import ua.dp.mysharp.model.UserDTO;
 import ua.dp.mysharp.repository.UserRepository;
 
 import java.util.ArrayList;
@@ -16,13 +17,13 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepo;
 
 	@Override
-	public User create(String name, String photoURL) {
-		if (name == null || name.isEmpty()) return null;
-		User user = new User();
-		user.setName(name);
-		user.setPhotoURL(photoURL);
-		userRepo.save(user);
-		return user;
+	public User create(UserDTO dto) {
+		if (dto == null ||
+                dto.getName() == null ||
+                dto.getName().isEmpty())
+		    return null;
+		User user = convert(dto);
+		return userRepo.save(user);
 	}
 
 	@Override
@@ -34,33 +35,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean setFavoriteMusic(Long id, String url) {
-		User user = get(id);
+	public boolean changeData(User user) {
 		if (user == null) return false;
-		user.setSongURL(url);
-		userRepo.save(user);
-		return true;
-	}
-
-	@Override
-	public boolean setUserPhoto(Long id, String photoUrl) {
-		User user = get(id);
-		if (user == null) return false;
-		user.setPhotoURL(photoUrl);
+		if (get(user.getId()) == null) return false;
 		userRepo.save(user);
 		return true;
 	}
 
 	@Override
 	public User createTestUser() {
-		User testUser = create(
-				"Test", 
-				"User");
-		if (testUser == null) throw new RuntimeException("test owner not created");
-		
-		setFavoriteMusic(testUser.getId(),
-				"https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://uk1.internet-radio.com:8004/listen.pls&t=.pls");
-		setUserPhoto(testUser.getId(), "http://iconizer.net/files/Practika/orig/owner.png");
+		User testUser = userRepo.save(
+		        new User(
+				null,
+                "Test",
+                "http://iconizer.net/files/Practika/orig/owner.png",
+                "https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://uk1.internet-radio.com:8004/listen.pls&t=.pls"));
+        if (testUser == null) throw new RuntimeException("test owner not created");
+
 		System.out.println("test owner created: " + testUser.toString());
 		return testUser;
 	}
@@ -74,4 +65,14 @@ public class UserServiceImpl implements UserService {
 		}
 		return collection;
 	}
+
+	@Override
+    public User convert(UserDTO dto) {
+        User user = new User(
+                null,
+                dto.getName(),
+                dto.getPhotoUrl(),
+                dto.getSongUrl());
+        return user;
+    }
 }

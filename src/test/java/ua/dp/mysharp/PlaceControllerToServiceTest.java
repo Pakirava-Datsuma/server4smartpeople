@@ -8,15 +8,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import ua.dp.mysharp.model.Place;
-import ua.dp.mysharp.model.User;
-import ua.dp.mysharp.rest.API.NewPlace;
+import ua.dp.mysharp.model.PlaceDTO;
 import ua.dp.mysharp.rest.PlaceController;
 import ua.dp.mysharp.service.PlaceService;
 import ua.dp.mysharp.service.PlaceServiceImpl;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static ua.dp.mysharp.PlaceTestEntityFactory.getNormalExistPlace;
+import static ua.dp.mysharp.PlaceTestEntityFactory.getNormalExistPlaceDto;
 
 /**
  * Created by swanta on 13.12.16.
@@ -40,45 +40,26 @@ public class PlaceControllerToServiceTest {
     }
 
     @Test
-    public void get() throws Exception {
+    public void getExistPlace() throws Exception {
         //when
-        Place expected = getTestPlaceWithUser();
-        when(service.get(expected.getId())).thenReturn(expected);
+        Place place = getNormalExistPlace();
 
         //test
-        Place result = controller.get(expected.getId());
+        controller.get(place.getId());
 
          //validate
-        verify(service).get(expected.getId());
-        assertEquals(expected, result);
+        verify(service).get(place.getId());
     }
 
     @Test
-    public void addPlaceWithOwner() throws Exception {
+    public void createPlaceWithOwner() throws Exception {
         //when
-        Place expected = getTestPlaceWithUser();
-        NewPlace request = new NewPlace();
-        request.setName(expected.getName());
-        request.setOwnerId(expected.getOwner().getId());
-        when(service.create(request.getName(), request.getOwnerId())).thenReturn(expected);
+        PlaceDTO request = getNormalExistPlaceDto();
 
         //test
-        Place result = controller.add(request);
+        controller.add(request);
 
         //validate
-        verify(service).create(request.getName(), request.getOwnerId());
-        assertEquals(expected, result);
-    }
-
-    private Place getTestPlaceWithUser() {
-        Long id = 1L;
-        User user = new User();
-        Place place = new Place();
-        user.setId(id++);
-        user.setName("Vasya");
-        place.setId(id);
-        place.setOwner(user);
-        place.setName("Vasya's ferrari");
-        return place;
+        verify(service).create(request);
     }
 }

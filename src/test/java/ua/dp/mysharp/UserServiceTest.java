@@ -7,16 +7,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import ua.dp.mysharp.model.User;
+import ua.dp.mysharp.model.UserDTO;
 import ua.dp.mysharp.repository.UserRepository;
 import ua.dp.mysharp.service.UserServiceImpl;
 
 import java.util.Collection;
 import java.util.Iterator;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static ua.dp.mysharp.TestEntityFactory.*;
+import static ua.dp.mysharp.UserTestEntityFactory.*;
 
 /**
  * Created by swanta on 13.12.16.
@@ -29,83 +29,104 @@ public class UserServiceTest {
     private UserServiceImpl service;
 
     private User
-            normalUser = getNormalUser(),
-            emptyUser = getEmptyUser(),
-            nullUser = getNullUser();
+            existUser = getNormalExistUser(),
+            modifiedUser = getModifiedExistUser(),
+            normalNewUser = getNormalNewUser();
+    private UserDTO
+            normalUserDto = getNormalExistUserDto(),
+            emptyUserDto = getEmptyNewUserDto(),
+            nullUserDto = getNullNewUserDto();
     private Collection<User>
-            normalUsers = getNormalUsers();
+            existUsers = getNormalExistUsers();
 
     @Before
     public void setUpRepoMock() throws Exception {
 
-        when(repo.findOne(normalUser.getId())).thenReturn(normalUser);
+        when(repo.findOne(existUser.getId())).thenReturn(existUser);
         when(repo.findOne(null)).thenThrow(new IllegalArgumentException());
-        when(repo.save(normalUser)).thenReturn(normalUser);
+        when(repo.save(existUser)).thenReturn(existUser);
+        when(repo.save(normalNewUser)).thenReturn(existUser);
         when(repo.findAll()).thenReturn(new Iterable<User>() {
             @Override
             public Iterator<User> iterator() {
-                return normalUsers.iterator();
+                return existUsers.iterator();
             }
         });
     }
 
     @Test
     public void createSucces() throws Exception {
-        User actual = service.create(normalUser.getName(), normalUser.getPhotoURL());
-        assertEquals(normalUser.getName(), actual.getName());
-        assertEquals(normalUser.getPhotoURL(), actual.getPhotoURL());
-        verify(repo, times(1)).save(normalUser);
+        UserDTO request = normalUserDto;
+        User expectedResult = existUser;
+        User expectedRepoCall = normalNewUser;
+
+        User actualResult = service.create(request);
+
+        verify(repo, times(1)).save(expectedRepoCall);
+        assertEquals(expectedResult, actualResult);
     }
 
     @Test
     public void createError() throws Exception {
 
-        assertNull(service.create(nullUser.getName(), nullUser.getPhotoURL()));
-        verify(repo, never()).save(nullUser);
+        User nullResult = service.create(nullUserDto);
+        User emptyResult = service.create(emptyUserDto);
 
-        assertNull(service.create(emptyUser.getName(), emptyUser.getPhotoURL()));
-        verify(repo, never()).save(emptyUser);
+        assertNull(nullResult);
+        assertNull(emptyResult);
+        verify(repo, never()).save(any(User.class));
     }
 
     @Test
-    public void get() throws Exception {
-        assertEquals(normalUser, service.get(normalUser.getId()));
-        assertNull(service.get(null));
+    public void getOneById() throws Exception {
+        Long request = existUser.getId();
+        User expectedServiceResult = existUser;
+
+        User actualServiceResult = service.get(request);
+
+        assertEquals(expectedServiceResult, actualServiceResult);
         verify(repo, times(1))
-                .findOne(normalUser.getId());
+                .findOne(request);
+    }
+    @Test
+    public void getOneByNull() throws Exception {
+        Long request = null;
+
+        User result = service.get(request);
+
+        assertNull(result);
+        verify(repo, never())
+                .findOne(any());
     }
 
     @Test
-    public void setFavoriteMusic() throws Exception  {
-        String testString = "!SONG_MARK!";
-        String testStringBefore = normalUser.getSongURL();
-        service.setFavoriteMusic(normalUser.getId(),testString);
-        assertEquals(normalUser.getSongURL(), testString);
-        verify(repo).save(normalUser);
-        service.setFavoriteMusic(normalUser.getId(),testStringBefore);
+    public void changeUserSuccess() throws Exception  {
+        User request = modifiedUser;
+
+        boolean actual = service.changeData(request);
+
+        assertTrue(actual);
+        verify(repo, times(1)).save(request);
     }
 
     @Test
-    public void setUserPhoto() throws Exception {
-        String testString = "!PHOTO_MARK!";
-        String testStringBefore = normalUser.getPhotoURL();
-        service.setUserPhoto(normalUser.getId(),testString);
-        assertEquals(normalUser.getPhotoURL(), testString);
-        verify(repo).save(normalUser);
-        service.setUserPhoto(normalUser.getId(),testStringBefore);
+    public void changeUserNotFound() throws Exception {
+        User request = normalNewUser;
+
+        boolean actual = service.changeData(request);
+
+        assertFalse(actual);
+        verify(repo, never()).save(any(User.class));
     }
 
     @Test
     public void getAll() throws Exception {
-        Collection<User> result = service.getAll();
-        Iterator<User> expectedIterator = normalUsers.iterator();
-        Iterator<User> resultIterator = result.iterator();
+        Collection<User> expected = existUsers;
 
-        assertEquals(normalUsers.size(), result.size());
-        while (expectedIterator.hasNext()
-                && resultIterator.hasNext()) {
-            assertEquals(expectedIterator.next(), resultIterator.next());
-        }
+        Collection<User> actual = service.getAll();
+
+        assertEquals(expected, actual);
+        verify(repo,times(1)).findAll();
     }
 
 }

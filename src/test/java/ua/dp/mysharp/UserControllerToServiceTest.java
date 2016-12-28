@@ -7,13 +7,13 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import ua.dp.mysharp.model.User;
+import ua.dp.mysharp.model.UserDTO;
 import ua.dp.mysharp.rest.UserController;
-import ua.dp.mysharp.rest.API.NewUser;
 import ua.dp.mysharp.service.UserService;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static ua.dp.mysharp.UserTestEntityFactory.getNormalExistUserDto;
 
 /**
  * Created by swanta on 13.12.16.
@@ -45,11 +45,8 @@ public class UserControllerToServiceTest {
 
     @Test
     public void create() throws Exception {
-        User user = new User();
-        NewUser request = new NewUser();
-        request.setName(user.getName());
-        request.setPhotoUrl(user.getPhotoURL());
+        UserDTO request = getNormalExistUserDto();
         controller.create(request);
-        verify(service).create(request.getName(), request.getPhotoUrl());
+        verify(service).create(request);
     }
 }

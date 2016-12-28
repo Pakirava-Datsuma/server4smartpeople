@@ -12,8 +12,8 @@ import ua.dp.mysharp.model.Place;
 import ua.dp.mysharp.model.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static ua.dp.mysharp.TestEntityFactory.getNormalPlace;
-import static ua.dp.mysharp.TestEntityFactory.getNormalUser;
+import static ua.dp.mysharp.PlaceTestEntityFactory.getNormalExistPlace;
+import static ua.dp.mysharp.UserTestEntityFactory.getNormalExistUser;
 
 /**
  * Created by swanta on 17.12.16.
@@ -30,7 +30,7 @@ public class DomainJsonTests {
 
     @Test
     public void serializeUser() throws Exception {
-        User user = getNormalUser();
+        User user = getNormalExistUser();
         JsonContent<User> json = userJson.write(user);
         System.out.println(user);
         System.out.println(json.getJson());
@@ -43,7 +43,7 @@ public class DomainJsonTests {
 
     @Test
     public void serializePlace() throws Exception {
-        Place place = getNormalPlace();
+        Place place = getNormalExistPlace();
         JsonContent<Place> json = placeJson.write(place);
         String actualJsonString = json.getJson();
         String expectedJsonUserSubstring = userJson.write(place.getOwner()).getJson();

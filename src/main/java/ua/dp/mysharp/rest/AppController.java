@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.dp.mysharp.service.PlaceService;
 import ua.dp.mysharp.service.UserService;
 
+import static ua.dp.mysharp.rest.API.RestApi.ABOUT_SERVER_URL;
+import static ua.dp.mysharp.rest.API.RestApi.TEST_SERVER_URL;
+
 /**
  * Created by swanta on 28.11.16.
  */
 @RestController
-@RequestMapping("/api/server")
 public class AppController {
 
     @Autowired
@@ -20,12 +22,12 @@ public class AppController {
     @Autowired
     PlaceService placeService;
 
-    @RequestMapping("/about")
+    @RequestMapping(ABOUT_SERVER_URL)
     public String aboutMIA() {
         return "Hi! This is #MIA - My Information Assistant.";
     }
 
-    @RequestMapping("/test")
+    @RequestMapping(TEST_SERVER_URL)
     @ResponseStatus(HttpStatus.OK)
     public String createTestEntities() {
         placeService.createTestPlace(userService.createTestUser());
