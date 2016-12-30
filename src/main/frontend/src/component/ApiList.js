@@ -5,7 +5,7 @@ export const HouseController =
   new ApiController ({
     prefix: "/places",
   });
-export var UserController =
+export const UserController =
   new ApiController ({
     prefix: "/users",
   });

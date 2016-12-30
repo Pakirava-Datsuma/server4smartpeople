@@ -1,25 +1,20 @@
 import React from 'react';
-// import {Tooltip, OverlayTrigger, Image} from 'react-bootstrap';
+import {Collapse} from 'react-bootstrap';
 import SmartList from './SmartList';
-// import Avatar from './Avatar';
 
 class SmartChildren extends React.Component {
-    constructor(){
-        super();
-        this.state = {}
-      }
+
+    static propTypes = {
+        items: React.PropTypes.arrayOf(React.PropTypes.object.isRequired).isRequired,
+        folded: React.PropTypes.bool.isRequired,
+    };
 
     render(){
-        if (this.props.folded) {
-          let children=onGetChildren();}
         return (
             <div className="smart-children-tray">
-              <Button onClick={ ()=> this.setState({ folded: !this.state.folded })}>
-                click
-              </Button>
-              <Collapse in={this.state.open}>
-                        <SmartList items=children
-                                    editable=false />
+              <Collapse in={this.props.folded}>
+                        <SmartList items={this.props.items}
+                                    editable={false} />
               </Collapse>
             </div>)
     }

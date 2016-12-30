@@ -2,66 +2,101 @@
  * Created by swanta on 02.12.16.
  */
 import React from 'react';
-import {ButtonToolbar, Panel} from 'react-bootstrap';
-import {ImageList, AddButton, UpdateButton} from './ImageList';
+// import {Panel} from 'react-bootstrap';
 import SmartList from './SmartList';
+import {UserController, HouseController} from './ApiList';
+import InitialData from './InitialData';
+import AddItemModal from './AddItemModal';
 
-class UsersList extends React.Component {
-    constructor(){
+export default class UsersList extends React.Component {
+
+    static propTypes = {
+        onOpenUser: React.PropTypes.func,
+    };
+
+    constructor() {
         super();
         this.state = {
-            title: "Users",
-            panelStyle: "success"
-        }
+            users: InitialData.users.map((user) =>
+                user.houses = InitialData.houses),
+            showAddUserModal: false,
+        };
+        console.log(this.state.users[0].houses[0].name);
+        this.onGetUsers = this.onGetUsers.bind(this);
+        this.onGetHousesForUser = this.onGetHousesForUser.bind(this);
+        this.onAddUser = this.onAddUser.bind(this);
+        this.onShowAddUserModal = this.onShowAddUserModal.bind(this);
+        this.onHideAddUserModal = this.onHideAddUserModal.bind(this);
     }
 
-    PropTypes() {
-      return {
-        users: React.PropTypes.array.isRequired,
-      }
+    onShowAddUserModal() {this.setState({showAddUserModal: true});
+        console.log("AddUserModal starting...")}
+    onHideAddUserModal() {this.setState({showAddUserModal: false})}
+
+    onAddUser(user) {
+        UserController.create(user, (newUser) => {
+            let newUsers = this.state.users.concat(newUser);
+            this.setState({users: newUsers});
+            console.log("user added, upd pls");
+            console.log("user sent: " + user);
+            console.log("user got: " + newUser);
+        });
+        return true;
+    }
+
+    onRemoveUser (user) {
+        console.log("removing user " + user.id);
+        UserController.remove(user, (result) => {
+            if (result) {
+                this.onGetUsers();
+            } else {
+                alert("Server declined removing this");
+            }
+        })
+    }
+
+
+    onGetUsers() {
+        console.log("updating users...");
+        UserController.list((users)=>{
+            console.log("users: " + users.toString());
+            this.setState({users: users});
+        });
+    }
+
+    onGetHousesForUser(userId) {
+        console.log("updating houses for " + userId);
+        // TODO: HouseController.getChildren(userId, (houses)=>{
+        HouseController.list(userId, (houses)=> {
+            console.log("houses: " + houses);
+            this.setState({
+                users: this.state.users
+                    .find((user) => user.id == userId)
+                    .houses = houses
+            });
+        });
     }
 
     render () {
-        let items=[];
-        console.log(this.props.users.toString());
-        // console.log("1st user image in UsersList: " + this.props.users[0].photoURL);
-        if (this.props.users.length > 0) {
-            items=this.props.users.map((user) => {
-                // console.log("user in conversion: " + user.toString());
-                return {
-                    id: user.id,
-                    url: user.photoURL,
-                    name: user.name
-                }
-            });
+        console.log("UsersList rendering");
 
-        }
-
-        let buttons=<ButtonToolbar>
-            <AddButton onClick={this.props.onAddUser} bsStyle={this.state.panelStyle} />
-            <UpdateButton onClick={this.props.onItemsUpdate} />
-        </ButtonToolbar>
-
-        let header=<div><h3>{this.props.title + ": " + imagesSet.length}</h3>
-              <Buttons buttonAdd={this.props.buttonAdd}
-                        onAdd={this.props.onAdd}
-                          styleAddButton={this.props.bsStyle}
-                         buttonUpdate={this.props.buttonUpdate}
-                         onUpdate={this.props.onUpdate}
-                         />
-            </div>;
-
-        let list = <SmartList editable={true}
-                      items={items}
-                      onClick={this.props.onUserSelect}
-                      header={this.state.title + ": " + items.length}
-                      bsStyle={this.state.panelStyle}
-                      onItemsUpdate={this.props.onItemsUpdate}/>;
-
-        return <Panel header={header}
-                      bsStyle={this.props.bsStyle}>
-                {list}
-            </Panel>;
+        return <SmartList editable={true}
+                          items={this.state.users}
+                          onOpenItem={this.props.onOpenUser}
+                          onAddItem={this.onAddUser}
+                          onGetChildren={this.onGetHousesForUser}
+                          onRemoveItem={this.onRemoveUser}
+        />;
     }
 }
- export default UsersList;
+
+export const AddUserModal = () =>
+    <AddItemModal title="New user"
+                  entity="User"
+                  glyph="user"
+                  show={this.state.showAddUserModal}
+                  onHide={this.onHideAddUserModal}
+                  onAdd={this.onAddUser}
+                  btnOk="Create"
+                  btnCancel="Cancel"
+/>;

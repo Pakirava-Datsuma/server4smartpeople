@@ -1,36 +1,49 @@
 import React from 'react';
-// import {Tooltip, OverlayTrigger, Image} from 'react-bootstrap';
+// import {} from 'react-bootstrap';
 import SmartItem from './SmartItem';
-// import Avatar from './Avatar';
+import InitialData from './InitialData';
 
 class SmartList extends React.Component {
-    constructor(){
-        super();
-        this.state = {}
-      }
+
+    static propTypes = {
+        items: React.PropTypes.array.isRequired,
+        editable: React.PropTypes.bool.isRequired,
+        onAddItem: React.PropTypes.func,
+        onGetChildren: React.PropTypes.func,
+        onRemoveItem: React.PropTypes.func,
+        onOpenItem: React.PropTypes.func,
+    };
 
     render(){
         let items=[];
-        if (this.props.items) items = this.props.items.map( entity => {
+        if (this.props.items) {
             if (this.props.editable) {
-              item = <SmartItem entity={entity}/>;
+                items = this.props.items.map(item =>
+                    <SmartItem item={item}/>);
+                items.add(
+                    <AddButton onAdd={this.props.onAddItem} />);
             } else {
-              item = <SmartItem entity={entity}
-                                onOpenItem={this.props.onOpenItem}
-                                onGetChildren={this.props.onGetChildren}
-                                onRemoveItem={this.props.onRemoveItem}
-                                />;
+                items = this.props.items.map(item =>
+                    <SmartItem item={item}
+                               onOpenItem={this.props.onOpenItem}
+                               onGetChildren={this.props.onGetChildren}
+                               onRemoveItem={this.props.onRemoveItem}
+                    />);
             }
         }
-        if (this.props.editable) { items.add(
-            <AddButton onClick=this.props.onAddItem />
-          );}
+
         let className = this.props.editable ? "smart-list-editable" : "smart-list-simple";
 
         return <div className={className}>
                 {items}
-            </div>
+            </div>;
     }
 }
 
+export const AddButton = (props) => {
+    let item = {name: "New User", photoUrl: InitialData.AddButtonLogo};
+    return <SmartItem item={item}
+                      onOpenItem={this.props.onAdd}
+                        />;
+};
 export default SmartList;

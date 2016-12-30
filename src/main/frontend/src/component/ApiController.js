@@ -16,9 +16,9 @@ function ApiController(URLs) {
             ;
     };
 
-    this.URL_GET = getUrl("/one");
-    this.URL_CREATE = getUrl("/new");
-    this.URL_LIST = getUrl("/all");
+    this.URL_GET = this.getUrl("/one");
+    this.URL_CREATE = this.getUrl("/new");
+    this.URL_LIST = this.getUrl("/all");
 
 
     this.get = (id, callback) => {
