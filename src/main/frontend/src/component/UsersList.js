@@ -5,7 +5,7 @@ import React from 'react';
 // import {Panel} from 'react-bootstrap';
 import SmartList from './SmartList';
 import {UserController, HouseController} from './ApiList';
-import {defaultUsers} from './InitialData';
+import {defaultUsers, defaultHouses} from './InitialData';
 import AddItemModal from './AddItemModal';
 
 export default class UsersList extends React.Component {
@@ -35,7 +35,8 @@ export default class UsersList extends React.Component {
     onAddUser(user) {
         this.setState({loading: true,});
         UserController.create(user, (newUser) => {
-            let newUsers = this.state.users.concat(newUser);
+            let newUsers = this.state.users;
+            newUsers.push(newUser);
             this.setState({
                 users: newUsers,
                 loading:false,
@@ -63,25 +64,40 @@ export default class UsersList extends React.Component {
     onGetUsers() {
         this.setState({loading: true,});
         console.log("updating users...");
-        UserController.list((users)=>{
-            console.log("users: " + users.toString());
+        // UserController.list((users)=>{
+        //     console.log("users: " + users.toString());
+            let newUsers = defaultUsers.map((user) => {
+                user.children = [];
+                return user;
+            });
             this.setState({
-                users: users,
+                // users: users,
+                users: newUsers,
                 loading: false,});
-        });
+        // });
     }
 
     onGetHousesForUser(userId) {
         console.log("updating houses for " + userId);
         // TODO: HouseController.getChildren(userId, (houses)=>{
-        HouseController.list(userId, (houses)=> {
-            console.log("houses: " + houses);
-            this.setState({
-                users: this.state.users
-                    .find((user) => user.id == userId)
-                    .houses = houses
+        // HouseController.list(userId, (houses)=> {
+        //     console.log("houses: " + houses);
+            let users = this.state.users;
+            let user = users.find((user) => {return user.id == userId});
+            console.log("user found: " + user.name);
+            user
+                // .houses = houses;
+                .children = defaultHouses;
+            console.log("now he/she has houses: " + user.children.length);
+        this.setState({
+                users: users
             });
-        });
+        // });
+
+    }
+
+    componentDidMount() {
+        this.onGetUsers();
     }
 
     render () {

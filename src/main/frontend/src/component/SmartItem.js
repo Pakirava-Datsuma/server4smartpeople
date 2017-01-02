@@ -12,13 +12,29 @@ class SmartItem extends React.Component {
         onOpenItem: React.PropTypes.func,
     };
 
+    constructor() {
+        super();
+        this.onGetChildren = this.onGetChildren.bind(this);
+    };
+
+    onGetChildren(){
+        console.log("updating childrens for " +
+            this.props.item.name + " / " +
+            this.props.item.id);
+        this.props.onGetChildren(this.props.item.id);
+
+    }
+
     render() {
+        console.log("item avatar");
         let avatar = <Avatar entity={this.props.item}
                              editable={false}/>;
         let removeButton = this.props.onRemoveItem
             ? <RemoveButton onClick={this.props.onRemoveItem}/> : "";
+        console.log("item children: " + (this.props.onGetChildren ? "1" : "0"));
         let children = this.props.onGetChildren
-            ? <SmartChildren onGetChildren={this.props.onGetChildren}/> :"";
+            ? <SmartChildren children={this.props.item.children}
+                             onGetChildren={this.onGetChildren}/> :"";
 
         return <div className="smart-item">
             {avatar}

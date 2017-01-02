@@ -59,14 +59,15 @@ const defaultUsers = [
     ];
 
 const defaultLogos = {
-    UserLogo: "http://simpleicon.com/wp-content/uploads/add-user.svg",
-    HouseLogo: "https://cdn.pixabay.com/photo/2014/04/03/00/38/house-308936_1280.png",
+    user: "http://simpleicon.com/wp-content/uploads/add-user.svg",
+    house: "https://cdn.pixabay.com/photo/2014/04/03/00/38/house-308936_1280.png",
 
-    AddButtonLogo: "http://images.clipartpanda.com/plus-clipart-enki_grey_plus_sign.png",
+    addButton: "http://images.clipartpanda.com/plus-clipart-enki_grey_plus_sign.png",
+    loadingButton: "http://icon-park.com/imagefiles/loading7_gray.gif",
 };
 
-console.log("length users: " + defaultUsers.length);
-console.log("length their houses: " + defaultUsers[0].houses.length);
+// console.log("length users: " + defaultUsers.length);
+// console.log("length their houses: " + defaultUsers[0].houses.length);
 // console.log("array: " + InitialData.defaultUsers.toString());
 
 export {defaultUsers, defaultHouses, defaultLogos};

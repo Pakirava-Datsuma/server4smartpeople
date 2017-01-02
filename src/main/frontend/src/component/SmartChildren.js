@@ -1,70 +1,62 @@
 import React from 'react';
-import {Badge, Collapse} from 'react-bootstrap';
+import {Badge, Collapse, Panel} from 'react-bootstrap';
 import SmartList from './SmartList';
 import {defaultUsers} from './InitialData';
 
 class SmartChildren extends React.Component {
 
     static propTypes = {
+        children: React.PropTypes.array,
         onGetChildren: React.PropTypes.func.isRequired,
     };
     constructor(){
         super();
         this.state = {
             folded: true,
-            children: defaultUsers,
             isLoading: true,
         };
-        this.onFold.bind(this.onFold());
-        // this.onUnfold.bind(this.onUnfold());
+        this.onFold = this.onFold.bind(this);
     }
     onFold(){
+        console.log("children " + (this.state.folded ? "unfolding..." : "folding..."));
         this.setState({
             folded: !this.state.folded,
+            isLoading: this.state.folded,
         });
-
-        if (this.state.folded) {
-            this.setState({
-                isLoading: true,
-            });
-            console.log("updating childrens for " +
-                this.props.item.name + " " +
-                this.props.id);
-            this.setState({
-                isLoading: true,
-            });
-
-            // UserController.list((children) => {
-            //     this.setState({
-            //         children: children,
-            //         isLoading: false,
-            //     })
-            // });
-        };
+        this.props.onGetChildren();
     }
 
     render() {
-        let list = <SmartList items={this.state.children}
+        let list = [], childrenCount = "";
+        if (this.props.children) {
+            console.log("children list");
+            list = <SmartList items={this.props.children}
                               editable={false}/>;
-        let childrenCount = <Badge>{this.state.children.count}</Badge>;
-        let foldButton = <FoldButton fold={!this.state.folded}/>;
+
+            console.log("children count");
+            let childrenCount = <Badge>{this.props.children.count}</Badge>;
+        };
+        console.log("children fold button");
+        let foldButton = <FoldButton fold={!this.state.folded}
+                                     onFold={this.onFold} />;
 
         return <div className="smart-children-tray">
-            {childrenCount}
-            {foldButton}
-            <Collapse in={this.props.folded}>
-                {list}
+            <Collapse in={!this.state.folded}>
+                <Panel>
+                    {list}
+                </Panel>
             </Collapse>
+            {foldButton}
+            {childrenCount}
         </div>;
     }
 };
 
 export const FoldButton = (props) => {
     // TODO: make it float to the right from avatar
-    let text = this.props.fold ? "<" : ">";
-    return <div className="item-remove-button"
-                onClick={this.props.onClick}>
-        <Badge>{text}</Badge>
+    let text = props.fold ? "<" : ">";
+    return <div className="item-fold-button">
+        <Badge onClick={props.onFold}>{text}</Badge>
     </div>;
 };
 
