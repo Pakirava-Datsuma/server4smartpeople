@@ -5,7 +5,7 @@ import React from 'react';
 import {Panel} from 'react-bootstrap';
 import UsersList from './UsersList';
 // import HousesList from './HousesList';
-import InitialData from './InitialData';
+// import {defaultLogos, defaultHouses} from './InitialData';
 
 console.log("adminpanel loading...");
 class AdminPanel extends React.Component {
@@ -15,10 +15,10 @@ class AdminPanel extends React.Component {
     //     this.userDefaultPic = "http://clipartix.com/wp-content/uploads/2016/05/Free-house-clip-art-clipart-clipartcow.gif";
     //     this.houseDefaultPic = "http://clipartix.com/wp-content/uploads/2016/05/Free-house-clip-art-clipart-clipartcow.gif";
     //     this.state = {
-    //         houses: InitialData.houses,
+    //         houses: defaultHouses,
     //         showAddHouseModal: false,
-    //         houseLogo: InitialData.DefaultHouseLogoURL,
-    //         userLogo: InitialData.DefaultUserLogoURL,
+    //         houseLogo: defaultLogos.DefaultHouseLogoURL,
+    //         userLogo: defaultLogos.DefaultUserLogoURL,
     //     };
     //     this.onShowAddHouseModal = this.onShowAddHouseModal.bind(this);
     //     this.onHideAddHouseModal = this.onHideAddHouseModal.bind(this);

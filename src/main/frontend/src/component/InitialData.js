@@ -1,9 +1,7 @@
 /**
  * Created by swanta on 30.11.16.
  */
-const InitialData = {
-
-    houses: [
+const defaultHouses = [
         {
             id: 0,
             photoUrl: "http://clipartix.com/wp-content/uploads/2016/05/Free-house-clip-art-clipart-clipartcow.gif",
@@ -34,38 +32,41 @@ const InitialData = {
             ownerId: [1],
             name: "test place 5"
         },
-    ],
+    ];
 
-    users: [
+const defaultUsers = [
         {
             id: 0,
             photoUrl: "https://upload.wikimedia.org/wikipedia/en/a/a0/ONHS_Eagles_logo.png",
             musicURL: "",
             name: "test user Jake",
-            houses: this.houses,
+            houses: defaultHouses,
         },
         {
             id: 1,
             photoUrl: "https://s-media-cache-ak0.pinimg.com/236x/06/bb/0a/06bb0aab77b49b3a9b5ed41096e495f2.jpg",
             musicURL: "",
             name: "test user Pamela",
-            houses: this.houses,
+            houses: defaultHouses,
         },
         {
             id: 2,
             photoUrl: "https://s-media-cache-ak0.pinimg.com/236x/16/de/5f/16de5f8dd1ffe99f9e169a0605a960b3.jpg",
             musicURL: "",
             name: "test user Robson",
-            houses: this.houses,
+            houses: defaultHouses,
         }
-    ],
+    ];
 
-    DefaultUserLogoURL: "http://simpleicon.com/wp-content/uploads/add-user.svg",
-    DefaultHouseLogoURL: "https://cdn.pixabay.com/photo/2014/04/03/00/38/house-308936_1280.png",
+const defaultLogos = {
+    UserLogo: "http://simpleicon.com/wp-content/uploads/add-user.svg",
+    HouseLogo: "https://cdn.pixabay.com/photo/2014/04/03/00/38/house-308936_1280.png",
 
     AddButtonLogo: "http://images.clipartpanda.com/plus-clipart-enki_grey_plus_sign.png",
 };
-console.log("length users: " + InitialData.users.length);
-console.log("length their houses: " + InitialData.users[0].houses.length);
-// console.log("array: " + InitialData.users.toString());
-export default InitialData;
+
+console.log("length users: " + defaultUsers.length);
+console.log("length their houses: " + defaultUsers[0].houses.length);
+// console.log("array: " + InitialData.defaultUsers.toString());
+
+export {defaultUsers, defaultHouses, defaultLogos};

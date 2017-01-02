@@ -1,9 +1,8 @@
 import React from 'react';
-import {Badge} from 'react-bootstrap';
+import {Image} from 'react-bootstrap';
 //TODO:
 // - editable property for avatar on entity page to edt it's name
 // - single component for classNames
-// - badge floats before the image
 
 class Avatar extends React.Component {
     static propTypes = {
@@ -12,28 +11,17 @@ class Avatar extends React.Component {
     };
 
     render() {
-        let className = "avatar-" + this.props.itemLevel;
-
-        // let badge = this.props.info
-        //     ? <Badge>{this.props.info} </Badge>
-        //     : "";
-
-        let imageWithBadge =
-            <Image className="avatar-image"
-                   src={this.props.photoUrl}
-            >
-                {/*{badge}*/}
-                {this.props.children}
-            </Image>;
+        let image =
+            <Image src={this.props.entity.photoUrl} />;
 
         //    TODO:
         // make {title} editable if this.props.editable
-        let title = <div className="avatar-title">
+        let title = <div className="title">
             {this.props.entity.name}
         </div>;
 
-        return <div className={className}>
-            {imageWithBadge}
+        return <div className="avatar">
+            {image}
             {title}
         </div>
     }

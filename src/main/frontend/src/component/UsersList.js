@@ -5,7 +5,7 @@ import React from 'react';
 // import {Panel} from 'react-bootstrap';
 import SmartList from './SmartList';
 import {UserController, HouseController} from './ApiList';
-import InitialData from './InitialData';
+import {defaultUsers} from './InitialData';
 import AddItemModal from './AddItemModal';
 
 export default class UsersList extends React.Component {
@@ -17,11 +17,10 @@ export default class UsersList extends React.Component {
     constructor() {
         super();
         this.state = {
-            users: InitialData.users.map((user) =>
-                user.houses = InitialData.houses),
+            users: defaultUsers,
             showAddUserModal: false,
+            loading: false,
         };
-        console.log(this.state.users[0].houses[0].name);
         this.onGetUsers = this.onGetUsers.bind(this);
         this.onGetHousesForUser = this.onGetHousesForUser.bind(this);
         this.onAddUser = this.onAddUser.bind(this);
@@ -34,9 +33,13 @@ export default class UsersList extends React.Component {
     onHideAddUserModal() {this.setState({showAddUserModal: false})}
 
     onAddUser(user) {
+        this.setState({loading: true,});
         UserController.create(user, (newUser) => {
             let newUsers = this.state.users.concat(newUser);
-            this.setState({users: newUsers});
+            this.setState({
+                users: newUsers,
+                loading:false,
+            });
             console.log("user added, upd pls");
             console.log("user sent: " + user);
             console.log("user got: " + newUser);
@@ -45,6 +48,7 @@ export default class UsersList extends React.Component {
     }
 
     onRemoveUser (user) {
+        this.setState({loading: true,});
         console.log("removing user " + user.id);
         UserController.remove(user, (result) => {
             if (result) {
@@ -57,10 +61,13 @@ export default class UsersList extends React.Component {
 
 
     onGetUsers() {
+        this.setState({loading: true,});
         console.log("updating users...");
         UserController.list((users)=>{
             console.log("users: " + users.toString());
-            this.setState({users: users});
+            this.setState({
+                users: users,
+                loading: false,});
         });
     }
 
@@ -86,6 +93,7 @@ export default class UsersList extends React.Component {
                           onAddItem={this.onAddUser}
                           onGetChildren={this.onGetHousesForUser}
                           onRemoveItem={this.onRemoveUser}
+                          onLoading={this.state.loading}
         />;
     }
 }
