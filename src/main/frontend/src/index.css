@@ -1,24 +1,28 @@
-img.smallAvatar {
-  width: 3em;
-  margin: 0.3em;
-}
-img.mediumAvatar {
-  width: 5em;
-  margin: 1em;
+body {
+  padding: 1em;
+  font-family: sans-serif;
 }
 
-img.fullAvatar {
-  width: 15em;
-  margin: 2em;
+.smart-item {
+  background-color: #555;
+  display: inline-table;
+  height: 17em;
+  padding: 1em;
+    border-radius: 2em;
 }
-.admin-panel .image-list-item {
-  width: 5em;
-  height: 5em;
-  overflow: auto;
-  margin: 1em;
+.smart-item .avatar {
+     width: 12em;
 }
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+.smart-item .avatar > img {
+    object-fit: cover;
+}
+.smart-children-tray .smart-list-simple{
+    padding: 1em;
+}
+.smart-children-tray .smart-item {
+    height: 100%;
+    background-color: transparent;
+}
+.smart-children-tray .avatar {
+    width: 10em;
 }
