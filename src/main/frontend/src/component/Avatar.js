@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image} from 'react-bootstrap';
+import Avatar from 'material-ui/Avatar';
 //TODO:
 // - editable property for avatar on entity page to edt it's name
 // - single component for classNames
