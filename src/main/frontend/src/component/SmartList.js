@@ -1,73 +1,64 @@
 import React from 'react';
 // import {} from 'react-bootstrap';
 import SmartItem from './SmartItem';
+import SmartChild from './SmartChild';
 import {defaultLogos} from './InitialData';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import RefreshIndicator from 'material-ui/';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+
+const style = {
+    display: 'flex',
+    flexWrap: 'wrap',
+};
 
 class SmartList extends React.Component {
 
     static propTypes = {
         items: React.PropTypes.array.isRequired,
-        editable: React.PropTypes.bool.isRequired,
-        onAddItem: React.PropTypes.func,
         onGetChildren: React.PropTypes.func,
+        onAddItem: React.PropTypes.func,
         onRemoveItem: React.PropTypes.func,
         onOpenItem: React.PropTypes.func,
-        isLoading: React.PropTypes.bool
+        isLoading: React.PropTypes.bool,
     };
 
-    render(){
-        console.log("list addButton: " + (this.props.editable ? "1" : "0"));
-        let addButton = this.props.editable
-            ? <AddButton onAdd={this.props.onAddItem}/> :"";
-        console.log("list loadingButton: " + (this.props.isLoading ? "1" : "0"));
-        let loadingButton= this.props.isLoading
-            ? <LoadButton/> :"";
-        let items=[];
-        console.log("list items: " + (this.props.items ? "1" : "0"));
-        if (this.props.items) {
-            if (this.props.editable) {
-                items = this.props.items.map(item =>
-                    <SmartItem item={item} key={item.id}
-                               onOpenItem={this.props.onOpenItem}
-                               onGetChildren={this.props.onGetChildren}
-                               onRemoveItem={this.props.onRemoveItem}
-                    />);
-            } else {
-                items = this.props.items.map(item =>
-                    <SmartItem item={item} key={item.id}/>);
-            }
+    render() {
+        console.log("list items count: " + this.props.items.length());
+        let items = (this.props.onGetChildren)
+            ? this.props.items.map(item =>
+                <SmartItem item={item} key={item.id}
+                           onOpenItem={this.props.onOpenItem}
+                           onGetChildren={this.props.onGetChildren}
+                           onRemoveItem={this.props.onRemoveItem}
+                />)
+            : this.props.children.map((child) =>
+                <SmartChild key={child.id}
+                           item={child}/>);
 
+        if (this.props.onAddItem) {
+            console.log("list addButton: " + (this.props.editable ? "1" : "0"));
+            items.push(<AddButton/>);
         }
 
         let className = this.props.editable ? "smart-list-editable" : "smart-list-simple";
         console.log("list class: " + className);
-        return <div className={className}>
+        return <div className={className} style={style}>
                 {items}
-                {loadingButton}
-                {addButton}
-            </div>;
+            <LoadingIndicator visible={this.state.isLoading}/>
+        </div>;
     }
 }
 
 export const AddButton = (props) => {
     console.log("add button: " + (props.onAdd ? "1" : "0"));
-    console.log("add button: " + defaultLogos.addButton);
-    return <SpecialItem name="Add"
-                        logo={defaultLogos.addButton}
-                        onDo={props.onAdd}
-                        />;
+    return <FloatingActionButton>
+        <ContentAdd onTouchTap={props.onAdd} />
+        </FloatingActionButton>;
 };
-export const LoadButton = () => {
-    console.log("LoadButton: " + defaultLogos.loadingButton);
-    return <SpecialItem name="loading..."
-                        logo={defaultLogos.loadingButton}/>;
-};
-export const SpecialItem = (props) => {
-    let item = {name: props.name, photoUrl: props.logo};
-    console.log("special item: " + item.toString());
-    return <SmartItem item={item}
-                      onOpenItem={props.onDo}
-                        />;
+export const LoadingIndicator = (props) => {
+    console.log("LoadingIndicator: " + defaultLogos.loadingButton);
+    return <RefreshIndicator size={40} status={props.visible ? "loading" : "hide"} left="50%" top={0} />;
 };
 
 
