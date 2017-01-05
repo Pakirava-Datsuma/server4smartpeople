@@ -4,7 +4,7 @@ import SmartItem from './SmartItem';
 import SmartChild from './SmartChild';
 import {defaultLogos} from './InitialData';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import RefreshIndicator from 'material-ui/';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
 const style = {
@@ -20,45 +20,60 @@ class SmartList extends React.Component {
         onAddItem: React.PropTypes.func,
         onRemoveItem: React.PropTypes.func,
         onOpenItem: React.PropTypes.func,
-        isLoading: React.PropTypes.bool,
+        onOpenChild: React.PropTypes.func,
+        isLoading: React.PropTypes.bool.isRequired,
     };
 
+    shouldComponentUpdate (nextProps) {
+        return !( nextProps.items == this.props.items
+                    && nextProps.isLoading == this.props.isLoading);
+    }
+
     render() {
-        console.log("list items count: " + this.props.items.length());
-        let items = (this.props.onGetChildren)
-            ? this.props.items.map(item =>
+        let items = this.props.items;
+        console.log("list items count: " + items.length);
+        let list = (this.props.onGetChildren)
+            ? items.map(item =>
                 <SmartItem item={item} key={item.id}
                            onOpenItem={this.props.onOpenItem}
                            onGetChildren={this.props.onGetChildren}
                            onRemoveItem={this.props.onRemoveItem}
                 />)
-            : this.props.children.map((child) =>
+            : items.map((child) =>
                 <SmartChild key={child.id}
-                           item={child}/>);
+                            item={child}
+                            onOpen={this.props.onOpenChild}
+                />);
 
         if (this.props.onAddItem) {
-            console.log("list addButton: " + (this.props.editable ? "1" : "0"));
-            items.push(<AddButton/>);
+            console.log("list addButton: " + !!this.props.onAddItem);
+            list.push(<AddButton key="addButton" onAdd={this.props.onAddItem}/>);
         }
 
-        let className = this.props.editable ? "smart-list-editable" : "smart-list-simple";
-        console.log("list class: " + className);
-        return <div className={className} style={style}>
-                {items}
-            <LoadingIndicator visible={this.state.isLoading}/>
+        return <div style={style}>
+                {list}
+            <LoadingIndicator visible={this.props.isLoading}/>
         </div>;
     }
 }
 
-export const AddButton = (props) => {
-    console.log("add button: " + (props.onAdd ? "1" : "0"));
-    return <FloatingActionButton>
-        <ContentAdd onTouchTap={props.onAdd} />
+export class AddButton extends React.Component {
+    static propTypes = {
+        onAdd: React.PropTypes.func.isRequired,
+    };
+    // shouldComponentUpdate () {return false;}
+    render () {
+        console.log("add button: " + !!this.props.onAdd);
+        return <FloatingActionButton>
+            <ContentAdd onTouchTap={this.props.onAdd}/>
         </FloatingActionButton>;
+    }
 };
 export const LoadingIndicator = (props) => {
-    console.log("LoadingIndicator: " + defaultLogos.loadingButton);
-    return <RefreshIndicator size={40} status={props.visible ? "loading" : "hide"} left="50%" top={0} />;
+    console.log("LoadingIndicator: " + props.visible);
+    return <RefreshIndicator size={40} left={20} top={0}
+                             status={props.visible ? "loading" : "hide"}
+    />;
 };
 
 

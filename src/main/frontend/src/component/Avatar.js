@@ -4,27 +4,33 @@ import Avatar from 'material-ui/Avatar';
 // - editable property for avatar on entity page to edt it's name
 // - single component for classNames
 
-class Avatar extends React.Component {
+class SmartAvatar extends React.Component {
     static propTypes = {
         entity: React.PropTypes.object.isRequired,
-        editable: React.PropTypes.bool.isRequired,
+        onTitleChange: React.PropTypes.func,
     };
 
     render() {
-        let image =
-            <Image src={this.props.entity.photoUrl} />;
+        let avatar =
+            <Avatar src={this.props.entity.photoUrl} />;
 
-        //    TODO:
-        // make {title} editable if this.props.editable
-        let title = <div className="title">
-            {this.props.entity.name}
-        </div>;
+        let title;
+        if (this.props.onTitleChange) {
+            title = <TextField rows={1} rowsMax={2}
+                                   hintText="Name"
+                                   defaultValue={this.props.entity.name}
+            />;
+        } else {
+            title = this.props.entity.name;
+        }
 
-        return <div className="avatar">
-            {image}
-            {title}
-        </div>
+        return <List>
+            <ListItem leftAvatar={avatar}>
+                {title}
+            </ListItem>
+        </List>
+
     }
 }
 
-export default Avatar;
+export default SmartAvatar;

@@ -11,15 +11,20 @@ class SmartChild extends React.Component {
     static propTypes = {
         item: React.PropTypes.object.isRequired,
         onRemoveItem: React.PropTypes.func,
-        onOpenItem: React.PropTypes.func,
+        onOpen: React.PropTypes.func,
     };
+
+    shouldComponentUpdate (nextProps) {
+        return nextProps.item != this.props.item;
+    }
 
     render() {
         let child = this.props.item;
         return <Chip key={child.id}
                      style={style}
                      onRequestDelete={this.props.onRemoveItem}
-                     onTouchTap={this.props.onOpenItem}>
+                     containerElement={this.props.onOpen(child.id)}
+        >
             <Avatar src={child.photoUrl}/>
             {child.name}
         </Chip>;

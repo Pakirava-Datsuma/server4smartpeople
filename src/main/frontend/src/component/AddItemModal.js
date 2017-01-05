@@ -5,7 +5,8 @@ import React from 'react';
 import ReactTimeout from 'react-timeout';
 import {ButtonToolbar, Button, Image, Modal, FormGroup, FormControl,
   ControlLabel, Glyphicon} from 'react-bootstrap';
-import ImageWithTooltip from './ImageWithTooltip';
+import Avatar from 'material-ui/Avatar';
+import
 
 export default class AddItemModal extends React.Component {
     constructor(){

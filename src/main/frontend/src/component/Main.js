@@ -3,32 +3,22 @@
  */
 import React from 'react';
 import {PageHeader} from 'react-bootstrap';
+import AppBar from 'material-ui/AppBar';
 
-console.log("Main loading...");
+let date = new Date();
+console.log(date.getHours() + ":" + date.getMinutes());
 
-class Main extends React.Component {
-    constructor() {
-        super();
-        console.log("Main created");
-    }
-
-    componentWillMount(){console.log("Main mounting...");}
-
-    render () {
-        console.log("Main rendering...");
-        return (
-            <div>
-            <div className="header" marginWidth="2em" marginHeight="0.5em">
-                <PageHeader>#MIA
-                    <small>network</small>
-                </PageHeader>
-                {/*<Link href="/">View</Link>*/}
-                {/*<Link href="simulate">Simulate</Link>*/}
-            </div>
-                {this.props.children}
-            </div>);
-    }
+const onInfo = () => {
+    alert("#My Information Assistant's network")
 }
+
+const Main = (props) => <div>
+    <AppBar title = "#MIA network" onLeftIconButtonTouchTap={onInfo}/>
+        // {/*<Link href="/">View</Link>*/}
+        // {/*<Link href="simulate">Simulate</Link>*/}
+    {props.children}
+</div>;
+
 console.log("Main loaded");
 
 export default Main;

@@ -16,18 +16,19 @@ class SmartItem extends React.Component {
         super();
         this.state = {
             folded: true,
-            isLoading: true,
+            isLoading: false,
         };
         this.onGetChildren = this.onGetChildren.bind(this);
         this.onFold = this.onFold.bind(this);
 
     };
 
-    onFold(){
-        console.log("children " + (this.state.folded ? "unfolding..." : "folding..."));
+    onFold(expand){
+        let fold = !expand;
+        console.log("children " + (fold ? "folding..." : "unfolding..."));
         this.setState({
-            folded: !this.state.folded,
-            isLoading: this.state.folded,
+            folded: fold,
+            isLoading: !fold,
         });
         this.props.onGetChildren();
     }
@@ -39,15 +40,20 @@ class SmartItem extends React.Component {
         this.props.onGetChildren(this.props.item.id);
 
     }
+    // shouldComponentUpdate (nextProps, nextState) {
+    //     return nextProps.item != this.props.item
+    //         || nextState != this.state;
+    // }
 
     render() {
-        return <Card>
+        let item = this.props.item;
+        return <Card expanded={!this.state.folded} onExpandChange={this.onFold}>
             <CardHeader title={item.name}
                         avatar={item.photoUrl}
                         actAsExpander={true} showExpandableButton={true}
                         />
             <CardText expandable={true}>
-                <SmartList items={item.children}
+                <SmartList items={item.children ? item.children : []}
                            isLoading={this.state.isLoading}/>
             </CardText>
             <CardActions>
@@ -55,8 +61,16 @@ class SmartItem extends React.Component {
                             onTouchTap={this.props.onRemoveItem}
                             disabled={!this.props.onRemoveItem}/>
                 <FlatButton label="Edit"
-                            onTouchTap={this.props.onOpenItem}
+                            containerElement={this.props.onOpenItem(item.id)}
                             disabled={!this.props.onOpenItem}/>
+                <FlatButton label="V"
+                            onTouchTap={()=>{
+                                console.log("clicked");
+                                this.onFold(true)}}/>
+                <FlatButton label="^"
+                            onTouchTap={()=>{
+                                console.log("clicked");
+                                this.onFold(false)}}/>
             </CardActions>
             </Card>
     }
