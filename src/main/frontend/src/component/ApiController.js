@@ -1,13 +1,9 @@
 import $ from 'jquery';
+// import $ from './apiMock';
 
 function ApiController(URLs) {
     this.URL_ROOT = "/api";
     this.URL_PREFIX = URLs.prefix;
-    this.ENABLE_LOG = true;
-
-    this.log = (message) => {
-        if (this.ENABLE_LOG) console.log(message);
-    };
 
     this.getUrl = (url) => {
         return this.URL_ROOT
@@ -23,13 +19,11 @@ function ApiController(URLs) {
 
     this.get = (id, callback) => {
         let url = this.URL_GET + '/' + id;
-        this.log(url);
         $.get(url, callback);
     };
 
     this.create = (data, callback) => {
         let url = this.URL_CREATE;
-        this.log(url);
         // $.put(url, data, callback);
         $.ajax({
             headers: {
@@ -46,7 +40,11 @@ function ApiController(URLs) {
 
     this.list = (callback) => {
         let url = this.URL_LIST;
-        this.log(url);
+        $.get(url, callback);
+    };
+
+    this.remove = (id, callback) => {
+        let url = this.URL_DELETE + '/' + id;
         $.get(url, callback);
     };
 }

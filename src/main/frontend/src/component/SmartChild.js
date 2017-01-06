@@ -1,6 +1,7 @@
 import React from 'react';
 import Chip from 'material-ui/Chip';
 import Avatar from 'material-ui/Avatar';
+import FontIcon from 'material-ui/FontIcon';
 
 const style = {
     margin: 4,
@@ -19,13 +20,16 @@ class SmartChild extends React.Component {
     }
 
     render() {
-        let child = this.props.item;
-        return <Chip key={child.id}
-                     style={style}
+        const child = this.props.item;
+        const avatar = child.photoUrl
+            ? <Avatar src={child.photoUrl}/>
+            : <Avatar icon={<FontIcon className="material-icons">face</FontIcon>}/>;
+        const link = this.props.onOpen ? this.props.onOpen(child.id) : "";
+        return <Chip style={style}
                      onRequestDelete={this.props.onRemoveItem}
-                     containerElement={this.props.onOpen(child.id)}
+                     containerElement={link}
         >
-            <Avatar src={child.photoUrl}/>
+            {avatar}
             {child.name}
         </Chip>;
     }

@@ -3,6 +3,13 @@ import SmartList from './SmartList';
 import FlatButton from 'material-ui/FlatButton';
 import {Card, CardActions, CardText, CardTitle, CardHeader} from 'material-ui/Card';
 
+const styles = {
+    geometry: {
+        width: '16em',
+        margin: '0.5em',
+    },
+}
+
 class SmartItem extends React.Component {
 
     static propTypes = {
@@ -20,8 +27,12 @@ class SmartItem extends React.Component {
         };
         this.onGetChildren = this.onGetChildren.bind(this);
         this.onFold = this.onFold.bind(this);
-
+        this.onRemove = this.onRemove.bind(this);
     };
+
+    onRemove (){
+        this.props.onRemoveItem(this.props.item);
+    }
 
     onFold(expand){
         let fold = !expand;
@@ -30,7 +41,7 @@ class SmartItem extends React.Component {
             folded: fold,
             isLoading: !fold,
         });
-        this.props.onGetChildren();
+        this.onGetChildren();
     }
 
     onGetChildren(){
@@ -47,7 +58,7 @@ class SmartItem extends React.Component {
 
     render() {
         let item = this.props.item;
-        return <Card expanded={!this.state.folded} onExpandChange={this.onFold}>
+        return <Card expanded={!this.state.folded} onExpandChange={this.onFold} style={styles.geometry}>
             <CardHeader title={item.name}
                         avatar={item.photoUrl}
                         actAsExpander={true} showExpandableButton={true}
@@ -58,19 +69,11 @@ class SmartItem extends React.Component {
             </CardText>
             <CardActions>
                 <FlatButton label="Delete"
-                            onTouchTap={this.props.onRemoveItem}
+                            onTouchTap={this.onRemove}
                             disabled={!this.props.onRemoveItem}/>
                 <FlatButton label="Edit"
                             containerElement={this.props.onOpenItem(item.id)}
                             disabled={!this.props.onOpenItem}/>
-                <FlatButton label="V"
-                            onTouchTap={()=>{
-                                console.log("clicked");
-                                this.onFold(true)}}/>
-                <FlatButton label="^"
-                            onTouchTap={()=>{
-                                console.log("clicked");
-                                this.onFold(false)}}/>
             </CardActions>
             </Card>
     }

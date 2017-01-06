@@ -41,35 +41,37 @@ export default class UsersList extends React.Component {
         return <Link to={"/houses/" + id}/>;
     }
 
-    onCreateUser() {
-        this.setState({showAddUserModal: true,})
-    }
-
     onAddUser(user) {
-        this.setState({loading: true,});
-        UserController.create(user, (newUser) => {
-            let newUsers = this.state.users;
-            newUsers.push(newUser);
-            this.setState({
-                users: newUsers,
-                loading:false,
-            });
-            console.log("user added, upd pls");
-            console.log("user sent: " + user);
-            console.log("user got: " + newUser);
+        this.setState({
+            users: this.state.users.push(user),
+            loading: true,
         });
-        return true;
+        UserController.create(user, (newUser) => {
+            // console.log("user sent: " + user);
+            // user.id = newUser.id;
+            // this.setState({
+            //     users: this.state.users
+            //     loading: false,
+            // });
+            // console.log("user got: " + newUser);
+            this.onGetUsers();
+        });
     }
 
-    onRemoveUser (user) {
-        this.setState({loading: true,});
-        console.log("removing user " + user.id);
-        UserController.remove(user, (result) => {
-            if (result) {
+
+    onRemoveUser (oldUser) {
+        console.log("removing user " + oldUser.id);
+        // let users = this.state.users;
+        // users.splice(users.findIndex((user) => {return user == oldUser}), 1);
+        // this.setState({
+        //     users: users,
+        //     loading: true,
+        // });
+        UserController.remove(oldUser.id, (result) => {
+            // if (!result) {
+                // alert("Server declined removing " + oldUser.name);
                 this.onGetUsers();
-            } else {
-                alert("Server declined removing this");
-            }
+            // }
         })
     }
 
@@ -77,17 +79,17 @@ export default class UsersList extends React.Component {
     onGetUsers() {
         this.setState({loading: true,});
         console.log("updating users...");
-        // UserController.list((users)=>{
+        UserController.list((users)=>{
         //     console.log("users: " + users.toString());
-            let newUsers = defaultUsers.map((user) => {
-                user.children = [];
-                return user;
-            });
+            // let newUsers = defaultUsers.map((user) => {
+                // user.children = [];
+                // return user;
+            // });
             this.setState({
-                // users: users,
-                users: newUsers,
+                users: users,
+                // users: newUsers,
                 loading: false,});
-        // });
+        });
     }
 
     onGetHousesForUser(userId) {
@@ -97,7 +99,7 @@ export default class UsersList extends React.Component {
         //     console.log("houses: " + houses);
             let users = this.state.users;
             let user = users.find((user) => {return user.id == userId});
-            console.log("user found: " + user.name);
+            console.log("user found: " + !!user);
             user
                 // .houses = houses;
                 .children = defaultHouses;
@@ -118,7 +120,7 @@ export default class UsersList extends React.Component {
         return <div>
             <SmartList items={this.state.users}
                        onOpenItem={this.onOpenUser}
-                       onAddItem={this.onAddUser}
+                       onAddItem={this.onShowAddUserModal}
                        onRemoveItem={this.onRemoveUser}
                        isLoading={this.state.loading}
                        onGetChildren={this.onGetHousesForUser}
