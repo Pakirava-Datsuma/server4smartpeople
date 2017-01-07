@@ -22,9 +22,9 @@ function ApiController(URLs) {
         $.get(url, callback);
     };
 
-    this.create = (data, callback) => {
+    this.create = (object, callback) => {
         let url = this.URL_CREATE;
-        // $.put(url, data, callback);
+        // $.put(url, object, callback);
         $.ajax({
             headers: {
                 "Accept": "application/json",
@@ -32,7 +32,7 @@ function ApiController(URLs) {
             },
             type: "PUT",
             url: url,
-            data: JSON.stringify(data),
+            data: JSON.stringify(object),
             success: callback,
             error: callback
         });

@@ -17,6 +17,9 @@ class SmartItem extends React.Component {
         onGetChildren: React.PropTypes.func.isRequired,
         onRemoveItem: React.PropTypes.func,
         onOpenItem: React.PropTypes.func,
+        onOpenChild: React.PropTypes.func,
+        onAddChild: React.PropTypes.func,
+        onRemoveChild: React.PropTypes.func,
     };
 
     constructor() {
@@ -28,7 +31,13 @@ class SmartItem extends React.Component {
         this.onGetChildren = this.onGetChildren.bind(this);
         this.onFold = this.onFold.bind(this);
         this.onRemove = this.onRemove.bind(this);
+        this.onAddChild = this.onAddChild.bind(this);
     };
+
+    onAddChild(child){
+        child.parent = this.props.item;
+        this.props.onAddChild(child);
+    }
 
     onRemove (){
         this.props.onRemoveItem(this.props.item);
@@ -65,7 +74,11 @@ class SmartItem extends React.Component {
                         />
             <CardText expandable={true}>
                 <SmartList items={item.children ? item.children : []}
-                           isLoading={this.state.isLoading}/>
+                           isLoading={this.state.isLoading}
+                           onOpenItem={this.props.onOpenChild}
+                           onAddItem={this.onAddChild}
+                           onRemoveItem={this.props.onRemoveChild}
+                />
             </CardText>
             <CardActions>
                 <FlatButton label="Delete"

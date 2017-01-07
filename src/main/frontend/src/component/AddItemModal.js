@@ -22,31 +22,34 @@ export default class AddItemModal extends React.Component {
     };
 
 
-    constructor(){
+    constructor() {
         super();
-        this.state={
-          name: "",
-          photo: "",
+        this.state = {
+            name: "",
+            photoUrl: "",
+            showConfirmationDialog: false,
         };
         this.onOk = this.onOk.bind(this);
         this.onCancel = this.onCancel.bind(this);
     }
-    onOk(){
-      // alert("sending?");
+
+    onOk() {
+        // alert("sending?");
         // show sending data to server dialog
         // and only after succes you may hide the modal
-        let entity={
-          name: this.state.name,
-          photoUrl: this.state.photoUrl,
+        let entity = {
+            name: this.state.name,
+            photoUrl: this.state.photoUrl,
         };
         this.props.onHide();
         this.props.onAdd(entity);
     };
 
-    onCancel(){
+    onCancel() {
         this.props.onHide();
     };
-    render () {
+
+    render() {
         const form = <div>
             <TextField hintText="Name"
                        id="name-text-field"
@@ -69,26 +72,48 @@ export default class AddItemModal extends React.Component {
         //    <Glyphicon glyph={this.props.glyph}/>
         //     {this.props.title}
 
-        const buttons = [
-            <FlatButton label="Cancel"
-                        primary={true}
-                        onTouchTap={this.onCancel}
-            />,
-            <FlatButton label="Submit"
-                        primary={true}
-                        keyboardFocused={true}
-                        onTouchTap={this.onOk}
-            />,
-        ];
+        const actions = <Buttons
+            onOk={this.props.onOk}
+            onCancel={this.setState({showConfirmationDialog: true}).bind(this)}/>;
+
+        const confirmation = <ConfirmationDialog
+            show={this.state.showConfirmationDialog}
+            onOk={this.onCancel()}
+            onCancel={this.setState({showConfirmationDialog: false}).bind(this)}/>;
 
         return <Dialog
             title={title}
-            actions={buttons}
+            actions={actions}
             modal={true}
             open={this.props.show}
             autoScrollBodyContent={true}
         >
             {form}
+            {confirmation}
         </Dialog>;
     }
+}
+
+const Buttons = (props) => {
+    return [
+        <FlatButton label="Discard"
+                    primary={true}
+                    onTouchTap={props.onCancel}
+        />,
+        <FlatButton label="Submit"
+                    primary={true}
+                    keyboardFocused={true}
+                    onTouchTap={props.onOk}
+        />,
+    ];
+};
+
+const ConfirmationDialog = (props) => {
+    const actions = <Buttons onOk={props.onOk} onCancel={props.onCancel}/>;
+    return <Dialog
+        title="You will lose this data. Continue?"
+        actions={actions}
+        modal={true}
+        open={props.show}
+    />;
 }

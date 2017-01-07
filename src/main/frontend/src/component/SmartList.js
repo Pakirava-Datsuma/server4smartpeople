@@ -17,12 +17,14 @@ class SmartList extends React.Component {
 
     static propTypes = {
         items: React.PropTypes.array.isRequired,
-        onGetChildren: React.PropTypes.func,
+        onOpenItem: React.PropTypes.func,
         onAddItem: React.PropTypes.func,
         onRemoveItem: React.PropTypes.func,
-        onOpenItem: React.PropTypes.func,
-        onOpenChild: React.PropTypes.func,
         isLoading: React.PropTypes.bool.isRequired,
+        onGetChildren: React.PropTypes.func,
+        onOpenChild: React.PropTypes.func,
+        onAddChild: React.PropTypes.func,
+        onRemoveChild: React.PropTypes.func,
     };
 
     shouldComponentUpdate (nextProps) {
@@ -34,7 +36,7 @@ class SmartList extends React.Component {
         let items = this.props.items;
         console.log("list items count: " + items.length);
         let addButton = (this.props.onAddItem)
-            ? <AddButton key="addButton" onAdd={this.props.onAddItem}/>
+            ? <AddButton key="addButton" onAdd={this.props.onAddItem} isChild={!this.props.onGetChildren}/>
             : "";
         let refreshIndicator = <LoadingIndicator visible={!this.props.isLoading}/>;
         let list = (this.props.onGetChildren)
@@ -43,11 +45,15 @@ class SmartList extends React.Component {
                            onOpenItem={this.props.onOpenItem}
                            onGetChildren={this.props.onGetChildren}
                            onRemoveItem={this.props.onRemoveItem}
+                           onOpenChild={this.props.onOpenChild}
+                           onAddChild={this.props.onAddChild}
+                           onRemoveChild={this.props.onRemoveChild}
                 />)
             : items.map((child) =>
                 <SmartChild key={child.id}
                             item={child}
-                            onOpen={this.props.onOpenChild}
+                            onOpen={this.props.onOpenItem}
+                            onRemove={this.props.onRemoveItem}
                 />);
         if (list.length == 0) list = <NoEntitiesLabel/>;
 
@@ -71,14 +77,18 @@ export class AddButton extends React.Component {
     };
     static propTypes = {
         onAdd: React.PropTypes.func.isRequired,
+        isChild: React.PropTypes.bool,
     };
     // shouldComponentUpdate () {return false;}
     render () {
 
         // console.log("add button: " + !!this.props.onAdd);
-        return <FloatingActionButton style={AddButton.style}>
-            <ContentAdd onTouchTap={this.props.onAdd}/>
-        </FloatingActionButton>;
+        return (this.props.isChild)
+            ?   <FloatingActionButton style={AddButton.style}>
+                    <ContentAdd onTouchTap={this.props.onAdd}/>
+                </FloatingActionButton>
+            :   <SmartChild item={{name: "Add..."}}
+                            onOpen={this.props.onAdd}/>;
     }
 };
 export const LoadingIndicator = (props) => {

@@ -14,8 +14,6 @@ const onInfo = () => {
 
 const Main = (props) => <div>
     <AppBar title = "#MIA network" onLeftIconButtonTouchTap={onInfo}/>
-        // {/*<Link href="/">View</Link>*/}
-        // {/*<Link href="simulate">Simulate</Link>*/}
     {props.children}
 </div>;
 

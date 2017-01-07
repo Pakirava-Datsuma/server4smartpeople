@@ -2,7 +2,7 @@
  * Created by swanta on 30.11.16.
  */
 import React from 'react';
-import {Panel} from 'react-bootstrap';
+// import {Panel} from 'react-bootstrap';
 import UsersList from './UsersList';
 // import HousesList from './HousesList';
 // import {defaultLogos, defaultHouses} from './InitialData';
@@ -20,12 +20,6 @@ class AdminPanel extends React.Component {
     //         houseLogo: defaultLogos.DefaultHouseLogoURL,
     //         userLogo: defaultLogos.DefaultUserLogoURL,
     //     };
-    //     this.onShowAddHouseModal = this.onShowAddHouseModal.bind(this);
-    //     this.onHideAddHouseModal = this.onHideAddHouseModal.bind(this);
-    // };
-    //
-    // onShowAddHouseModal() {this.setState({showAddHouseModal: true})}
-    // onHideAddHouseModal() {this.setState({showAddHouseModal: false})}
     //
     // shouldComponentUpdate(nextProps, nextState) {
     //     let result = (nextState.users !== this.state.users)
@@ -40,22 +34,6 @@ class AdminPanel extends React.Component {
     //     // this.onGetHousesForUser();
     // }
     //
-    // onAddHouse(house) {
-    //   let newHouse={
-    //     name: house.name,
-    //     photoUrl: house.photo,
-    //     ownerId: this.state.users[0].id,
-    //   };
-    //   HouseController.create(newHouse, (newHouse) => {
-    //   // console.log(url);
-    //       let newHouses = this.state.houses.concat(newHouse);
-    //       this.setState({houses: newHouses});
-    //       console.log("house added, upd pls");
-    //       console.log("house sent: " + house);
-    //       console.log("house got: " + newHouse);
-    //   });
-    //     return true;
-    // }
 
     render () {
         console.log("adminPanel rendering...");
@@ -100,9 +78,9 @@ class AdminPanel extends React.Component {
         //                />
         //
         return <div>
-            <Panel bsStyle="success">
+            {/*<Panel bsStyle="success">*/}
                 <UsersList/>
-            </Panel>
+            {/*</Panel>*/}
             {/*{modalAddUser}*/}
             {/*{modalAddHouse}*/}
         </div>;
