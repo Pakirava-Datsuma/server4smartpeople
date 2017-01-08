@@ -52,7 +52,7 @@ class AdminPanel extends React.Component {
         // let userList = <UsersList
         //     users={this.state.users}
         //     onAddUser={this.onAddUser}
-        //     onOpenUser={User}
+        //     LinkToUserPage={User}
         //     buttonAdd
         //     onAdd={this.onShowAddUserModal}
         //     buttonUpdate

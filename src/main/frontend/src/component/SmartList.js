@@ -4,7 +4,6 @@ import SmartItem from './SmartItem';
 import SmartChild from './SmartChild';
 import {defaultLogos} from './InitialData';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import RefreshIndicator from 'material-ui/RefreshIndicator';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
 const style = {
@@ -20,7 +19,6 @@ class SmartList extends React.Component {
         onOpenItem: React.PropTypes.func,
         onAddItem: React.PropTypes.func,
         onRemoveItem: React.PropTypes.func,
-        isLoading: React.PropTypes.bool.isRequired,
         onGetChildren: React.PropTypes.func,
         onOpenChild: React.PropTypes.func,
         onAddChild: React.PropTypes.func,
@@ -45,7 +43,6 @@ class SmartList extends React.Component {
         let addButton = (this.props.onAddItem)
             ? <AddButton key="addButton" onAdd={this.props.onAddItem} isChild={!!this.props.onGetChildren}/>
             : "";
-        let refreshIndicator = <LoadingIndicator visible={this.props.isLoading}/>;
         let list = (this.props.onGetChildren)
             ? items.map((item) =>
                 <SmartItem item={item} key={item.id}
@@ -63,11 +60,9 @@ class SmartList extends React.Component {
                             onRemove={this.props.onRemoveItem}
                 />);
         if (list.length == 0) list = <NoEntitiesLabel/>;
-
+        list.push(addButton);
 
         return <div style={style}>
-            {addButton}
-            {refreshIndicator}
             {list}
         </div>;
     }
@@ -75,12 +70,22 @@ class SmartList extends React.Component {
 
 export class AddButton extends React.Component {
     static style = {
-        margin: 0,
-        top: 'auto',
-        right: 20,
-        bottom: 20,
-        left: 'auto',
-        position: 'fixed',
+        big: {
+            margin: 0,
+            top: 'auto',
+            right: 20,
+            bottom: 20,
+            left: 'auto',
+            position: 'fixed',
+        },
+        small: {
+            margin: 0,
+            // top: 'auto',
+            // right: 0,
+            // bottom: 0,
+            // left: 'auto',
+            // position: 'absolute',
+        },
     };
     static propTypes = {
         onAdd: React.PropTypes.func.isRequired,
@@ -90,20 +95,12 @@ export class AddButton extends React.Component {
     render () {
 
         console.log("add button: " + !!this.props.onAdd);
-        return (this.props.isChild)
-            ?   <FloatingActionButton style={AddButton.style}>
-                    <ContentAdd onTouchTap={this.props.onAdd}/>
-                </FloatingActionButton>
-            :   <SmartChild item={{name: "Add..."}}
-                            onOpen={this.props.onAdd}/>;
+        const big = this.props.isChild;
+        return <FloatingActionButton style={big ? AddButton.style.big : AddButton.style.small}
+                                     mini={!big}>
+            <ContentAdd onTouchTap={()=>{console.log("ADD tap");this.props.onAdd()}}/>
+        </FloatingActionButton>;
     }
-};
-export const LoadingIndicator = (props) => {
-    console.log("LoadingIndicator: " + props.visible);
-    return <RefreshIndicator size={40} left={-20} top={10}
-                             style={{marginLeft: '50%'}}
-                             status={props.visible ? "loading" : "hide"}
-    />;
 };
 
 export const NoEntitiesLabel = () => <SmartChild item={{name: "No entities yet...",}}/>;

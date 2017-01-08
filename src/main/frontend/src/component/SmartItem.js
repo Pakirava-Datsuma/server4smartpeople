@@ -26,7 +26,6 @@ class SmartItem extends React.Component {
         super();
         this.state = {
             folded: true,
-            isLoading: false,
         };
         this.onGetChildren = this.onGetChildren.bind(this);
         this.onFold = this.onFold.bind(this);
@@ -34,9 +33,9 @@ class SmartItem extends React.Component {
         this.onAddChild = this.onAddChild.bind(this);
     };
 
-    onAddChild(child){
-        child.parent = this.props.item.id;
-        this.props.onAddChild(child);
+    onAddChild(){
+        console.log("onAddChild for " + this.props.item.id);
+        this.props.onAddChild(this.props.item.id);
     }
 
     onRemove (){
@@ -48,7 +47,6 @@ class SmartItem extends React.Component {
         console.log("children " + (fold ? "folding..." : "unfolding..."));
         this.setState({
             folded: fold,
-            isLoading: !fold,
         });
         this.onGetChildren();
     }
@@ -75,7 +73,6 @@ class SmartItem extends React.Component {
                         />
             <CardText expandable={true}>
                 <SmartList items={item.children ? item.children : []}
-                           isLoading={this.state.isLoading}
                            onOpenItem={this.props.onOpenChild}
                            onAddItem={this.onAddChild}
                            onRemoveItem={this.props.onRemoveChild}

@@ -4,11 +4,12 @@
 import React from 'react';
 import {Link}                                                                                                                                                                                    from 'react-router';
 // import {Panel} from 'react-bootstrap';
-import Snackbar from 'material-ui/Snackbar';
 import SmartList from './SmartList';
 import {UserController, HouseController} from './ApiList';
 import {defaultUsers, defaultHouses} from './InitialData';
 import AddItemModal from './AddItemModal';
+import LoadingIndicator from './LoadingIndicator';
+import Snackbar from 'material-ui/Snackbar';
 
 export default class UsersList extends React.Component {
 
@@ -18,6 +19,7 @@ export default class UsersList extends React.Component {
             users: defaultUsers,
             showAddUserModal: false,
             showAddHouseModal: false,
+            ownerOfNewHouse: 0,
             loading: false,
             showError: false,
             errorMessage: "",
@@ -30,11 +32,12 @@ export default class UsersList extends React.Component {
         this.onShowAddUserModal = this.onShowAddUserModal.bind(this);
         this.onHideAddUserModal = this.onHideAddUserModal.bind(this);
         this.onRemoveUser = this.onRemoveUser.bind(this);
-        this.onAddHouse = this.LinkToHousePage.bind(this);
-        this.onRemoveHouse = this.LinkToHousePage.bind(this);
+        this.onAddHouse = this.onAddHouse.bind(this);
+        this.onRemoveHouse = this.onRemoveHouse.bind(this);
         this.onShowAddHouseModal = this.onShowAddHouseModal.bind(this);
         this.onHideAddHouseModal = this.onHideAddHouseModal.bind(this);
         this.showError = this.showError.bind(this);
+        this.getOwnerOf = this.getOwnerOf.bind(this);
     }
 
     showError(message) {
@@ -45,24 +48,52 @@ export default class UsersList extends React.Component {
         });
     }
 
-    onShowAddHouseModal() {console.log("onShowAddHouseModal");
-    this.setState({showAddHouseModal: true})}
-    onHideAddHouseModal() {console.log("onHideAddHouseModal");
-        // this.setState({showAddHouseModal: false})
+    onShowAddHouseModal(ownerId) {
+        console.log("onShowAddHouseModal for " + ownerId);
+        this.setState({
+            showAddHouseModal: true,
+            ownerOfNewHouse: ownerId,
+        });
+    }
+    onHideAddHouseModal() {
+        console.log("onHideAddHouseModal");
+        this.setState({
+            showAddHouseModal: false,
+        });
     }
 
 
-    onAddHouse(house){
-        house.owner = house.parent;
+    getOwnerOf (house) {
+        const index = this.state.users.findIndex((user) => {
+            return user.id == house.owner;});
+        console.log("index "+index);
+        return this.state.users[index];
+    }
 
+    onAddHouse(house){
+        console.log("onAddHouse " + house.name);
+        house.owner = this.state.ownerOfNewHouse;
+        console.log("house.owner " + house.owner);
+        const houses = this.getOwnerOf(house).houses;
+        houses.push(house);
+        this.state.loading = true;
         HouseController.create(house, (newHouse) => {
+            console.log("house got: " + newHouse);
             this.onGetUsers();
         })
     }
 
     onRemoveHouse(house){
-        console.log("onRemoveHouse");
-        HouseController.create(house.id, (result) => {
+        console.log("onRemoveHouse " + house.id);
+        let owner = this.getOwnerOf(house);
+        let houses = owner.houses;
+        houses.splice(houses.indexOf(house), 1);
+        // this.setState({
+        //     users: users,
+        //     loading: true,
+        // });
+        this.setState({loading: true,});
+        HouseController.remove(house.id, (result) => {
             this.onGetUsers();
         })
 
@@ -83,10 +114,8 @@ export default class UsersList extends React.Component {
 
     onAddUser(user) {
         console.log('onAddUser');
-        this.setState({
-            users: this.state.users.push(user),
-            loading: true,
-        });
+        this.state.users.push(user);
+        this.state.loading = true;
         UserController.create(user, (newUser) => {
             // console.log("user sent: " + user);
             // user.id = newUser.id;
@@ -94,7 +123,7 @@ export default class UsersList extends React.Component {
             //     users: this.state.users
             //     loading: false,
             // });
-            // console.log("user got: " + newUser);
+            console.log("user got: " + newUser);
             this.onGetUsers();
         });
     }
@@ -108,6 +137,7 @@ export default class UsersList extends React.Component {
         //     users: users,
         //     loading: true,
         // });
+        this.setState({loading: true,});
         UserController.remove(oldUser.id, (result) => {
             // if (!result) {
                 // alert("Server declined removing " + oldUser.name);
@@ -134,7 +164,6 @@ export default class UsersList extends React.Component {
 
     onGetHousesForUser(user) {
         console.log("updating houses for " + user.id);
-        // TODO: HouseController.getChildren(userId, (houses)=>{
         HouseController.list(user.id, (houses)=> {
             console.log("houses: " + houses);
             // let users = this.state.users;
@@ -177,8 +206,6 @@ export default class UsersList extends React.Component {
                           show={this.state.showAddUserModal}
                           onHide={this.onHideAddUserModal}
                           onAdd={this.onAddUser}
-                          btnOk="Create"
-                          btnCancel="Cancel"
             />
             <AddItemModal title="New place"
                           entity="Place"
@@ -186,14 +213,13 @@ export default class UsersList extends React.Component {
                           show={this.state.showAddHouseModal}
                           onHide={this.onHideAddHouseModal}
                           onAdd={this.onAddHouse}
-                          btnOk="Create"
-                          btnCancel="Cancel"
             />
             <Snackbar open={this.state.showError}
                 message={this.state.errorMessage}
                 autoHideDuration={4000}
                 onRequestClose={()=>this.setState({showError: false})}
             />
+            <LoadingIndicator visible={this.state.loading}/>
         </div>;
     }
 }

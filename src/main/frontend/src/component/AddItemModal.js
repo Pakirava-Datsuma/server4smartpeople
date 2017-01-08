@@ -39,6 +39,7 @@ export default class AddItemModal extends React.Component {
         // alert("sending?");
         // show sending data to server dialog
         // and only after succes you may hide the modal
+        console.log("ok ");
         let entity = {
             name: this.state.name,
             photoUrl: this.state.photoUrl,
@@ -48,6 +49,7 @@ export default class AddItemModal extends React.Component {
     };
 
     onCancel() {
+        console.log("cancel ");
         if (this.state.containsValuableData)
             this.setState({showConfirmationDialog: true});
         else this.props.onHide();
@@ -67,8 +69,7 @@ export default class AddItemModal extends React.Component {
                        id="name-text-field"
                        value={this.state.name}
                        onChange={(event) => {
-                           this.onChangeData({name:
-                               (event.target.value ? event.target.value : "")})
+                           this.onChangeData({name: event.target.value})
                        }}/>
             <TextField hintText="Photo"
                        id="photolink-text-field"
@@ -104,7 +105,11 @@ export default class AddItemModal extends React.Component {
         const confirmation = <ConfirmationDialog
             show={this.state.showConfirmationDialog}
             onOk={this.onCancel}
-            onCancel={() => this.setState({showConfirmationDialog: false})}/>;
+            onCancel={() => {
+                console.log("not confirmed ");
+                this.setState({showConfirmationDialog: false});
+            }
+            }/>;
 
         return <Dialog
             title={title}

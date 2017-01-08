@@ -15,10 +15,6 @@ class SmartChild extends React.Component {
         onOpen: React.PropTypes.func,
     };
 
-    shouldComponentUpdate (nextProps) {
-        return nextProps.item != this.props.item;
-    }
-
     render() {
         const child = this.props.item;
         const avatar = child.photoUrl
