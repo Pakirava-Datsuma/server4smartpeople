@@ -4,6 +4,7 @@
 import React from 'react';
 import {Link}                                                                                                                                                                                    from 'react-router';
 // import {Panel} from 'react-bootstrap';
+import Snackbar from 'material-ui/Snackbar';
 import SmartList from './SmartList';
 import {UserController, HouseController} from './ApiList';
 import {defaultUsers, defaultHouses} from './InitialData';
@@ -18,28 +19,41 @@ export default class UsersList extends React.Component {
             showAddUserModal: false,
             showAddHouseModal: false,
             loading: false,
+            showError: false,
+            errorMessage: "",
         };
         this.onGetUsers = this.onGetUsers.bind(this);
-        this.onOpenUser = this.onOpenUser.bind(this);
-        this.onOpenHouse = this.onOpenHouse.bind(this);
+        this.LinkToUserPage = this.LinkToUserPage.bind(this);
+        this.LinkToHousePage = this.LinkToHousePage.bind(this);
         this.onGetHousesForUser = this.onGetHousesForUser.bind(this);
         this.onAddUser = this.onAddUser.bind(this);
         this.onShowAddUserModal = this.onShowAddUserModal.bind(this);
         this.onHideAddUserModal = this.onHideAddUserModal.bind(this);
         this.onRemoveUser = this.onRemoveUser.bind(this);
-        this.onAddHouse = this.onOpenHouse.bind(this);
-        this.onRemoveHouse = this.onOpenHouse.bind(this);
+        this.onAddHouse = this.LinkToHousePage.bind(this);
+        this.onRemoveHouse = this.LinkToHousePage.bind(this);
         this.onShowAddHouseModal = this.onShowAddHouseModal.bind(this);
         this.onHideAddHouseModal = this.onHideAddHouseModal.bind(this);
+        this.showError = this.showError.bind(this);
     }
 
-    onShowAddHouseModal() {this.setState({showAddHouseModal: true})}
-    onHideAddHouseModal() {this.setState({showAddHouseModal: false})}
+    showError(message) {
+        this.setState({
+            showError: true,
+            errorMessage: message,
+            loading: false,
+        });
+    }
+
+    onShowAddHouseModal() {console.log("onShowAddHouseModal");
+    this.setState({showAddHouseModal: true})}
+    onHideAddHouseModal() {console.log("onHideAddHouseModal");
+        // this.setState({showAddHouseModal: false})
+    }
 
 
     onAddHouse(house){
-        house.owner = house.parent.id;
-        house.parent = null;
+        house.owner = house.parent;
 
         HouseController.create(house, (newHouse) => {
             this.onGetUsers();
@@ -47,6 +61,7 @@ export default class UsersList extends React.Component {
     }
 
     onRemoveHouse(house){
+        console.log("onRemoveHouse");
         HouseController.create(house.id, (result) => {
             this.onGetUsers();
         })
@@ -57,16 +72,17 @@ export default class UsersList extends React.Component {
         console.log("AddUserModal starting...")}
     onHideAddUserModal() {this.setState({showAddUserModal: false})}
 
-    onOpenUser (id) {
-        this.setState({loading: true,});
+    LinkToUserPage (id) {
+        console.log("LinkToUserPage");
         return <Link to={"/users/" + id}/>;
     }
-    onOpenHouse (id) {
-        this.setState({loading: true,});
+    LinkToHousePage (id) {
+        console.log("LinkToHousePage");
         return <Link to={"/houses/" + id}/>;
     }
 
     onAddUser(user) {
+        console.log('onAddUser');
         this.setState({
             users: this.state.users.push(user),
             loading: true,
@@ -86,8 +102,8 @@ export default class UsersList extends React.Component {
 
     onRemoveUser (oldUser) {
         console.log("removing user " + oldUser.id);
-        // let users = this.state.users;
-        // users.splice(users.findIndex((user) => {return user == oldUser}), 1);
+        let users = this.state.users;
+        users.splice(users.findIndex((user) => {return user == oldUser}), 1);
         // this.setState({
         //     users: users,
         //     loading: true,
@@ -102,18 +118,17 @@ export default class UsersList extends React.Component {
 
 
     onGetUsers() {
-        this.setState({loading: true,});
         console.log("updating users...");
+        this.setState({loading: true,});
         UserController.list((users)=>{
         //     console.log("users: " + users.toString());
             // let newUsers = defaultUsers.map((user) => {
                 // user.children = [];
                 // return user;
             // });
-            this.setState({
-                users: users,
-                // users: newUsers,
-                loading: false,});
+            if (users instanceof Array)
+                this.setState({user: users, loading: false,});
+            else this.showError("No users loaded");
         });
     }
 
@@ -127,30 +142,32 @@ export default class UsersList extends React.Component {
             // console.log("user found: " + !!user);
             user.houses = houses;
             console.log("now he/she has houses: " + user.houses.length);
-        this.setState({
+            this.setState({
                 users: this.state.users,
             });
         });
 
     }
 
-    componentDidMount() {
-        this.onGetUsers();
+    componentDidMount() {        console.log('componentDidMount');
+
+        // this.onGetUsers();
     }
 
     render () {
         console.log("UsersList rendering");
         let items=this.state.users.map((user) => {
             user.children = user.houses;
+            return user;
         });
         return <div>
             <SmartList items={items}
-                       onOpenItem={this.onOpenUser}
+                       onOpenItem={this.LinkToUserPage}
                        onAddItem={this.onShowAddUserModal}
                        onRemoveItem={this.onRemoveUser}
                        isLoading={this.state.loading}
                        onGetChildren={this.onGetHousesForUser}
-                       onOpenChild={this.onOpenHouse}
+                       onOpenChild={this.LinkToHousePage}
                        onAddChild={this.onShowAddHouseModal}
                        onRemoveChild={this.onRemoveHouse}
             />
@@ -171,6 +188,11 @@ export default class UsersList extends React.Component {
                           onAdd={this.onAddHouse}
                           btnOk="Create"
                           btnCancel="Cancel"
+            />
+            <Snackbar open={this.state.showError}
+                message={this.state.errorMessage}
+                autoHideDuration={4000}
+                onRequestClose={()=>this.setState({showError: false})}
             />
         </div>;
     }

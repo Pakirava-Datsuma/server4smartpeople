@@ -28,9 +28,11 @@ export default class AddItemModal extends React.Component {
             name: "",
             photoUrl: "",
             showConfirmationDialog: false,
+            containsValuableData: false,
         };
         this.onOk = this.onOk.bind(this);
         this.onCancel = this.onCancel.bind(this);
+        this.onChangeData = this.onChangeData.bind(this);
     }
 
     onOk() {
@@ -41,13 +43,23 @@ export default class AddItemModal extends React.Component {
             name: this.state.name,
             photoUrl: this.state.photoUrl,
         };
-        this.props.onHide();
         this.props.onAdd(entity);
+        this.props.onHide();
     };
 
     onCancel() {
-        this.props.onHide();
+        if (this.state.containsValuableData)
+            this.setState({showConfirmationDialog: true});
+        else this.props.onHide();
     };
+
+    onChangeData(newData) {
+        newData.containsValuableData =
+            (newData.name!=undefined ? newData.name : this.state.name) != "" ||
+            (newData.photoUrl!=undefined ? newData.photoUrl : this.state.photoUrl) != "";
+        console.log("data is valuable: " + newData.containsValuableData);
+        this.setState(newData);
+    }
 
     render() {
         const form = <div>
@@ -55,13 +67,14 @@ export default class AddItemModal extends React.Component {
                        id="name-text-field"
                        value={this.state.name}
                        onChange={(event) => {
-                           this.setState({name: event.target.value})
+                           this.onChangeData({name:
+                               (event.target.value ? event.target.value : "")})
                        }}/>
             <TextField hintText="Photo"
                        id="photolink-text-field"
                        value={this.state.photoUrl}
                        onChange={(event) => {
-                           this.setState({photoUrl: event.target.value})
+                           this.onChangeData({photoUrl: event.target.value})
                        }}/>
         </div>;
 
@@ -72,14 +85,26 @@ export default class AddItemModal extends React.Component {
         //    <Glyphicon glyph={this.props.glyph}/>
         //     {this.props.title}
 
-        const actions = <Buttons
-            onOk={this.props.onOk}
-            onCancel={this.setState({showConfirmationDialog: true}).bind(this)}/>;
-
+        const actions = [
+            <FlatButton
+                key="Discard"
+                label="Discard"
+                primary={true}
+                onTouchTap={this.onCancel}
+            />,
+            <FlatButton
+                disabled={!this.state.containsValuableData}
+                key="Submit"
+                label="Submit"
+                primary={true}
+                keyboardFocused={true}
+                onTouchTap={this.onOk}
+            />,
+        ];
         const confirmation = <ConfirmationDialog
             show={this.state.showConfirmationDialog}
-            onOk={this.onCancel()}
-            onCancel={this.setState({showConfirmationDialog: false}).bind(this)}/>;
+            onOk={this.onCancel}
+            onCancel={() => this.setState({showConfirmationDialog: false})}/>;
 
         return <Dialog
             title={title}
@@ -94,26 +119,26 @@ export default class AddItemModal extends React.Component {
     }
 }
 
-const Buttons = (props) => {
-    return [
-        <FlatButton label="Discard"
-                    primary={true}
-                    onTouchTap={props.onCancel}
+const ConfirmationDialog = (props) => {
+    const actions = [
+        <FlatButton
+            key="No"
+            label="No"
+            primary={true}
+            keyboardFocused={true}
+            onTouchTap={props.onCancel}
         />,
-        <FlatButton label="Submit"
-                    primary={true}
-                    keyboardFocused={true}
-                    onTouchTap={props.onOk}
+        <FlatButton
+            key="Yes"
+            label="Yes"
+            primary={true}
+            onTouchTap={props.onOk}
         />,
     ];
-};
-
-const ConfirmationDialog = (props) => {
-    const actions = <Buttons onOk={props.onOk} onCancel={props.onCancel}/>;
     return <Dialog
-        title="You will lose this data. Continue?"
+        title="You will lose this data. Is it OK?"
         actions={actions}
         modal={true}
         open={props.show}
     />;
-}
+};

@@ -35,7 +35,7 @@ class SmartItem extends React.Component {
     };
 
     onAddChild(child){
-        child.parent = this.props.item;
+        child.parent = this.props.item.id;
         this.props.onAddChild(child);
     }
 
@@ -57,7 +57,7 @@ class SmartItem extends React.Component {
         console.log("updating childrens for " +
             this.props.item.name + " / " +
             this.props.item.id);
-        this.props.onGetChildren(this.props.item.id);
+        this.props.onGetChildren(this.props.item);
 
     }
     // shouldComponentUpdate (nextProps, nextState) {
@@ -67,6 +67,7 @@ class SmartItem extends React.Component {
 
     render() {
         let item = this.props.item;
+        console.log(item.name);
         return <Card expanded={!this.state.folded} onExpandChange={this.onFold} style={styles.geometry}>
             <CardHeader title={item.name}
                         avatar={item.photoUrl}

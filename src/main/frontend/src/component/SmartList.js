@@ -27,20 +27,27 @@ class SmartList extends React.Component {
         onRemoveChild: React.PropTypes.func,
     };
 
-    shouldComponentUpdate (nextProps) {
-        return !( nextProps.items == this.props.items
-                    && nextProps.isLoading == this.props.isLoading);
-    }
+    // shouldComponentUpdate (nextProps) {
+    //     return !( nextProps.items.length == this.props.items.length
+    //                 && (
+    //                         (
+    //                             nextProps.items.children
+    //                             && nextProps.items.children.length == this.props.items.children.length
+    //                         )
+    //                         || !nextProps.items.children
+    //                     )
+    //                 && nextProps.isLoading == this.props.isLoading);
+    // }
 
     render() {
         let items = this.props.items;
         console.log("list items count: " + items.length);
         let addButton = (this.props.onAddItem)
-            ? <AddButton key="addButton" onAdd={this.props.onAddItem} isChild={!this.props.onGetChildren}/>
+            ? <AddButton key="addButton" onAdd={this.props.onAddItem} isChild={!!this.props.onGetChildren}/>
             : "";
-        let refreshIndicator = <LoadingIndicator visible={!this.props.isLoading}/>;
+        let refreshIndicator = <LoadingIndicator visible={this.props.isLoading}/>;
         let list = (this.props.onGetChildren)
-            ? items.map(item =>
+            ? items.map((item) =>
                 <SmartItem item={item} key={item.id}
                            onOpenItem={this.props.onOpenItem}
                            onGetChildren={this.props.onGetChildren}
@@ -82,7 +89,7 @@ export class AddButton extends React.Component {
     // shouldComponentUpdate () {return false;}
     render () {
 
-        // console.log("add button: " + !!this.props.onAdd);
+        console.log("add button: " + !!this.props.onAdd);
         return (this.props.isChild)
             ?   <FloatingActionButton style={AddButton.style}>
                     <ContentAdd onTouchTap={this.props.onAdd}/>
