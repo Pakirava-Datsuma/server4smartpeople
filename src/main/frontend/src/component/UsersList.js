@@ -19,7 +19,7 @@ export default class UsersList extends React.Component {
             users: defaultUsers,
             showAddUserModal: false,
             showAddHouseModal: false,
-            ownerOfNewHouse: 0,
+            ownerIdOfNewHouse: 0,
             loading: false,
             showError: false,
             errorMessage: "",
@@ -52,7 +52,7 @@ export default class UsersList extends React.Component {
         console.log("onShowAddHouseModal for " + ownerId);
         this.setState({
             showAddHouseModal: true,
-            ownerOfNewHouse: ownerId,
+            ownerIdOfNewHouse: ownerId,
         });
     }
     onHideAddHouseModal() {
@@ -65,14 +65,14 @@ export default class UsersList extends React.Component {
 
     getOwnerOf (house) {
         const index = this.state.users.findIndex((user) => {
-            return user.id == house.owner;});
+            return user.id == house.ownerId;});
         console.log("index "+index);
         return this.state.users[index];
     }
 
     onAddHouse(house){
         console.log("onAddHouse " + house.name);
-        house.owner = this.state.ownerOfNewHouse;
+        house.ownerId = this.state.ownerIdOfNewHouse;
         console.log("house.owner " + house.owner);
         const houses = this.getOwnerOf(house).houses;
         houses.push(house);

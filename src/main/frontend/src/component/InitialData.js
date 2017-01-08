@@ -5,31 +5,31 @@ const defaultHouses = [
         {
             id: 0,
             photoUrl: "http://clipartix.com/wp-content/uploads/2016/05/Free-house-clip-art-clipart-clipartcow.gif",
-            ownerId: [2],
+            ownerId: 2,
             name: "test house 1"
         },
         {
             id: 1,
             photoUrl: "http://images.clipartpanda.com/car-20clip-20art-car-clip-art-3.jpg",
-            ownerId: [1],
+            ownerId: 1,
             name: "test house 2"
         },
         {
             id: 2,
             photoUrl: "http://images.clipartpanda.com/car-20clip-20art-eTMdKzKjc.svg",
-            ownerId: [2],
+            ownerId: 2,
             name: "test house 3"
         },
         {
             id: 3,
             photoUrl: "http://worldartsme.com/images/teal-house-clipart-1.jpg",
-            ownerId: [0],
+            ownerId: 0,
             name: "test house 4"
         },
         {
             id: 4,
             photoUrl: "http://dbclipart.com/wp-content/uploads/2016/02/Free-house-clip-art-clipart.png",
-            ownerId: [1],
+            ownerId: 1,
             name: "test place 5"
         },
     ];
@@ -40,21 +40,21 @@ const defaultUsers = [
             photoUrl: "https://upload.wikimedia.org/wikipedia/en/a/a0/ONHS_Eagles_logo.png",
             musicURL: "",
             name: "test user Jake",
-            houses: defaultHouses,
+            houses: defaultHouses.filter((house) => {return house.ownerId == 0}),
         },
         {
             id: 1,
             photoUrl: "https://s-media-cache-ak0.pinimg.com/236x/06/bb/0a/06bb0aab77b49b3a9b5ed41096e495f2.jpg",
             musicURL: "",
             name: "test user Pamela",
-            houses: defaultHouses,
+            houses: defaultHouses.filter((house) => {return house.ownerId == 1}),
         },
         {
             id: 2,
             photoUrl: "https://s-media-cache-ak0.pinimg.com/236x/16/de/5f/16de5f8dd1ffe99f9e169a0605a960b3.jpg",
             musicURL: "",
             name: "test user Robson",
-            houses: defaultHouses,
+            houses: defaultHouses.filter((house) => {return house.ownerId == 2}),
         }
     ];
 
@@ -67,7 +67,7 @@ const defaultLogos = {
 };
 
 // console.log("length users: " + defaultUsers.length);
-// console.log("length their houses: " + defaultUsers[0].houses.length);
+console.log("length their houses: " + defaultUsers[0].houses.length);
 // console.log("array: " + InitialData.defaultUsers.toString());
 
 export {defaultUsers, defaultHouses, defaultLogos};

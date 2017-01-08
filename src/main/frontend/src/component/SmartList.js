@@ -40,9 +40,7 @@ class SmartList extends React.Component {
     render() {
         let items = this.props.items;
         console.log("list items count: " + items.length);
-        let addButton = (this.props.onAddItem)
-            ? <AddButton key="addButton" onAdd={this.props.onAddItem} isChild={!!this.props.onGetChildren}/>
-            : "";
+
         let list = (this.props.onGetChildren)
             ? items.map((item) =>
                 <SmartItem item={item} key={item.id}
@@ -59,8 +57,10 @@ class SmartList extends React.Component {
                             onOpen={this.props.onOpenItem}
                             onRemove={this.props.onRemoveItem}
                 />);
-        if (list.length == 0) list = <NoEntitiesLabel/>;
-        list.push(addButton);
+        if (list.length == 0) list = [
+            <NoEntitiesLabel key="NoEntitiesLabel"/>];
+        if (this.props.onAddItem) list.push(
+            <AddButton key="addButton" onAdd={this.props.onAddItem} isChild={!!this.props.onGetChildren}/>);
 
         return <div style={style}>
             {list}

@@ -11,9 +11,18 @@ class SmartChild extends React.Component {
 
     static propTypes = {
         item: React.PropTypes.object.isRequired,
-        onRemoveItem: React.PropTypes.func,
+        onRemove: React.PropTypes.func,
         onOpen: React.PropTypes.func,
     };
+
+    constructor(){
+        super();
+        this.onRemove = this.onRemove.bind(this);
+    }
+
+    onRemove (){
+        this.props.onRemove(this.props.item);
+    }
 
     render() {
         const child = this.props.item;
@@ -22,7 +31,7 @@ class SmartChild extends React.Component {
             : <Avatar icon={<FontIcon className="material-icons">face</FontIcon>}/>;
         const link = this.props.onOpen ? this.props.onOpen(child.id) : "";
         return <Chip style={style}
-                     onRequestDelete={this.props.onRemoveItem}
+                     onRequestDelete={this.props.onRemove ? this.onRemove : undefined}
                      containerElement={link}
         >
             {avatar}
