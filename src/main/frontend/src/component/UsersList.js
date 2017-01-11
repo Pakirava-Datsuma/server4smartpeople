@@ -157,7 +157,7 @@ export default class UsersList extends React.Component {
                 // return user;
             // });
             if (users instanceof Array)
-                this.setState({user: users, loading: false,});
+                this.setState({users: users, loading: false,});
             else this.showError("No users loaded");
         });
     }
@@ -180,7 +180,7 @@ export default class UsersList extends React.Component {
 
     componentDidMount() {        console.log('componentDidMount');
 
-        // this.onGetUsers();
+        this.onGetUsers();
     }
 
     render () {

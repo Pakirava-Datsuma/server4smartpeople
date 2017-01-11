@@ -26,8 +26,8 @@ class SmartChild extends React.Component {
 
     render() {
         const child = this.props.item;
-        const avatar = child.photoUrl
-            ? <Avatar src={child.photoUrl}/>
+        const avatar = child.photoURL
+            ? <Avatar src={child.photoURL}/>
             : <Avatar icon={<FontIcon className="material-icons">face</FontIcon>}/>;
         const link = this.props.onOpen ? this.props.onOpen(child.id) : "";
         return <Chip style={style}
