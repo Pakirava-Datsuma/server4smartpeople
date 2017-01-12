@@ -15,6 +15,8 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepo;
+	@Autowired
+    private PlaceService placeService;
 
 	@Override
 	public User create(UserDTO dto) {
@@ -27,11 +29,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User get(Long id) {
-		if (id == null) {
+	public User get(long id) {
+		if (id == 0) {
 			return null;
 		}
 		return userRepo.findOne(id);
+	}
+
+	@Override
+	public User delete(long id) {
+		User user = userRepo.findOne(id);
+		userRepo.delete(user);
+		return user;
 	}
 
 	@Override
@@ -44,12 +53,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User createTestUser() {
-		User testUser = userRepo.save(
-		        new User(
-				null,
-                "Test",
-                "http://iconizer.net/files/Practika/orig/owner.png",
-                "https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://uk1.internet-radio.com:8004/listen.pls&t=.pls"));
+		User testUser = new User();
+        testUser.setName("Test");
+		testUser.setPhotoURL("http://iconizer.net/files/Practika/orig/owner.png");
+        testUser.setSongURL("https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://uk1.internet-radio.com:8004/listen.pls&t=.pls");
+        testUser = userRepo.save(testUser);
         if (testUser == null) throw new RuntimeException("test owner not created");
 
 		System.out.println("test owner created: " + testUser.toString());
@@ -68,11 +76,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
     public User convert(UserDTO dto) {
-        User user = new User(
-                null,
-                dto.getName(),
-                dto.getPhotoUrl(),
-                dto.getSongUrl());
+        User user = new User();
+        user.setName(dto.getName());
+        user.setPhotoURL(dto.getPhotoUrl());
+        user.setSongURL(dto.getSongUrl());
         return user;
     }
 }
