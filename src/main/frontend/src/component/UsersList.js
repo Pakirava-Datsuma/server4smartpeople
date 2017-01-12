@@ -5,11 +5,12 @@ import React from 'react';
 import {Link}                                                                                                                                                                                    from 'react-router';
 // import {Panel} from 'react-bootstrap';
 import SmartList from './SmartList';
-import {UserController, HouseController} from './ApiList';
+import {UserController, HouseController, ServerController} from './ApiList';
 import {defaultUsers, defaultHouses} from './InitialData';
 import AddItemModal from './AddItemModal';
 import LoadingIndicator from './LoadingIndicator';
 import Snackbar from 'material-ui/Snackbar';
+import FlatButton from 'material-ui/FlatButton';
 
 export default class UsersList extends React.Component {
 
@@ -17,6 +18,7 @@ export default class UsersList extends React.Component {
         super();
         this.state = {
             users: defaultUsers,
+            testing: true,
             showAddUserModal: false,
             showAddHouseModal: false,
             ownerIdOfNewHouse: 0,
@@ -86,30 +88,40 @@ export default class UsersList extends React.Component {
         console.log("onAddHouse " + house.name);
         house.ownerId = this.state.ownerIdOfNewHouse;
         console.log("house.owner " + house.ownerId);
-        let owner = this.getOwnerOfHouse(house);
-        if (owner.houses instanceof Array) {
-            owner.houses.push(house)
-        } else {
-            owner.houses = [house]}
-        this.state.loading = true;
+
+        this.setState({loading: true});
         HouseController.create(house, (newHouse) => {
             console.log("house got: " + newHouse);
-            this.onGetUsers();
+            let result = newHouse.id !== undefined;
+            if (result || this.state.testing) {
+                house.id = result
+                    ? newHouse.id
+                    : getRandomId();
+                let owner = this.getOwnerOfHouse(house);
+                if (owner.houses instanceof Array) {
+                    owner.houses.push(house)
+                } else {
+                    owner.houses = [house]
+                }
+                this.setState({loading: false});
+            } else {
+                this.showError("Error while creating place \"" + house.name +"\"");
+            }
         })
     }
 
     onRemoveHouse(house){
         console.log("onRemoveHouse " + house.id);
-        let owner = this.getOwnerOfHouse(house);
-        let houses = owner.houses;
-        houses.splice(houses.indexOf(house), 1);
-        // this.setState({
-        //     users: users,
-        //     loading: true,
-        // });
         this.setState({loading: true,});
+        let owner = this.getOwnerOfHouse(house);
         HouseController.remove(house.id, (result) => {
-            this.onGetUsers();
+            if (result || this.state.testing) {
+                let houses = owner.houses;
+                houses.splice(houses.indexOf(house), 1);
+                this.setState({loading: false,});
+            } else {
+                this.showError("Can't remove " + house.name + " from " + owner.name);
+            }
         })
 
     }
@@ -128,45 +140,68 @@ export default class UsersList extends React.Component {
     }
 
     onGetUser(user) {
-        console.log("onGetUser " + user.id);
+        console.log('onGetUser "' + user.name + '"...');
+        this.setState({loading: true});
         UserController.get(user.id, (newUser)=>{
-            let users = this.state.users;
-            let userIndex = this.getUserIndexInList(user.id);
-            users[userIndex] = newUser;
-            this.setState({users: users});
+            console.log('onGetUser "' + user.name + '" returned ' + newUser);
+            let result = newUser.id !== undefined;
+            if (result) {
+                let users = this.state.users;
+                let userIndex = this.getUserIndexInList(user.id);
+                users[userIndex] = newUser;
+                this.setState({loading: false});
+            } else if (!this.state.testing) {
+                this.showError("Can't load " + user.name + "'s data");
+            } else {
+                this.setState({loading: false});
+            }
         });
     }
     onAddUser(user) {
-        console.log('onAddUser');
-        this.state.users.push(user);
-        this.state.loading = true;
+        console.log('adding user "' + user.name + '"...');
+        this.setState({loading: true});
         UserController.create(user, (newUser) => {
+            console.log("user got: " + newUser);
             // console.log("user sent: " + user);
             // user.id = newUser.id;
             // this.setState({
             //     users: this.state.users
             //     loading: false,
             // });
-            console.log("user got: " + newUser);
-            this.onGetUsers();
+            console.log('adding user "' + user.name + '" returned ' + newUser);
+            let result = newUser.id !== undefined;
+            if (result || this.state.testing) {
+                user.id = result
+                    ? newUser.id
+                    : getRandomId();
+                this.state.users.push(user);
+                this.setState({loading: false});
+            } else {
+                this.showError("Creating user \"" + user.name + "\" error")
+            }
         });
     }
 
 
     onRemoveUser (oldUser) {
         console.log("removing user " + oldUser.id);
-        let users = this.state.users;
-        users.splice(users.findIndex((user) => {return user == oldUser}), 1);
         // this.setState({
         //     users: users,
         //     loading: true,
         // });
         this.setState({loading: true,});
         UserController.remove(oldUser.id, (result) => {
-            // if (!result) {
-                // alert("Server declined removing " + oldUser.name);
-                this.onGetUsers();
-            // }
+            console.log('removing user finished with "' + result + '"');
+            if (result || this.state.testing) {
+                // console.log('removing user "' + oldUser.name + '" successed');
+                let users = this.state.users;
+                users.splice(this.getUserIndexInList(oldUser.id), 1);
+                this.setState({loading: false});
+            } else {
+                // this.onGetUsers();
+                // console.log('removing user "' + oldUser.name + '" FAILED');
+                this.showError("Server declined removing \"" + oldUser.name + '"');
+            }
         })
     }
 
@@ -181,23 +216,35 @@ export default class UsersList extends React.Component {
                 // return user;
             // });
             if (users instanceof Array)
-                this.setState({users: users, loading: false,});
-            else this.showError("No users loaded");
+                this.setState({users: users, testing: false, loading: false,});
+            else {
+                this.state.testing = true,
+                this.showError("No users loaded. Testing mode...");
+            }
         });
     }
 
     onGetHousesForUser(user) {
         console.log("updating houses for " + user.id);
+        this.setState({loading: true});
         HouseController.list(user.id, (houses)=> {
             console.log("houses: " + houses);
             // let users = this.state.users;
             // let user = users.find((user) => {return user.id == userId});
             // console.log("user found: " + !!user);
-            user.houses = houses;
-            console.log("now he/she has houses: " + user.houses.length);
-            this.setState({
-                users: this.state.users,
-            });
+            let result = houses instanceof Array;
+            if (result || this.state.testing) {
+                // console.log("now he/she has houses: " + user.houses.length);
+                user.houses = result
+                    ? houses
+                    : defaultHouses;
+                this.setState({
+                    users: this.state.users,
+                    loading: false,
+                });
+            } else {
+                this.showError("No place data loaded");
+            }
         });
 
     }
@@ -247,4 +294,8 @@ export default class UsersList extends React.Component {
             <LoadingIndicator visible={this.state.loading}/>
         </div>;
     }
+}
+
+function getRandomId () {
+    return Math.random()*100000000;
 }

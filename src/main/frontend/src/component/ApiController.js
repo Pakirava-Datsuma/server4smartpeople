@@ -62,7 +62,7 @@ function ApiController(URLs) {
             url: url,
             // data: JSON.stringify(object),
             success: callback,
-            error: callback
+            error: callback,
         });
     };
 
@@ -73,7 +73,9 @@ function ApiController(URLs) {
             type: "DELETE",
             url: url,
             success: callback,
-            error: callback
+            error: function () {
+                callback()
+            },
         });
     };
 }

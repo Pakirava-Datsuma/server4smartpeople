@@ -28,3 +28,25 @@ export const UserController =
     prefix: "/users",
   });
 
+//TODO: unificate all controllers
+export const ServerController = {
+    URL_TEST: "/api/server/test",
+    CreateTestEntities: (callback) => {
+        let url = ServerController.URL_TEST;
+        console.log("test creation: " + url);
+        $.ajax({
+            headers: {
+                // "Accept": "application/json",
+                // "Content-Type": "application/json"
+            },
+            type: "GET",
+            url: url,
+            // data: JSON.stringify(object),
+            success: callback,
+            error: (result)=>{
+                result="no connection";
+                callback(result);
+            },
+        });
+    }
+};

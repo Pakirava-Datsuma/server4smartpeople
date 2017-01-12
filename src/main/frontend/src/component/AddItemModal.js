@@ -59,7 +59,7 @@ export default class AddItemModal extends React.Component {
         newData.containsValuableData =
             (newData.name!=undefined ? newData.name : this.state.name) != "" ||
             (newData.photoURL!=undefined ? newData.photoURL : this.state.photoURL) != "";
-        console.log("data is valuable: " + newData.containsValuableData);
+        // console.log("data is valuable: " + newData.containsValuableData);
         this.setState(newData);
     }
 
@@ -105,13 +105,13 @@ export default class AddItemModal extends React.Component {
         const confirmation = <ConfirmationDialog
             show={this.state.showConfirmationDialog}
             onOk={() => {
-                console.log("not confirmed ");
+                {/*console.log("not confirmed ");*/}
                 this.setState({showConfirmationDialog: false});
                 this.props.onHide;
             }
             }
             onCancel={() => {
-                console.log("not confirmed ");
+                {/*console.log("not confirmed ");*/}
                 this.setState({showConfirmationDialog: false});
             }
             }/>;

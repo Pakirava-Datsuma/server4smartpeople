@@ -56,11 +56,13 @@ class SmartItem extends React.Component {
 
 
 
-    shouldComponentUpdate (nextProps, nextState) {
-        return nextProps.item.name !== this.props.item.name
-            || nextProps.item.photoURL !== this.props.item.photoURL
-            || nextState.folded !== this.state.folded;
-    }
+    // shouldComponentUpdate (nextProps, nextState) {
+    //     return nextState.folded !== this.state.folded
+    //         || nextProps.item.name !== this.props.item.name
+    //         || nextProps.item.photoURL !== this.props.item.photoURL
+    //         || JSON.stringify(nextProps.item.children) !== JSON.stringify(this.props.item.children)
+    //         ;
+    // }
 
     render() {
         let item = this.props.item;
