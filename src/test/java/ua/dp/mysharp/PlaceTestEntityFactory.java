@@ -41,12 +41,11 @@ public class PlaceTestEntityFactory {
 
     public static Place getNormalExistPlace() {
         if (normalExistPlace == null) {
-            User existUser = new User(
-                    1L,
-                    "Jacky",
-                    "http://iconizer.net/files/Practika/orig/owner.png",
-                    "https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://uk1.internet-radio.com:8004/listen.pls&t=.pls"
-            );
+            User existUser = new User();
+                    existUser.setId(1L);
+            existUser.setName("Jacky");
+            existUser.setPhotoURL("http://iconizer.net/files/Practika/orig/owner.png");
+            existUser.setSongURL("https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://uk1.internet-radio.com:8004/listen.pls&t=.pls");
             normalExistPlace = new Place(
                     2L,
                     "Cool House",

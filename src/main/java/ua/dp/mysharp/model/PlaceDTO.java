@@ -24,7 +24,11 @@ public class PlaceDTO {
     }
 
     public Place convert() {
-        return new Place(null, name, photoUrl,
-                new User(ownerId, null, null, null));
+        User user = new User();
+        user.setId(ownerId);
+        Place place = new Place();
+        place.setName(name);
+        place.setPhotoURL(photoUrl);
+        return place;
     }
 }
