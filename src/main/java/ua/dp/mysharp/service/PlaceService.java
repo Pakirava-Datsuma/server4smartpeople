@@ -20,4 +20,8 @@ public interface PlaceService {
 	Place get(Long id);
 
     Place convert(PlaceDTO dto);
+
+    Place delete(long id);
+
+    Collection<Place> getAllForUser(long id);
 }

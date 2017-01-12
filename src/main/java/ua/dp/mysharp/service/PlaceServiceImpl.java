@@ -9,6 +9,7 @@ import ua.dp.mysharp.repository.PlaceRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Service
 public class PlaceServiceImpl implements PlaceService {
@@ -43,6 +44,13 @@ public class PlaceServiceImpl implements PlaceService {
 	}
 
 	@Override
+	public Place delete(long id) {
+    	Place place = placeRepo.findOne(id);
+		placeRepo.delete(id);
+    	return place;
+	}
+
+	@Override
 	public Place createTestPlace(User owner) {
 		if (owner == null) throw  new RuntimeException("you must create test owner first");
 		Place testPlace = placeRepo.save(
@@ -65,7 +73,14 @@ public class PlaceServiceImpl implements PlaceService {
 		}
 		return places;
 	}
-	
+
+	@Override
+	public Collection<Place> getAllForUser(long id) {
+        return getAll().stream()
+                .filter( place -> place.getOwner().getId() == id)
+                .collect(Collectors.toList());
+	}
+
 	@Override
 	public Place get(Long id) {
         if (id == null) return null;
