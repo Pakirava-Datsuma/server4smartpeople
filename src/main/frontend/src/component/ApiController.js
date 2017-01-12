@@ -15,15 +15,26 @@ function ApiController(URLs) {
     this.URL_GET = this.getUrl("/one");
     this.URL_CREATE = this.getUrl("/new");
     this.URL_LIST = this.getUrl("/all");
-
+    this.URL_DELETE = this.getUrl("/delete");
 
     this.get = (id, callback) => {
         let url = this.URL_GET + '/' + id;
-        $.get(url, callback);
+        console.log("get: " + url);
+        // $.get(url, callback);
+        $.ajax({
+            headers: {
+                "Accept": "application/json",
+            },
+            type: "GET",
+            url: url,
+            success: callback,
+            error: callback
+        });
     };
 
     this.create = (object, callback) => {
         let url = this.URL_CREATE;
+        console.log("create: " + url);
         // $.put(url, object, callback);
         $.ajax({
             headers: {
@@ -40,12 +51,30 @@ function ApiController(URLs) {
 
     this.list = (callback) => {
         let url = this.URL_LIST;
-        $.get(url, callback);
+        console.log("list: " + url);
+        // $.get(url, callback);
+        $.ajax({
+            headers: {
+                "Accept": "application/json",
+                // "Content-Type": "application/json"
+            },
+            type: "GET",
+            url: url,
+            // data: JSON.stringify(object),
+            success: callback,
+            error: callback
+        });
     };
 
     this.remove = (id, callback) => {
         let url = this.URL_DELETE + '/' + id;
-        $.get(url, callback);
+        console.log("remove: " + url);
+        $.ajax({
+            type: "DELETE",
+            url: url,
+            success: callback,
+            error: callback
+        });
     };
 }
 

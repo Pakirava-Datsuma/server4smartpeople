@@ -26,7 +26,7 @@ export default class AddItemModal extends React.Component {
         super();
         this.state = {
             name: "",
-            photoUrl: "",
+            photoURL: "",
             showConfirmationDialog: false,
             containsValuableData: false,
         };
@@ -42,7 +42,7 @@ export default class AddItemModal extends React.Component {
         console.log("ok ");
         let entity = {
             name: this.state.name,
-            photoUrl: this.state.photoUrl,
+            photoURL: this.state.photoURL,
         };
         this.props.onAdd(entity);
         this.props.onHide();
@@ -58,7 +58,7 @@ export default class AddItemModal extends React.Component {
     onChangeData(newData) {
         newData.containsValuableData =
             (newData.name!=undefined ? newData.name : this.state.name) != "" ||
-            (newData.photoUrl!=undefined ? newData.photoUrl : this.state.photoUrl) != "";
+            (newData.photoURL!=undefined ? newData.photoURL : this.state.photoURL) != "";
         console.log("data is valuable: " + newData.containsValuableData);
         this.setState(newData);
     }
@@ -73,9 +73,9 @@ export default class AddItemModal extends React.Component {
                        }}/>
             <TextField hintText="Photo"
                        id="photolink-text-field"
-                       value={this.state.photoUrl}
+                       value={this.state.photoURL}
                        onChange={(event) => {
-                           this.onChangeData({photoUrl: event.target.value})
+                           this.onChangeData({photoURL: event.target.value})
                        }}/>
         </div>;
 
@@ -104,7 +104,12 @@ export default class AddItemModal extends React.Component {
         ];
         const confirmation = <ConfirmationDialog
             show={this.state.showConfirmationDialog}
-            onOk={this.onCancel}
+            onOk={() => {
+                console.log("not confirmed ");
+                this.setState({showConfirmationDialog: false});
+                this.props.onHide;
+            }
+            }
             onCancel={() => {
                 console.log("not confirmed ");
                 this.setState({showConfirmationDialog: false});

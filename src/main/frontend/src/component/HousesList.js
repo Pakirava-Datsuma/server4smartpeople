@@ -21,7 +21,7 @@ class HousesList extends React.Component {
                 // console.log("house in conversion: " + house.toString());
                 return {
                     id: house.id,
-                    url: house.photoUrl,
+                    url: house.photoURL,
                     name: house.name
                 }
             });

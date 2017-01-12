@@ -14,9 +14,10 @@ class SmartItem extends React.Component {
 
     static propTypes = {
         item: React.PropTypes.object.isRequired,
-        onGetChildren: React.PropTypes.func.isRequired,
-        onRemoveItem: React.PropTypes.func,
+        onGetItem: React.PropTypes.func.isRequired,
         onOpenItem: React.PropTypes.func,
+        onRemoveItem: React.PropTypes.func,
+        onGetChildren: React.PropTypes.func.isRequired,
         onOpenChild: React.PropTypes.func,
         onAddChild: React.PropTypes.func,
         onRemoveChild: React.PropTypes.func,
@@ -27,14 +28,13 @@ class SmartItem extends React.Component {
         this.state = {
             folded: true,
         };
-        this.onGetChildren = this.onGetChildren.bind(this);
         this.onFold = this.onFold.bind(this);
         this.onRemove = this.onRemove.bind(this);
         this.onAddChild = this.onAddChild.bind(this);
     };
 
     onAddChild(){
-        console.log("onAddChild for " + this.props.item.id);
+        // console.log("onAddChild for " + this.props.item.id);
         this.props.onAddChild(this.props.item.id);
     }
 
@@ -44,36 +44,36 @@ class SmartItem extends React.Component {
 
     onFold(expand){
         let fold = !expand;
-        console.log("children " + (fold ? "folding..." : "unfolding..."));
+        // console.log("children " + (fold ? "folding..." : "unfolding..."));
+        if (!fold) {
+            this.props.onGetItem(this.props.item);
+            this.props.onGetChildren(this.props.item);
+        }
         this.setState({
             folded: fold,
         });
-        this.onGetChildren();
     }
 
-    onGetChildren(){
-        console.log("updating childrens for " +
-            this.props.item.name + " / " +
-            this.props.item.id);
-        this.props.onGetChildren(this.props.item);
 
+
+    shouldComponentUpdate (nextProps, nextState) {
+        return nextProps.item.name !== this.props.item.name
+            || nextProps.item.photoURL !== this.props.item.photoURL
+            || nextState.folded !== this.state.folded;
     }
-    // shouldComponentUpdate (nextProps, nextState) {
-    //     return nextProps.item != this.props.item
-    //         || nextState != this.state;
-    // }
 
     render() {
         let item = this.props.item;
-        console.log(item.name);
+        // console.log(item.name);
         return <Card expanded={!this.state.folded} onExpandChange={this.onFold} style={styles.geometry}>
             <CardHeader title={item.name}
-                        avatar={item.photoUrl}
+                        avatar={item.photoURL}
                         actAsExpander={true} showExpandableButton={true}
                         />
             <CardText expandable={true}>
                 <SmartList items={item.children ? item.children : []}
-                           onOpenItem={this.props.onOpenChild}
+                           linkToItem={this.props.onOpenChild}
+                           onGetItem={()=>{}}
                            onAddItem={this.onAddChild}
                            onRemoveItem={this.props.onRemoveChild}
                 />

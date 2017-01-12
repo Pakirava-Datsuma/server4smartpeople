@@ -37,7 +37,10 @@ export default class UsersList extends React.Component {
         this.onShowAddHouseModal = this.onShowAddHouseModal.bind(this);
         this.onHideAddHouseModal = this.onHideAddHouseModal.bind(this);
         this.showError = this.showError.bind(this);
-        this.getOwnerOf = this.getOwnerOf.bind(this);
+        this.getOwnerOfHouse = this.getOwnerOfHouse.bind(this);
+        this.getUserById = this.getUserById.bind(this);
+        this.getUserIndexInList = this.getUserIndexInList.bind(this);
+        this.onGetUser = this.onGetUser.bind(this);
     }
 
     showError(message) {
@@ -63,19 +66,31 @@ export default class UsersList extends React.Component {
     }
 
 
-    getOwnerOf (house) {
-        const index = this.state.users.findIndex((user) => {
-            return user.id == house.ownerId;});
-        console.log("index "+index);
+    getOwnerOfHouse (house) {
+        return this.getUserById(house.ownerId);
+    }
+
+    getUserIndexInList(id) {
+        return this.state.users.findIndex((user) => {
+            return user.id == id;
+        });
+    }
+
+    getUserById(id) {
+        const index = this.getUserIndexInList(id);
+        // console.log("index "+index);
         return this.state.users[index];
     }
 
     onAddHouse(house){
         console.log("onAddHouse " + house.name);
         house.ownerId = this.state.ownerIdOfNewHouse;
-        console.log("house.owner " + house.owner);
-        const houses = this.getOwnerOf(house).houses;
-        houses.push(house);
+        console.log("house.owner " + house.ownerId);
+        let owner = this.getOwnerOfHouse(house);
+        if (owner.houses instanceof Array) {
+            owner.houses.push(house)
+        } else {
+            owner.houses = [house]}
         this.state.loading = true;
         HouseController.create(house, (newHouse) => {
             console.log("house got: " + newHouse);
@@ -85,7 +100,7 @@ export default class UsersList extends React.Component {
 
     onRemoveHouse(house){
         console.log("onRemoveHouse " + house.id);
-        let owner = this.getOwnerOf(house);
+        let owner = this.getOwnerOfHouse(house);
         let houses = owner.houses;
         houses.splice(houses.indexOf(house), 1);
         // this.setState({
@@ -104,14 +119,23 @@ export default class UsersList extends React.Component {
     onHideAddUserModal() {this.setState({showAddUserModal: false})}
 
     LinkToUserPage (id) {
-        console.log("LinkToUserPage");
+        // console.log("LinkToUserPage");
         return <Link to={"/users/" + id}/>;
     }
     LinkToHousePage (id) {
-        console.log("LinkToHousePage");
+        // console.log("LinkToHousePage");
         return <Link to={"/houses/" + id}/>;
     }
 
+    onGetUser(user) {
+        console.log("onGetUser " + user.id);
+        UserController.get(user.id, (newUser)=>{
+            let users = this.state.users;
+            let userIndex = this.getUserIndexInList(user.id);
+            users[userIndex] = newUser;
+            this.setState({users: users});
+        });
+    }
     onAddUser(user) {
         console.log('onAddUser');
         this.state.users.push(user);
@@ -148,7 +172,7 @@ export default class UsersList extends React.Component {
 
 
     onGetUsers() {
-        console.log("updating users...");
+        // console.log("updating users...");
         this.setState({loading: true,});
         UserController.list((users)=>{
         //     console.log("users: " + users.toString());
@@ -178,25 +202,26 @@ export default class UsersList extends React.Component {
 
     }
 
-    componentDidMount() {        console.log('componentDidMount');
-
+    componentDidMount() {
+        // console.log('componentDidMount');
         this.onGetUsers();
     }
 
     render () {
-        console.log("UsersList rendering");
+        // console.log("UsersList rendering");
         let items=this.state.users.map((user) => {
             user.children = user.houses;
             return user;
         });
         return <div>
             <SmartList items={items}
-                       onOpenItem={this.LinkToUserPage}
+                       linkToItem={this.LinkToUserPage}
+                       onGetItem={this.onGetUser}
                        onAddItem={this.onShowAddUserModal}
                        onRemoveItem={this.onRemoveUser}
                        isLoading={this.state.loading}
                        onGetChildren={this.onGetHousesForUser}
-                       onOpenChild={this.LinkToHousePage}
+                       linkToChild={this.LinkToHousePage}
                        onAddChild={this.onShowAddHouseModal}
                        onRemoveChild={this.onRemoveHouse}
             />

@@ -12,7 +12,7 @@ class SmartAvatar extends React.Component {
 
     render() {
         let avatar =
-            <Avatar src={this.props.entity.photoUrl} />;
+            <Avatar src={this.props.entity.photoURL} />;
 
         let title;
         if (this.props.onTitleChange) {

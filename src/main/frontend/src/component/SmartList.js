@@ -16,11 +16,12 @@ class SmartList extends React.Component {
 
     static propTypes = {
         items: React.PropTypes.array.isRequired,
-        onOpenItem: React.PropTypes.func,
+        linkToItem: React.PropTypes.func,
+        onGetItem: React.PropTypes.func.isRequired,
         onAddItem: React.PropTypes.func,
         onRemoveItem: React.PropTypes.func,
         onGetChildren: React.PropTypes.func,
-        onOpenChild: React.PropTypes.func,
+        linkToChild: React.PropTypes.func,
         onAddChild: React.PropTypes.func,
         onRemoveChild: React.PropTypes.func,
     };
@@ -39,22 +40,23 @@ class SmartList extends React.Component {
 
     render() {
         let items = this.props.items;
-        console.log("list items count: " + items.length);
+        // console.log("list items count: " + items.length);
 
         let list = (this.props.onGetChildren)
             ? items.map((item) =>
                 <SmartItem item={item} key={item.id}
-                           onOpenItem={this.props.onOpenItem}
+                           onOpenItem={this.props.linkToItem}
+                           onGetItem={this.props.onGetItem}
                            onGetChildren={this.props.onGetChildren}
                            onRemoveItem={this.props.onRemoveItem}
-                           onOpenChild={this.props.onOpenChild}
+                           onOpenChild={this.props.linkToChild}
                            onAddChild={this.props.onAddChild}
                            onRemoveChild={this.props.onRemoveChild}
                 />)
             : items.map((child) =>
                 <SmartChild key={child.id}
                             item={child}
-                            onOpen={this.props.onOpenItem}
+                            onOpen={this.props.linkToItem}
                             onRemove={this.props.onRemoveItem}
                 />);
         if (list.length == 0) list = [
@@ -94,7 +96,7 @@ export class AddButton extends React.Component {
     // shouldComponentUpdate () {return false;}
     render () {
 
-        console.log("add button: " + !!this.props.onAdd);
+        // console.log("add button: " + !!this.props.onAdd);
         const big = this.props.isChild;
         return <FloatingActionButton style={big ? AddButton.style.big : AddButton.style.small}
                                      mini={!big}>
