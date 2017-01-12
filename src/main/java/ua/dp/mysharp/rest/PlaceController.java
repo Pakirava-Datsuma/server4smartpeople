@@ -9,9 +9,7 @@ import ua.dp.mysharp.service.PlaceService;
 
 import java.util.Collection;
 
-import static ua.dp.mysharp.rest.API.RestApi.GET_PLACELIST_URL;
-import static ua.dp.mysharp.rest.API.RestApi.GET_PLACE_URL;
-import static ua.dp.mysharp.rest.API.RestApi.NEW_PLACE_URL;
+import static ua.dp.mysharp.rest.API.RestApi.*;
 
 /**
  * Created by swanta on 28.11.16.
@@ -29,11 +27,24 @@ public class PlaceController {
         return placeService.getAll();
     }
 
+    @RequestMapping(GET_PLACELIST_FOR_USER_URL)
+    @ResponseStatus( HttpStatus.FOUND)
+    @ResponseBody
+    public Collection<Place> getAllForUser(@RequestParam("id") long id) {
+        return placeService.getAllForUser(id);
+    }
+
     @RequestMapping(GET_PLACE_URL)
     @ResponseStatus( HttpStatus.FOUND)
     @ResponseBody
-    public Place get(@RequestParam("id") long id) {
+    public Place get(@PathVariable("id") long id) {
         return placeService.get(id);
+    }
+
+    @RequestMapping(value = DELETE_PLACE_URL, method = RequestMethod.DELETE)
+    @ResponseStatus( HttpStatus.OK)
+    public Place delete(@PathVariable("id") long id) {
+        return placeService.delete(id);
     }
 
     @RequestMapping(value = NEW_PLACE_URL, method = RequestMethod.PUT)

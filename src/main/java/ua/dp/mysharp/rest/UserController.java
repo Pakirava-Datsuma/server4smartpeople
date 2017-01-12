@@ -9,15 +9,14 @@ import ua.dp.mysharp.service.UserService;
 
 import java.util.Collection;
 
-import static ua.dp.mysharp.rest.API.RestApi.GET_USERLIST_URL;
-import static ua.dp.mysharp.rest.API.RestApi.GET_USER_URL;
-import static ua.dp.mysharp.rest.API.RestApi.NEW_USER_URL;
+import static ua.dp.mysharp.rest.API.RestApi.*;
 
 /**
  * @author swanta
  *
  */
 @RestController
+@ResponseBody
 public class UserController {
 	
 	@Autowired
@@ -25,22 +24,25 @@ public class UserController {
 
 	@RequestMapping(GET_USERLIST_URL)
 	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
 	public Collection<User> getAll() {
 		return userService.getAll();
 	}
 
 	@RequestMapping(GET_USER_URL)
 	@ResponseStatus(HttpStatus.FOUND)
-	@ResponseBody
-	public User get(@RequestParam("id") long id) {
+	public User get(@PathVariable("id") long id) {
 		return userService.get(id);
 	}
 
 	@RequestMapping(value = NEW_USER_URL, method = RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.CREATED)
-	@ResponseBody
 	public User create(@RequestBody UserDTO user) {
 		return userService.create(user);
+	}
+
+	@RequestMapping(value = DELETE_USER_URL, method = RequestMethod.DELETE)
+	@ResponseStatus( HttpStatus.OK)
+	public User delete(@PathVariable("id") long id) {
+		return userService.delete(id);
 	}
 }
