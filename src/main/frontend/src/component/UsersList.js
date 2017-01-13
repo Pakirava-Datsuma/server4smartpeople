@@ -5,8 +5,8 @@ import React from 'react';
 import {Link}                                                                                                                                                                                    from 'react-router';
 // import {Panel} from 'react-bootstrap';
 import SmartList from './SmartList';
-import {UserController, HouseController, ServerController} from './ApiList';
-import {defaultUsers, defaultHouses} from './InitialData';
+import {UserController, HouseController} from './ApiList';
+import {defaultUsers, getDefaultHouses} from './InitialData';
 import AddItemModal from './AddItemModal';
 import LoadingIndicator from './LoadingIndicator';
 import Snackbar from 'material-ui/Snackbar';
@@ -86,8 +86,8 @@ export default class UsersList extends React.Component {
 
     onAddHouse(house){
         console.log("onAddHouse " + house.name);
-        house.ownerId = this.state.ownerIdOfNewHouse;
-        console.log("house.owner " + house.ownerId);
+        house.owner.id = this.state.ownerIdOfNewHouse;
+        console.log("house.owner " + house.owner.id);
 
         this.setState({loading: true});
         HouseController.create(house, (newHouse) => {
@@ -218,7 +218,7 @@ export default class UsersList extends React.Component {
             if (users instanceof Array)
                 this.setState({users: users, testing: false, loading: false,});
             else {
-                this.state.testing = true,
+                this.state.testing = true;
                 this.showError("No users loaded. Testing mode...");
             }
         });
@@ -232,17 +232,21 @@ export default class UsersList extends React.Component {
             // let user = users.find((user) => {return user.id == userId});
             // console.log("user found: " + !!user);
             let result = houses instanceof Array;
+
+            // TODO: dirty workaround (костыль) - need investigation
+            // why this request returns object with array
+            // while GET_ALL request returns simple array
             if (!result && houses instanceof Object) {
                 houses = houses.responseJSON;
-                result = houses instanceof Array;
-            }
+                result = houses instanceof Array;}
+
             // console.log("houses : " + houses);
             // console.log("houses : " + typeof houses);
             if (result || this.state.testing) {
                 // console.log("now he/she has houses: " + user.houses.length);
                 user.houses = result
                     ? houses
-                    : defaultHouses;
+                    : getDefaultHouses(user.id);
                 this.setState({
                     users: this.state.users,
                     loading: false,
@@ -271,21 +275,18 @@ export default class UsersList extends React.Component {
                        onGetItem={this.onGetUser}
                        onAddItem={this.onShowAddUserModal}
                        onRemoveItem={this.onRemoveUser}
-                       isLoading={this.state.loading}
                        onGetChildren={this.onGetHousesForUser}
                        linkToChild={this.LinkToHousePage}
                        onAddChild={this.onShowAddHouseModal}
                        onRemoveChild={this.onRemoveHouse}
             />
             <AddItemModal title="New user"
-                          entity="User"
                           glyph="user"
                           show={this.state.showAddUserModal}
                           onHide={this.onHideAddUserModal}
                           onAdd={this.onAddUser}
             />
             <AddItemModal title="New place"
-                          entity="Place"
                           glyph="house"
                           show={this.state.showAddHouseModal}
                           onHide={this.onHideAddHouseModal}
