@@ -69,7 +69,7 @@ export default class UsersList extends React.Component {
 
 
     getOwnerOfHouse (house) {
-        return this.getUserById(house.ownerId);
+        return this.getUserById(house.owner.id);
     }
 
     getUserIndexInList(id) {
@@ -225,14 +225,19 @@ export default class UsersList extends React.Component {
     }
 
     onGetHousesForUser(user) {
-        console.log("updating houses for " + user.id);
+        // console.log("updating houses for " + user.id);
         this.setState({loading: true});
         HouseController.getAllForUser(user.id, (houses)=> {
-            console.log("houses: " + houses);
             // let users = this.state.users;
             // let user = users.find((user) => {return user.id == userId});
             // console.log("user found: " + !!user);
             let result = houses instanceof Array;
+            if (!result && houses instanceof Object) {
+                houses = houses.responseJSON;
+                result = houses instanceof Array;
+            }
+            // console.log("houses : " + houses);
+            // console.log("houses : " + typeof houses);
             if (result || this.state.testing) {
                 // console.log("now he/she has houses: " + user.houses.length);
                 user.houses = result
