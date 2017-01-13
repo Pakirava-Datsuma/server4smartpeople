@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserDTO {
     private String name;
-    private String photoUrl;
-    private String songUrl;
+    private String photoURL;
+    private String songURL;
 
     public UserDTO(User user) {
         this(user.getName(),

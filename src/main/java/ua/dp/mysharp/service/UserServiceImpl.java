@@ -76,8 +76,8 @@ public class UserServiceImpl implements UserService {
     public User convert(UserDTO dto) {
         User user = new User();
         user.setName(dto.getName());
-        user.setPhotoURL(dto.getPhotoUrl());
-        user.setSongURL(dto.getSongUrl());
+        user.setPhotoURL(dto.getPhotoURL());
+        user.setSongURL(dto.getSongURL());
         return user;
     }
 }

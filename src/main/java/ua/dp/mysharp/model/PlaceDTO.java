@@ -12,19 +12,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PlaceDTO {
     private String name;
-    private String photoUrl;
+    private String photoURL;
     private Long ownerId;
 
     public PlaceDTO(Place place) {
         name = place.getName();
-        photoUrl = place.getPhotoURL();
+        photoURL = place.getPhotoURL();
         User owner = place.getOwner();
         if (owner != null)
             ownerId = place.getOwner().getId();
     }
 
     public Place convert() {
-        return new Place(null, name, photoUrl,
+        return new Place(null, name, photoURL,
                 new User(ownerId, null, null, null));
     }
 }
