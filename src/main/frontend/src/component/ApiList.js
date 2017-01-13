@@ -6,9 +6,9 @@ export let HouseController =
   new ApiController ({
     prefix: "/places",
   });
-HouseController.URL_LIST_FOR_USER = HouseController.URL_LIST + '/{id}';
+HouseController.URL_LIST_FOR_USER = HouseController.URL_LIST;
  HouseController.getAllForUser = (id, callback)=>{
-     let url = HouseController.URL_LIST_FOR_USER;
+     let url = HouseController.URL_LIST_FOR_USER + '/' + id;
      console.log("list for user: " + url);
      $.ajax({
          headers: {

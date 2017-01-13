@@ -227,7 +227,7 @@ export default class UsersList extends React.Component {
     onGetHousesForUser(user) {
         console.log("updating houses for " + user.id);
         this.setState({loading: true});
-        HouseController.list(user.id, (houses)=> {
+        HouseController.getAllForUser(user.id, (houses)=> {
             console.log("houses: " + houses);
             // let users = this.state.users;
             // let user = users.find((user) => {return user.id == userId});
