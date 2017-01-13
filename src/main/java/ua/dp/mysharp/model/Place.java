@@ -28,7 +28,7 @@ public class Place {
 
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "user_id")
     @JsonManagedReference
     private User owner;
 

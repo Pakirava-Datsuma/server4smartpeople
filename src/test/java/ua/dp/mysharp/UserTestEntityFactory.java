@@ -70,11 +70,11 @@ public class UserTestEntityFactory {
 
     public static User getModifiedExistUser() {
         if (modifiedExistUser == null) {
-            modifiedExistUser = new User();
-            modifiedExistUser.setId(getNormalExistUser().getId());
-            modifiedExistUser.setName("!edited! " + getNormalExistUser().getName());
-            modifiedExistUser.setPhotoURL("!edited! " + getNormalExistUser().getPhotoURL());
-            modifiedExistUser.setSongURL("!edited! " + getNormalExistUser().getSongURL());
+            modifiedExistUser = new User(
+                    getNormalExistUser().getId(),
+                    "!edited! " + getNormalExistUser().getName(),
+                    "!edited! " + getNormalExistUser().getPhotoURL(),
+                    "!edited! " + getNormalExistUser().getSongURL());
         }
         return modifiedExistUser;
     }

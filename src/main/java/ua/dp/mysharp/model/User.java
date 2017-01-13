@@ -1,14 +1,14 @@
 package ua.dp.mysharp.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.util.Collection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  * @author swanta
@@ -32,10 +32,9 @@ public class User {
 	
 	private String songURL;
 
-	@OneToMany(mappedBy = "owner", fetch = FetchType.LAZY,
-			cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonBackReference
-	private Collection<Place> places;
+//	@OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+//	@JsonBackReference
+//	private Collection<Place> places;
 
 //	@OneToMany(mappedBy = "Place", fetch = FetchType.LAZY)
 //	Collection<Place> visitedPlaces;
