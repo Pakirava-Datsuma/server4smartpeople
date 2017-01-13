@@ -21,8 +21,10 @@ const Main = (props) => <div>
             iconElementLeft={<ActionHome style={{margin:11}} color="white"/>}
             iconElementRight={<FlatButton
                 label="Create test entities"
-                onTouchTap={()=>ServerController.CreateTestEntities((result)=>
-                    alert(result))}/>}/>
+                onTouchTap={()=>ServerController.CreateTestEntities((result)=>{
+                    alert(result);
+                    this.setState({});
+                })}/>}/>
     {props.children}
 </div>;
 
