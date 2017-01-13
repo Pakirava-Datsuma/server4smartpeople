@@ -8,7 +8,6 @@ import ua.dp.mysharp.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,16 +28,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User get(long id) {
-		if (id == 0) {
+	public User get(Long id) {
+		if (id == null) {
 			return null;
 		}
 		return userRepo.findOne(id);
 	}
 
 	@Override
-	public User delete(long id) {
+	public User delete(Long id) {
 		User user = userRepo.findOne(id);
+		placeService.getAllForUser(id)
+				.forEach(place -> placeService.delete(place.getId()));
 		userRepo.delete(user);
 		return user;
 	}
@@ -66,11 +67,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Collection<User> getAll() {
-		Collection<User> collection = new ArrayList<User>();
-		Iterator<User> iterator =  userRepo.findAll().iterator();
-		while (iterator.hasNext()) {
-			collection.add(iterator.next());
-		}
+		Collection<User> collection = new ArrayList<>();
+		for (User user : userRepo.findAll()) collection.add(user);
 		return collection;
 	}
 

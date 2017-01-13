@@ -9,7 +9,7 @@ import java.util.Collection;
 public interface UserService {
 
 	User create(UserDTO dto);
-	User get(long id);
+	User get(Long id);
 
 	boolean changeData(User user);
 
@@ -18,5 +18,5 @@ public interface UserService {
 
 	User convert(UserDTO dto);
 
-	User delete(long id);
+	User delete(Long id);
 }

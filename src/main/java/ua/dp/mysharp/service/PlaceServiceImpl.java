@@ -67,10 +67,8 @@ public class PlaceServiceImpl implements PlaceService {
 
 	@Override
 	public Collection<Place> getAll() {
-		Collection<Place> places = new ArrayList<Place>();
-		for (Place place : placeRepo.findAll()) {
-			places.add(place);
-		}
+		Collection<Place> places = new ArrayList<>();
+		for (Place place : placeRepo.findAll()) places.add(place);
 		return places;
 	}
 
