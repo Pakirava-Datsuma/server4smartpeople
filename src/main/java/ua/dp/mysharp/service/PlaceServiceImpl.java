@@ -21,13 +21,13 @@ public class PlaceServiceImpl implements PlaceService {
 
     public Place convert(PlaceDTO dto) {
         if (dto == null) return null;
-        Place result = dto.convert();
-        Long id = dto.getOwnerId();
-        if (id != null) {
-            User owner = userService.get(dto.getOwnerId());
+        Place place = dto.convert();
+        Long ownerId = dto.getOwnerId();
+        if (ownerId != null) {
+            User owner = userService.get(ownerId);
             if (owner != null)
-                result.setOwner(owner);
-            return result;
+                place.setOwner(owner);
+            return place;
         }
         return null;
     }
