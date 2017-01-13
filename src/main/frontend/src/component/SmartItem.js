@@ -85,8 +85,8 @@ class SmartItem extends React.Component {
                             onTouchTap={this.onRemove}
                             disabled={!this.props.onRemoveItem}/>
                 <FlatButton label="Edit"
-                            containerElement={this.props.onOpenItem(item.id)}
-                            disabled={!this.props.onOpenItem}/>
+                            //containerElement={this.props.onOpenItem(item.id)}
+                            disabled={true || !this.props.onOpenItem}/>
             </CardActions>
             </Card>
     }
