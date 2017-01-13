@@ -46,7 +46,7 @@ class SmartItem extends React.Component {
         let fold = !expand;
         // console.log("children " + (fold ? "folding..." : "unfolding..."));
         if (!fold) {
-            this.props.onGetItem(this.props.item);
+            //this.props.onGetItem(this.props.item);
             this.props.onGetChildren(this.props.item);
         }
         this.setState({
