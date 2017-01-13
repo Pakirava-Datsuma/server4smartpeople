@@ -7,7 +7,7 @@ const style = {
 
 const LoadingIndicator = (props) => {
     console.log("LoadingIndicator: " + props.visible);
-    return <RefreshIndicator size={40} left={-20} top={10}
+    return <RefreshIndicator size={40} left={-20} top={80}
                              style={style}
                              status={props.visible ? "loading" : "hide"}
     />;
