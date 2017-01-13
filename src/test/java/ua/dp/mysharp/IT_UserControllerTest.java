@@ -37,6 +37,7 @@ public class IT_UserControllerTest {
 //        System.out.println(requestBody);
         mvc.perform(
                 NEW_USER.request()
+                        .accept(APPLICATION_JSON_UTF8)
                         .contentType(APPLICATION_JSON_UTF8)
                         .content(requestBody)
                 )
@@ -57,6 +58,7 @@ public class IT_UserControllerTest {
 //        System.out.println(requestBody);
         mvc.perform(
                 NEW_USER.request()
+                        .accept(APPLICATION_JSON_UTF8)
                         .contentType(APPLICATION_JSON_UTF8)
                         .content(requestBody)
                 )
