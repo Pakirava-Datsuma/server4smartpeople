@@ -86,7 +86,7 @@ export default class UsersList extends React.Component {
 
     onAddHouse(house){
         console.log("onAddHouse " + house.name);
-        house.owner.id = this.state.ownerIdOfNewHouse;
+        house.owner = {id: this.state.ownerIdOfNewHouse};
         console.log("house.owner " + house.owner.id);
 
         this.setState({loading: true});
@@ -182,7 +182,6 @@ export default class UsersList extends React.Component {
         });
     }
 
-
     onRemoveUser (oldUser) {
         console.log("removing user " + oldUser.id);
         // this.setState({
@@ -205,7 +204,6 @@ export default class UsersList extends React.Component {
         })
     }
 
-
     onGetUsers() {
         // console.log("updating users...");
         this.setState({loading: true,});
@@ -225,7 +223,7 @@ export default class UsersList extends React.Component {
     }
 
     onGetHousesForUser(user) {
-        // console.log("updating houses for " + user.id);
+        console.log("updating houses for " + user.id);
         this.setState({loading: true});
         HouseController.getAllForUser(user.id, (houses)=> {
             // let users = this.state.users;
@@ -241,7 +239,7 @@ export default class UsersList extends React.Component {
                 result = houses instanceof Array;}
 
             // console.log("houses : " + houses);
-            // console.log("houses : " + typeof houses);
+            console.log("houses : " + typeof houses);
             if (result || this.state.testing) {
                 // console.log("now he/she has houses: " + user.houses.length);
                 user.houses = result

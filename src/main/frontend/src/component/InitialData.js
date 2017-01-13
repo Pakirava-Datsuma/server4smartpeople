@@ -5,34 +5,43 @@ const defaultHouses = [
         {
             id: 0,
             photoURL: "http://clipartix.com/wp-content/uploads/2016/05/Free-house-clip-art-clipart-clipartcow.gif",
-            ownerId: 2,
+            owner: {id: 2},
             name: "test house 1"
         },
         {
             id: 1,
             photoURL: "http://images.clipartpanda.com/car-20clip-20art-car-clip-art-3.jpg",
-            ownerId: 1,
+            owner: {id: 1},
             name: "test house 2"
         },
         {
             id: 2,
             photoURL: "http://images.clipartpanda.com/car-20clip-20art-eTMdKzKjc.svg",
-            ownerId: 2,
+            owner: {id: 2},
             name: "test house 3"
         },
         {
             id: 3,
             photoURL: "http://worldartsme.com/images/teal-house-clipart-1.jpg",
-            ownerId: 0,
+            owner: {id: 0},
             name: "test house 4"
         },
         {
             id: 4,
             photoURL: "http://dbclipart.com/wp-content/uploads/2016/02/Free-house-clip-art-clipart.png",
-            ownerId: 1,
+            owner: {id: 1},
             name: "test place 5"
         },
     ];
+
+function getDefaultHouses(id) {
+    console.log("houses for " + id);
+    return id < defaultHouses.length
+        ? defaultHouses.filter((house) => {
+            return house.ownerId == id
+            })
+        : defaultHouses;
+}
 
 const defaultUsers = [
         {
@@ -40,34 +49,22 @@ const defaultUsers = [
             photoURL: "https://upload.wikimedia.org/wikipedia/en/a/a0/ONHS_Eagles_logo.png",
             musicURL: "",
             name: "test user Jake",
-            houses: defaultHouses.filter((house) => {return house.ownerId == 0}),
+            houses: getDefaultHouses(0),
         },
         {
             id: 1,
             photoURL: "https://s-media-cache-ak0.pinimg.com/236x/06/bb/0a/06bb0aab77b49b3a9b5ed41096e495f2.jpg",
             musicURL: "",
             name: "test user Pamela",
-            houses: defaultHouses.filter((house) => {return house.ownerId == 1}),
+            houses: getDefaultHouses(1),
         },
         {
             id: 2,
             photoURL: "https://s-media-cache-ak0.pinimg.com/236x/16/de/5f/16de5f8dd1ffe99f9e169a0605a960b3.jpg",
             musicURL: "",
             name: "test user Robson",
-            houses: defaultHouses.filter((house) => {return house.ownerId == 2}),
+            houses: getDefaultHouses(2),
         }
     ];
 
-const defaultLogos = {
-    user: "http://simpleicon.com/wp-content/uploads/add-user.svg",
-    house: "https://cdn.pixabay.com/photo/2014/04/03/00/38/house-308936_1280.png",
-
-    addButton: "http://images.clipartpanda.com/plus-clipart-enki_grey_plus_sign.png",
-    loadingButton: "http://icon-park.com/imagefiles/loading7_gray.gif",
-};
-
-// console.log("length users: " + defaultUsers.length);
-console.log("length their houses: " + defaultUsers[0].houses.length);
-// console.log("array: " + InitialData.defaultUsers.toString());
-
-export {defaultUsers, defaultHouses, defaultLogos};
+export {defaultUsers, defaultHouses, getDefaultHouses};
