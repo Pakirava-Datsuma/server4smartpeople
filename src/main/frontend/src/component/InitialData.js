@@ -5,31 +5,31 @@ const defaultHouses = [
         {
             id: 0,
             photoURL: "http://clipartix.com/wp-content/uploads/2016/05/Free-house-clip-art-clipart-clipartcow.gif",
-            owner: {id: 2},
+            ownerId: 2,
             name: "test house 1"
         },
         {
             id: 1,
             photoURL: "http://images.clipartpanda.com/car-20clip-20art-car-clip-art-3.jpg",
-            owner: {id: 1},
+            ownerId: 1,
             name: "test house 2"
         },
         {
             id: 2,
             photoURL: "http://images.clipartpanda.com/car-20clip-20art-eTMdKzKjc.svg",
-            owner: {id: 2},
+            ownerId: 2,
             name: "test house 3"
         },
         {
             id: 3,
             photoURL: "http://worldartsme.com/images/teal-house-clipart-1.jpg",
-            owner: {id: 0},
+            ownerId: 0,
             name: "test house 4"
         },
         {
             id: 4,
             photoURL: "http://dbclipart.com/wp-content/uploads/2016/02/Free-house-clip-art-clipart.png",
-            owner: {id: 1},
+            ownerId: 1,
             name: "test place 5"
         },
     ];

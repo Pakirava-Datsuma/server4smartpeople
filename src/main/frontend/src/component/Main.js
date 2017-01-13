@@ -23,7 +23,6 @@ const Main = (props) => <div>
                 label="Create test entities"
                 onTouchTap={()=>ServerController.CreateTestEntities((result)=>{
                     alert(result);
-                    this.setState({});
                 })}/>}/>
     {props.children}
 </div>;

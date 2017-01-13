@@ -51,8 +51,8 @@ export const ServerController = {
                 },
             });
         else {
-            defaultUsers.map(UserController.create);
-            defaultHouses.map(HouseController.create);
+            defaultUsers.map((user)=>UserController.create({name: user.name, photoURL: user.photoURL}));
+            defaultHouses.map((house)=>HouseController.create({name: house.name, photoURL: house.photoURL}));
         }
 
     }

@@ -71,6 +71,7 @@ export default class AddItemModal extends React.Component {
                        onChange={(event) => {
                            this.onChangeData({name: event.target.value})
                        }}/>
+            <br />
             <TextField hintText="Photo"
                        id="photolink-text-field"
                        value={this.state.photoURL}

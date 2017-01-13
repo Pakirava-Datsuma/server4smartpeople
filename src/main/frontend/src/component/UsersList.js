@@ -69,7 +69,9 @@ export default class UsersList extends React.Component {
 
 
     getOwnerOfHouse (house) {
-        return this.getUserById(house.owner.id);
+        return house.owner
+            ? this.getUserById(house.owner.id)
+            : this.getUserById(house.ownerId);
     }
 
     getUserIndexInList(id) {
@@ -86,8 +88,8 @@ export default class UsersList extends React.Component {
 
     onAddHouse(house){
         console.log("onAddHouse " + house.name);
-        house.owner = {id: this.state.ownerIdOfNewHouse};
-        console.log("house.owner " + house.owner.id);
+        house.ownerId = this.state.ownerIdOfNewHouse;
+        console.log("house.owner " + house.ownerId);
 
         this.setState({loading: true});
         HouseController.create(house, (newHouse) => {
