@@ -15,7 +15,7 @@ class HousesList extends React.Component {
 
     render () {
         let items=[];
-        // console.log("1st house image in HousesList: " + this.props.houses[0].photoURL);
+        // console.log("1st house image in HousesList: " + this.props.houses[0].photoUrl);
         if (this.props.houses) {
             items=this.props.houses.map((house) => {
                 // console.log("house in conversion: " + house.toString());
