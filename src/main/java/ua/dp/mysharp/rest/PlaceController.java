@@ -15,6 +15,7 @@ import static ua.dp.mysharp.rest.API.RestApi.*;
  * Created by swanta on 28.11.16.
  */
 @RestController
+@ResponseBody
 public class PlaceController {
 
     @Autowired
@@ -22,21 +23,18 @@ public class PlaceController {
 
     @RequestMapping(GET_PLACELIST_URL)
     @ResponseStatus( HttpStatus.OK)
-    @ResponseBody
     public Collection<Place> getAll() {
         return placeService.getAll();
     }
 
     @RequestMapping(GET_PLACELIST_FOR_USER_URL)
     @ResponseStatus( HttpStatus.FOUND)
-    @ResponseBody
-    public Collection<Place> getAllForUser(@RequestParam("id") long id) {
+    public Collection<Place> getAllForUser(@PathVariable("id") long id) {
         return placeService.getAllForUser(id);
     }
 
     @RequestMapping(GET_PLACE_URL)
     @ResponseStatus( HttpStatus.FOUND)
-    @ResponseBody
     public Place get(@PathVariable("id") long id) {
         return placeService.get(id);
     }
@@ -49,7 +47,6 @@ public class PlaceController {
 
     @RequestMapping(value = NEW_PLACE_URL, method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public Place add(@RequestBody PlaceDTO item) {
         return placeService.create(item);
     }
