@@ -51,8 +51,21 @@ export const ServerController = {
                 },
             });
         else {
-            defaultUsers.map((user)=>UserController.create({name: user.name, photoURL: user.photoURL}));
-            defaultHouses.map((house)=>HouseController.create({name: house.name, photoURL: house.photoURL}));
+            let created = 0, finished = 0;
+            defaultUsers.map((user)=>{
+                UserController.create(user, (newUser)=>{
+                    defaultHouses.map((house)=>{
+                        if ((Math.random() * 2 - 1) > 0)
+                            house.ownerId = newUser.id;
+                            created++;
+                            HouseController.create(house, ()=>{
+                                finished++;
+                                if (created <= finished)
+                                    callback(created, defaultUsers.length);
+                            })
+                    });
+                })
+            });
         }
 
     }

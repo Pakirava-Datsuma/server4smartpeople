@@ -34,7 +34,7 @@ function ApiController(URLs) {
 
     this.create = (object, callback) => {
         let url = this.URL_CREATE;
-        if (object.id) object.id = undefined;
+        delete object.id;
         // $.put(url, object, callback);
         $.ajax({
             headers: {
