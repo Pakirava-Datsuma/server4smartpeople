@@ -6,10 +6,10 @@ To **RUN** backend launch `ua.dp.mysharp.MiaApplication` class
 To re**BUILD** frontend:
 
     $ ln -s src/main/webapp src/main/frontend/build
+    
     $ cd src/main/frontend
     $ npm update
     $ npm run build
-    $ cp 
 
 Specific folders:
 
