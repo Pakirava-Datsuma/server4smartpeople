@@ -15,7 +15,7 @@ public class ApiLogDaoMongo implements ApiLogDao {
     private MongoOperations mongoOperations;
 
     @Override
-    public void save(Object record) {
-        mongoOperations.save(record);
+    public void save(Object... objects) {
+        mongoOperations.save(objects);
     }
 }
