@@ -14,8 +14,10 @@ public class ApiLogService {
     @Autowired
     ApiLogDao dao;
 
+    static private final Object NULL = new Object();
+
     public void write (String string){
-        write(string, null);
+        write(string, NULL);
     }
 
     public void write(String string, Object... data) {
