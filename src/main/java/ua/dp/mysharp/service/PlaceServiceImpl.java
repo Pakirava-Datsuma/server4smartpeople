@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ua.dp.mysharp.model.Place;
 import ua.dp.mysharp.model.PlaceDTO;
 import ua.dp.mysharp.model.User;
-import ua.dp.mysharp.repository.PlaceRepository;
+import ua.dp.mysharp.dao.PlaceRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;

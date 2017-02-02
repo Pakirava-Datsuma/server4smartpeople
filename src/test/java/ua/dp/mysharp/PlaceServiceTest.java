@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import ua.dp.mysharp.model.Place;
 import ua.dp.mysharp.model.PlaceDTO;
-import ua.dp.mysharp.repository.PlaceRepository;
+import ua.dp.mysharp.dao.PlaceRepository;
 import ua.dp.mysharp.service.PlaceServiceImpl;
 import ua.dp.mysharp.service.UserServiceImpl;
 

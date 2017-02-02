@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import ua.dp.mysharp.model.User;
 import ua.dp.mysharp.model.UserDTO;
-import ua.dp.mysharp.repository.UserRepository;
+import ua.dp.mysharp.dao.UserRepository;
 import ua.dp.mysharp.service.UserServiceImpl;
 
 import java.util.Collection;

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.dp.mysharp.model.User;
 import ua.dp.mysharp.model.UserDTO;
-import ua.dp.mysharp.repository.UserRepository;
+import ua.dp.mysharp.dao.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;

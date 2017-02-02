@@ -1,14 +1,17 @@
-package ua.dp.mysharp.repository;
+/**
+ * 
+ */
+package ua.dp.mysharp.dao;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import ua.dp.mysharp.model.Place;
+import ua.dp.mysharp.model.User;
 
 /**
  * @author swanta
  *
  */
 @Repository
-public interface PlaceRepository extends CrudRepository<Place, Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
 
 }
